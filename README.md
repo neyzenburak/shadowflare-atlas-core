@@ -1,5 +1,26 @@
 # ShadowFlare Atlas Core
 
+> [!WARNING]
+> **Experimental. Educational. Built for curiosity and fun.**
+>
+> This is an independent hobby project exploring the data formats, rendering
+> and runtime behavior of a classic game. It is a work in progress, provided
+> **AS IS**, without warranties of any kind. Features may be incomplete,
+> unstable or incompatible with your installation, and live controls can
+> change game memory and progress subsequently written to your saves.
+>
+> **Use it at your own risk.** To the fullest extent permitted by applicable
+> law, the authors and contributors accept no liability for problems, losses
+> or damage arising from its use, including crashes, corrupted saves, lost
+> progress or other software issues. See the [0BSD license](LICENSE).
+>
+> **Review before you run.** Carefully inspect the source code, setup scripts,
+> feature documentation and any CT file you supply. Make independent backups
+> of your game and saves, and test on a separate copy before using valuable
+> characters. Built-in checks and automatic backups are not a guarantee of
+> safety or recovery. If you do not understand an operation, leave it disabled
+> until you have reviewed it.
+
 An offline item, monster and world-map atlas for **ShadowFlare v2.004**, with
 an optional Windows companion for live, single-player controls: a trainer,
 drop and EXP events, UI corrections, loot improvements and a character-based
@@ -15,6 +36,67 @@ Atlas interface remains in Turkish.
 This README is in English. The application interface and several linked
 technical documents are currently in Turkish; relevant interface labels are
 included below.
+
+## How it works
+
+Atlas has two main flows: **build a local atlas from your own game files**,
+then optionally **control a running game through a local Python companion**.
+The diagram uses [Mermaid, rendered directly by GitHub](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams).
+
+```mermaid
+flowchart TD
+    START["start.cmd + launcher.ps1<br/>Find Python and the game; prepare setup"]
+    FILES[("Your game installation<br/>Original game resources")]
+    BUILD["tools/build_assets.py<br/>Extract and decode game data"]
+    ASSETS[("Generated catalogue and artwork<br/>app/data.js + app/assets/")]
+
+    subgraph SESSION["Local Atlas session"]
+        UI["Browser frontend<br/>HTML, CSS, JavaScript and Canvas"]
+        API["Python HTTP companion<br/>app/live_server.py<br/>127.0.0.1:8770"]
+        FEATURES["Python feature modules<br/>Events, trainer, loot, travel and effects"]
+    end
+
+    GAME["Running ShadowFlare v2.004<br/>Game logic, native hooks and effect rendering"]
+    LOCAL[("Local user data<br/>Settings, grail journal and CT import cache")]
+    CT["Optional user-supplied CT<br/>Game folder or file picker"]
+
+    START -->|First setup or rebuild| BUILD
+    FILES -->|Read original resources| BUILD
+    BUILD -->|Generate locally| ASSETS
+    START -->|Start companion| API
+    ASSETS -->|Local static files| API
+    API -->|Serve UI, assets and JSON results| UI
+    UI -->|Local HTTP commands with session token| API
+    API -->|Validate and dispatch| FEATURES
+    FEATURES <-->|Windows process and memory APIs| GAME
+    FEATURES <-->|Read and persist| LOCAL
+    CT -->|Import supported records; no Lua execution| FEATURES
+```
+
+### What each part does
+
+| Component | Responsibility | Main source files |
+|---|---|---|
+| Launcher and setup | Locate Python and a compatible game installation, install missing setup dependencies, prepare local assets, create the desktop shortcut and start the companion. | [start.cmd](start.cmd), [launcher.ps1](launcher.ps1), [game_paths.py](app/game_paths.py) |
+| Offline asset builder | Read your game resources and generate item/monster data, map links, decoded artwork and fonts. This phase builds files; it does not attach to a running game. | [build_assets.py](tools/build_assets.py), [asset_build/](tools/asset_build/) |
+| Browser frontend | Search, filter and sort the catalogue; draw atlas previews and maps; display the grail and controls; send selected actions to the companion and show returned state. Favorites and some UI preferences use browser local storage. | [index.html](app/index.html), [app.js](app/app.js), [map-viewer.js](app/map-viewer.js), [live.js](app/live.js), [trainer.js](app/trainer.js) |
+| Local HTTP API | Serve the frontend and generated assets, expose live status, check the host/origin and session token for modifying requests, dispatch commands and report results or errors. It listens on loopback at `127.0.0.1:8770`. | [live_server.py](app/live_server.py) |
+| Runtime feature modules | Inspect the compatible game process, validate expected state/code, apply native hooks and coordinate events, inventory changes, movement, spawning and effects through Windows APIs. In-game effects are drawn inside the game process. | [live_drop.py](app/live_drop.py), [drop_event.py](app/drop_event.py), [display_fix.py](app/display_fix.py), [special_effects.py](app/special_effects.py), [game_launch.py](app/game_launch.py) |
+| Optional CT importer | Discover one user-provided CT beside the game EXE or accept a file-picker selection, parse supported records, and expose controls without automatically enabling them. Imported Lua is never run. | [ct_discovery.py](app/ct_discovery.py), [ct_table.py](app/ct_table.py), [ct_asm.py](app/ct_asm.py), [trainer.py](app/trainer.py) |
+| Local persistence | Store installation choices, feature settings, imported CT definitions and the per-character grail journal on your PC. Selected operations also create save backups. Personal data and CT imports are excluded from Git and local distribution ZIPs. | [game_paths.py](app/game_paths.py), [grail_store.py](app/grail_store.py), [trainer.py](app/trainer.py), [package_local.py](tools/package_local.py) |
+
+For example, changing the drop multiplier sends an `/api/live/event` request
+from the browser. The companion validates the request and updates the drop
+hook through `DropEvent`. When a monster dies, the **game executes the extra
+loot rolls**; the companion reports counters and state back to the interface.
+The browser presents the controls and results, while the game runs the native
+gameplay changes.
+
+Once assets have been generated, atlas browsing does not require a running
+game. Live gameplay controls need the supported process and, for
+character-specific actions, a loaded character. Launch configuration and CT
+import can work before a character is loaded. Normal use is local and offline
+after setup; missing dependencies may require internet access during setup.
 
 ## Before you clone
 
