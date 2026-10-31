@@ -3,6 +3,7 @@ from pathlib import Path
 from http.server import ThreadingHTTPServer,SimpleHTTPRequestHandler
 import argparse
 import ctypes
+import hashlib
 import json
 import os
 import secrets
@@ -38,6 +39,7 @@ from operation_save import save_choice
 from game_launch import GameLauncher
 
 PORT=8770
+INSTALLATION_ID=hashlib.sha256(str(ROOT.resolve()).casefold().encode('utf8')).hexdigest()[:24]
 TOKEN=secrets.token_hex(32)
 JOBS={}
 JOBS_LOCK=threading.Lock()
@@ -138,7 +140,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if not self.local():self.send_error(403);return
         path=urlsplit(self.path).path
-        if path=='/api/live/state':self.json({'bridge':'ShadowFlare Atlas Live Drop 1','protocol':19,'helperPid':os.getpid(),**status(),'launcher':LAUNCHER.info(),'event':EVENT.info(),'display':DISPLAY.info(),'watch':WATCH.info(),'trainer':TRAINER.info(),'stability':STABILITY.info(),'renderPerformance':RENDER_PERFORMANCE.info(),'quickSell':QUICK_SELL.info(),'groundLoot':GROUND.info(),'grail':GRAIL.info(),'premiumBeam':PREMIUM_BEAM.info(),'magicBeam':PREMIUM_BEAM.magic_info(),'goldCapacity':GOLD.info(),'lootQoL':LOOT_QOL.info(),'homingShots':HOMING.info(),'ctrlTeleport':TELEPORT.info(),'omegaBeam':OMEGA.info(),'experience':EXPERIENCE.info(),'levelControl':character_info(),'mapTravel':map_travel_info(),'mobSpawn':{'version':MOB_SPAWN_VERSION,'noAI':True},'token':TOKEN});return
+        if path=='/api/live/state':self.json({'bridge':'ShadowFlare Atlas Live Drop 1','protocol':19,'installationId':INSTALLATION_ID,'helperPid':os.getpid(),**status(),'launcher':LAUNCHER.info(),'event':EVENT.info(),'display':DISPLAY.info(),'watch':WATCH.info(),'trainer':TRAINER.info(),'stability':STABILITY.info(),'renderPerformance':RENDER_PERFORMANCE.info(),'quickSell':QUICK_SELL.info(),'groundLoot':GROUND.info(),'grail':GRAIL.info(),'premiumBeam':PREMIUM_BEAM.info(),'magicBeam':PREMIUM_BEAM.magic_info(),'goldCapacity':GOLD.info(),'lootQoL':LOOT_QOL.info(),'homingShots':HOMING.info(),'ctrlTeleport':TELEPORT.info(),'omegaBeam':OMEGA.info(),'experience':EXPERIENCE.info(),'levelControl':character_info(),'mapTravel':map_travel_info(),'mobSpawn':{'version':MOB_SPAWN_VERSION,'noAI':True},'token':TOKEN});return
         if path.startswith('/api/live/job/'):
             if self.headers.get('X-Atlas-Token')!=TOKEN:self.json({'error':'Unauthorized'},403);return
             with JOBS_LOCK:result=JOBS.get(path.rsplit('/',1)[-1])
@@ -365,6 +367,22 @@ def launch_arguments(args):
     return result
 
 
+def select_existing_helper(existing,url,timeout=10):
+    """Do not reuse or self-restart a helper belonging to another checkout."""
+    if existing.get('bridge')!='ShadowFlare Atlas Live Drop 1':return existing
+    if existing.get('protocol',0)>=19 and existing.get('installationId')==INSTALLATION_ID:return existing
+    request=Request(url+'api/live/stop',data=b'{}',headers={'Origin':url.rstrip('/'),'Content-Type':'application/json','X-Atlas-Token':existing['token']},method='POST')
+    with urlopen(request,timeout=5)as response:json.load(response)
+    deadline=time.monotonic()+timeout
+    while time.monotonic()<deadline:
+        time.sleep(.2)
+        try:
+            with urlopen(url+'api/live/state',timeout=1)as response:current=json.load(response)
+        except OSError:return {}
+        if current.get('helperPid')!=existing.get('helperPid'):raise RuntimeError('Başka bir Atlas yardımcısı başlatıldı; yeniden dene.')
+    raise RuntimeError('Önceki Atlas yardımcısının kapanması tamamlanamadı. Oyun kapatılmadı.')
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--elevate',action='store_true');p.add_argument('--no-browser',action='store_true');p.add_argument('--display-fix',action='store_true');p.add_argument('--no-quick-sell',action='store_true');p.add_argument('--no-premium-beam',action='store_true');p.add_argument('--launch-game',action='store_true');p.add_argument('--width',type=int);p.add_argument('--height',type=int);p.add_argument('--game');args=p.parse_args()
     # Reopening the launcher reuses our existing helper without another UAC prompt.
@@ -372,6 +390,7 @@ def main():
     try:
         with urlopen(url+'api/live/state',timeout=2) as response:existing=json.load(response)
     except Exception:existing={}
+    existing=select_existing_helper(existing,url)
     if existing.get('bridge')=='ShadowFlare Atlas Live Drop 1':
         previous_experience=1
         if existing.get('protocol',0)>=3:
