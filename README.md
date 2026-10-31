@@ -166,11 +166,18 @@ See [scenario items](docs/SCENARIO_ITEMS.md).
 ## Optional local CT and Atlas controls
 
 Atlas ships no third-party CT file, records, scripts or patch definitions.
-**Control Desk -> Trainer -> CT dosyası ekle** imports a file supplied by
-its user. Imported data stays under `app/trainer-local/`; it is excluded from
-Git and local ZIPs. **Tabloyu kaldır** disables imported patches and removes
-the local table. Adding a CT does not rebuild the atlas or contact a table
-hosting service. The optional table is never fetched automatically.
+Place your own `.ct` file beside `ShadowFlare.exe`. When exactly one CT is
+present, the running companion imports it automatically; no separate path
+setting or loaded character is needed. It also notices a file added while
+Atlas is running. If several CT files are present, choose one through
+**Control Desk -> Trainer -> CT dosyası ekle**. This picker also accepts a CT
+stored elsewhere. Existing imports take precedence and are not replaced.
+
+Imported data stays under `app/trainer-local/`; it is excluded from Git and
+local ZIPs. **Tabloyu kaldır** disables imported patches, removes the local
+table and pauses automatic importing until you explicitly add a CT again.
+Importing never enables cheats or runs Lua. It does not rebuild the atlas,
+download a table or contact a table hosting service.
 
 The importer supports bounded 32-bit values, pointer chains, bounded strings,
 static x86 patches and simple one-time byte writes. Lua is never executed.
@@ -367,3 +374,10 @@ The native viewport code is authored against the original game and does not
 include the external resolution helpers or their patch implementation.
 Users are responsible for their own CT files. These engineering choices do
 not imply rights-holder endorsement or legal clearance for game modding.
+
+## License
+
+Atlas source code is available under the [Zero-Clause BSD license (0BSD)](LICENSE).
+You may use, modify, redistribute and sell it without an attribution requirement.
+This license covers Atlas code; it does not grant rights to third-party game
+assets or user-supplied CT files.

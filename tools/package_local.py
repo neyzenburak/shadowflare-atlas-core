@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT.parent/'ShadowFlare-Atlas-Core.zip'
 TEMP=OUT.with_name(OUT.name+'.setup-new')
 if not is_ready(ROOT/'app'):raise SystemExit('Run start.cmd first to generate the complete local asset package.')
-files=[ROOT/n for n in ('start.cmd','setup.cmd','make-zip.cmd','launcher.ps1','README.md','requirements.txt','requirements-dev.txt','requirements-setup.txt')]
+files=[ROOT/n for n in ('start.cmd','setup.cmd','make-zip.cmd','launcher.ps1','README.md','LICENSE','requirements.txt','requirements-dev.txt','requirements-setup.txt')]
 files += sorted(p for p in (ROOT/'app').iterdir() if p.is_file() and p.suffix.lower() in ('.py','.js','.html','.css','.svg','.txt','.cmd','.json') and p.name!='trainer-plan.json' and (p.suffix!='.json' or p.name.endswith('-plan.json')))
 files += sorted(p for p in (ROOT/'app/assets').rglob('*') if p.is_file() and p.suffix.lower()!='.ct' and p.relative_to(ROOT/'app/assets').parts[0]!='turkish')
 for folder,suffixes in (('docs',('.md','.asm')),('tools',('.py','.asm')),('tests',('.py','.cjs'))):

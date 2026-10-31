@@ -5,9 +5,10 @@ import hashlib,json,struct,threading,time
 from live_drop import Game,Code,ROOT,LOCK,Alloc,Free,Flush,Protect,api,check,backup_saves
 import blackjack
 from ct_table import empty_table,load as load_table,parse as parse_table
+from ct_discovery import discover,read_local_file
 from ct_asm import assemble
 
-VERSION=3
+VERSION=4
 LOCAL=ROOT/'trainer-local'
 PLAN=load_table(LOCAL)
 RECORDS={r['id']:r for r in PLAN['records']}
@@ -55,14 +56,15 @@ def resolve(game,record,state,pet=0,cache=None):
     return address,binding,tuple(chain)
 
 class Trainer:
-    def __init__(self,start_worker=True):
+    def __init__(self,start_worker=True,auto_discover=True):
         self.lock=threading.RLock();self.game=None;self.active={};self.frozen={};self.undo=[]
         self.player=None;self.backup=None;self.message='';self.stop=threading.Event();self.worker=None
+        self.discovery_message='';self.auto_import_blocked=(LOCAL/'auto-import-disabled').exists();self.auto_discover=auto_discover
         if start_worker:
             self.worker=threading.Thread(target=self._follow,daemon=True);self.worker.start()
     def info(self):
         with self.lock:return dict(version=VERSION,active=list(self.active),frozen=list(self.frozen),undoCount=len(self.undo),backup=self.backup,message=self.message,
-                                   blackjack=blackjack.snapshot(self.game),table=dict(source=PLAN['source'],sha256=PLAN['sha256'],**PLAN['counts']))
+                                   blackjack=blackjack.snapshot(self.game),table=dict(source=PLAN['source'],sha256=PLAN['sha256'],discoveryMessage=self.discovery_message,autoImportBlocked=self.auto_import_blocked,**PLAN['counts']))
     def table(self):
         with self.lock:return {k:v for k,v in PLAN.items()if k not in ('patches','actions')}
     def import_table(self,raw,filename='local.ct'):
@@ -70,7 +72,10 @@ class Trainer:
         folder=locate()
         if folder is None:raise ValueError('Önce oyun klasörünü seç.')
         data=parse_table(raw,folder/'ShadowFlare.exe',filename)
+        return self._install_table(data)
+    def _install_table(self,data,automatic=False):
         with self.lock:
+            if automatic and (PLAN['sha256'] or self.auto_import_blocked or self.stop.is_set()):return self.table()
             if not LOCK.acquire(False):raise RuntimeError('Önceki oyun işlemini bekle.')
             try:
                 for ident in list(self.active):
@@ -78,10 +83,27 @@ class Trainer:
                 self.frozen.clear();self.undo.clear()
                 LOCAL.mkdir(exist_ok=True)
                 temp=LOCAL/'table.tmp';temp.write_text(json.dumps(data,ensure_ascii=False),'utf8');temp.replace(LOCAL/'table.json')
+                (LOCAL/'auto-import-disabled').unlink(missing_ok=True);self.auto_import_blocked=False;self.discovery_message=''
                 PLAN.clear();PLAN.update(data);RECORDS.clear();RECORDS.update({r['id']:r for r in data['records']});RECORDS[blackjack.ID]=blackjack.RECORD
-                self.message='CT içe aktarıldı; Lua çalıştırılmadı.'
+                self.message=('Oyun klasöründeki CT içe aktarıldı.' if automatic else 'CT içe aktarıldı.')+' Lua çalıştırılmadı; hiçbir hile otomatik açılmadı.'
                 return self.table()
             finally:LOCK.release()
+    def discover_table(self):
+        with self.lock:
+            if PLAN['sha256'] or self.auto_import_blocked or self.stop.is_set():return
+        try:
+            from game_paths import locate
+            folder=locate()
+            if folder is None:return
+            files=discover(folder)
+            if len(files)!=1:
+                self.discovery_message=('Oyun klasöründe birden fazla CT var; CT dosyası ekle ile birini seç.' if files else 'CT dosyanı oyun klasörüne koyabilir veya CT dosyası ekle ile seçebilirsin.')
+                return
+            data=parse_table(read_local_file(files[0]),folder/'ShadowFlare.exe',files[0].name)
+            self._install_table(data,automatic=True)
+        except Exception as error:
+            # A missing, incomplete or unsupported user file must not stop Atlas.
+            self.discovery_message='CT otomatik yüklenemedi: '+str(error)
     def remove_table(self):
         with self.lock:
             if not LOCK.acquire(False):raise RuntimeError('Önceki oyun işlemini bekle.')
@@ -89,6 +111,8 @@ class Trainer:
                 for ident in list(self.active):
                     if ident.startswith('ct:'):self._disable(ident)
                 self.frozen.clear();self.undo.clear()
+                LOCAL.mkdir(exist_ok=True);(LOCAL/'auto-import-disabled').write_text('Select a CT manually to enable imports again.\n','utf8')
+                self.auto_import_blocked=True;self.discovery_message='Otomatik CT yükleme kapalı; yeniden eklemek için CT dosyası ekle ile seç.'
                 (LOCAL/'table.json').unlink(missing_ok=True)
                 PLAN.clear();PLAN.update(empty_table());RECORDS.clear();RECORDS[blackjack.ID]=blackjack.RECORD
                 self.message='Yerel CT kaldırıldı.';return self.table()
@@ -280,7 +304,10 @@ class Trainer:
                 if not any(entry['base']<=ip<entry['base']+4096 for ip in self.game.ips(handles)):Free(self.game.h,entry['base'],0,0x8000)
         del self.active[ident];self.message='Hile kapatıldı: '+RECORDS[ident]['label']
     def _follow(self):
+        next_discovery=0
         while not self.stop.wait(.25):
+            if self.auto_discover and time.monotonic()>=next_discovery:
+                next_discovery=time.monotonic()+3;self.discover_table()
             with self.lock:
                 if not self.game or not (self.active or self.frozen or self.undo):continue
                 if not LOCK.acquire(False):continue

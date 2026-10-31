@@ -9,7 +9,8 @@ const imported={...empty,source:'example.ct',sha256:'local-example',records:[
   {id:'ct:1',parent:null,kind:'group',label:'Example group',description:'Example group'},
   {id:'ct:2',parent:'ct:1',kind:'value',label:'Example value',description:'Example value',type:'4 Bytes',readOnly:false}
 ],counts:{entries:2,structures:0,supported:1,unsupported:0}};
-w.AtlasLive={request:async(endpoint,body)=>{requests.push({endpoint,body});return endpoint.endsWith('/import')?imported:empty;},refresh:async()=>{}};
+let serverTable=empty;
+w.AtlasLive={request:async(endpoint,body)=>{requests.push({endpoint,body});return endpoint.endsWith('/import')?imported:endpoint.endsWith('/table')?serverTable:empty;},refresh:async()=>{}};
 for(const file of ['trainer-data.js','trainer-extras.js','trainer.js'])w.eval(fs.readFileSync(path.join(root,file),'utf8'));
 const pause=()=>new Promise(r=>setTimeout(r,30));
 (async()=>{
@@ -30,6 +31,14 @@ const pause=()=>new Promise(r=>setTimeout(r,30));
   assert(!d.getElementById('trainerRecords').textContent.includes('Example value'));
   d.querySelector('[data-category="atlas"]').click();
   assert(d.querySelector('[data-toggle="atlas-blackjack"]'),'Atlas controls survive CT removal');
+  w.dispatchEvent(new w.CustomEvent('atlas:live-state',{detail:{connected:true,ready:false,protocol:19,trainer:{version:4,table:{sha256:null,discoveryMessage:'Multiple CT files: choose one.'}}}}));
+  assert(d.getElementById('trainerTableSummary').textContent.includes('Multiple CT files'));
+  serverTable=imported;
+  w.dispatchEvent(new w.CustomEvent('atlas:live-state',{detail:{connected:true,ready:false,protocol:19,trainer:{version:4,table:{sha256:imported.sha256}}}}));
+  await pause();d.querySelector('[data-category="table"]').click();
+  assert(requests.some(r=>r.endpoint==='/api/trainer/table'),'Discovered tables load from the companion');
+  assert(d.getElementById('trainerRecords').textContent.includes('Example value'));
+  assert(!requests.some(r=>r.endpoint.endsWith('/toggle')||r.endpoint.endsWith('/write')),'Discovery must not enable cheats');
   assert.equal(w.TRAINER_DATA.records.length,0,'Bundled catalogue stays empty');
-  console.log('PASS: empty default trainer, local CT upload/removal, no CT download and independent Atlas controls');
+  console.log('PASS: local CT upload/removal/discovery, no automatic cheats, empty bundle and independent Atlas controls');
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(()=>w.close());

@@ -48,7 +48,7 @@
     $('#trainerRecords').innerHTML=body||'<div class="trainer-empty">Bu adla kayıt bulunamadı. Türkçe veya özgün İngilizce adla arayabilirsin.</div>';
     $('#trainerGroupTitle').textContent=query?'Tablonun tamamında arama':categories.find(c=>c[0]===category)[1];
     $('#trainerCount').textContent=category==='reference'&&!query?D.structures.length+' yapı · kaynak notları':num(roots.flatMap(descendants).filter(r=>!['group','connection'].includes(r.kind)&&matches(r)).length)+' kayıt';
-    $('#trainerTableSummary').textContent=D.sha256?`${D.counts.entries} CT kaydı · ${D.counts.supported} desteklenen denetim`:'CT dosyası eklenmedi; Atlas kontrolleri hazır.';
+    $('#trainerTableSummary').textContent=D.sha256?`${D.counts.entries} CT kaydı · ${D.counts.supported} desteklenen denetim`:trainer.table?.discoveryMessage||'CT dosyanı oyun klasörüne koyabilir veya buradan seçebilirsin; Atlas kontrolleri hazır.';
     for(const [id,draft] of drafts){const input=$(`[data-input="${id}"]`);if(input)input.value=draft;}
     paint();queueRead();
   }
@@ -133,6 +133,7 @@
   $('#trainerCTRemove').addEventListener('click',()=>tableRequest('remove',{}));
   window.addEventListener('atlas:live-state',e=>{
     const changed=bridge?.pid!==e.detail.pid||bridge?.player!==e.detail.player;bridge=e.detail;if(changed){snap.clear();drafts.clear();message='';}trainer=bridge.trainer||{};paint();queueRead();
+    if(!D.sha256)$('#trainerTableSummary').textContent=trainer.table?.discoveryMessage||'CT dosyanı oyun klasörüne koyabilir veya buradan seçebilirsin; Atlas kontrolleri hazır.';
     if(bridge.protocol>=19&&trainer.table&&trainer.table.sha256!==D.sha256&&!tableLoading){
       tableLoading=true;window.AtlasLive.request('/api/trainer/table',{}).then(installTable).catch(error=>{message=error.message;}).finally(()=>{tableLoading=false;paint();});
     }

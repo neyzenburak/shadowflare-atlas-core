@@ -165,7 +165,7 @@
         <div class="trainer-heading"><div><p class="eyebrow">ATLAS + YEREL TABLON</p><h2 id="trainerTitle">Trainer</h2><p id="trainerTableSummary">CT dosyası eklenmedi.</p></div><div class="event-actions"><label class="source-download">CT dosyası ekle <input id="trainerCTFile" type="file" accept=".ct" hidden></label><button id="trainerCTRemove" disabled>Tabloyu kaldır</button></div></div>
         <div class="trainer-toolbar"><label class="trainer-search"><span class="sr-only">Trainer’da ara</span><input id="trainerSearch" type="search" placeholder="Ölümsüzlük, can, büyü, Attack…" autocomplete="off"><kbd>/</kbd></label><button id="trainerRefresh" disabled>Değerleri yenile ↻</button><button id="trainerUndo" disabled>Son işlemi geri al</button><button id="trainerReset" disabled>Hileleri kapat</button></div>
         <div class="trainer-workspace"><nav id="trainerCategories" aria-label="Trainer grupları"></nav><div class="trainer-content"><div class="trainer-content-heading"><h3 id="trainerGroupTitle">Hileler</h3><span id="trainerCount"></span></div><p id="trainerMessage" role="status">Canlı değerler için CANLI-DROP-BASLAT.cmd veya ARAYUZ-DUZELT.cmd dosyasını çalıştır.</p><div id="trainerRecords"></div></div></div>
-        <div class="trainer-footnote"><span id="trainerActiveCount">Hiçbir hile açık değil.</span><p>Bir değeri değiştirmek için Uygula’ya bas. Karakter veya eşya değişince ilgili sabitleme kapanır. İlk değişiklikten önce kayıt yedeği alınır.</p><p>CT dosyasını kendin sağlarsın; yalnızca bu bilgisayarda saklanır ve ZIP’e eklenmez. Lua çalıştırılmaz. Desteklenmeyen betikler açıklamasıyla gösterilir.</p></div>
+        <div class="trainer-footnote"><span id="trainerActiveCount">Hiçbir hile açık değil.</span><p>Bir değeri değiştirmek için Uygula’ya bas. Karakter veya eşya değişince ilgili sabitleme kapanır. İlk değişiklikten önce kayıt yedeği alınır.</p><p>CT dosyanı ShadowFlare.exe ile aynı klasöre koy; tek bir CT varsa otomatik yüklenir. Birden fazla dosya varsa CT dosyası ekle ile seç. Dosya yalnızca bu bilgisayarda tutulur ve ZIP’e eklenmez. Hileler kendiliğinden açılmaz; Lua çalıştırılmaz. Desteklenmeyen betikler açıklamasıyla gösterilir.</p></div>
       </section>
     </div>
     <div id="mapsPage" role="tabpanel" aria-labelledby="mapsTab" hidden>
@@ -241,7 +241,7 @@
   <script src="live.js?v=37-core-game-launch"></script>
   <script src="trainer-data.js?v=core-local-1"></script>
   <script src="trainer-extras.js?v=2"></script>
-  <script src="trainer.js?v=core-local-1"></script>
+  <script src="trainer.js?v=core-local-2"></script>
   <script src="grail.js?v=1"></script>
   <script src="scenario.js?v=1"></script>
   <div id="grailToast" class="grail-toast" role="status" hidden><span>✦ YENİ GRAIL KAYDI</span><b id="grailToastName"></b><small id="grailToastCharacter"></small><button id="grailToastOpen">Koleksiyona git ↗</button><button id="grailToastClose" aria-label="Grail bildirimini kapat">×</button></div>

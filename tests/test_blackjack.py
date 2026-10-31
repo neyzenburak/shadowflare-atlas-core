@@ -120,7 +120,7 @@ class BlackjackTests(unittest.TestCase):
                 m.write(change['address'],change['after'])
         control._patch=apply
         with patch.object(trainer,'Alloc',return_value=BASE),patch.object(trainer,'Flush',return_value=True),patch.object(trainer,'Free',return_value=True) as free:
-            state=control.toggle(b.ID,True);self.assertIn(b.ID,state['active']);self.assertEqual(state['version'],3)
+            state=control.toggle(b.ID,True);self.assertIn(b.ID,state['active']);self.assertEqual(state['version'],4)
             m.deal();self.assertEqual([c['label'] for c in control.info()['blackjack']['playerCards']],['K','A'])
             control.reset();self.assertNotIn(b.ID,control.info()['active']);self.assertEqual(m.read(b.HOOK,len(b.ORIGINAL)),b.ORIGINAL)
             free.assert_called_once()

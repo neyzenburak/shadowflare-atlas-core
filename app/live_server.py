@@ -45,7 +45,7 @@ JOBS={}
 JOBS_LOCK=threading.Lock()
 DISPLAY=DisplayFix()
 WATCH=CrashWatch()
-TRAINER=Trainer()
+TRAINER=Trainer(auto_discover=False)
 STABILITY=HoverLifetimeFix(start_worker=False)
 RENDER_PERFORMANCE=RenderSortFix()
 GRAIL=Grail()
@@ -446,6 +446,7 @@ def main():
         print('Windows yönetici onayı istendi. Yardımcı onaydan sonra localhost:8770 üzerinde açılır.');return
     server=ThreadingHTTPServer(('127.0.0.1',PORT),Handler)
     upgrade_existing()
+    TRAINER.auto_discover=True
     GOLD.start()
     GROUND.start()
     PREMIUM_BEAM.start()

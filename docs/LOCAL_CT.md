@@ -1,9 +1,16 @@
 # User-supplied local tables
 
-Core includes a small CT importer and no third-party table. On the Control
-Desk, open Trainer and choose **CT dosyası ekle**. Select your own `.ct` file
-(maximum 4 MB). The helper needs a selected compatible game folder, but no
-loaded character is required to import a table.
+Core includes a small CT importer and no third-party table. Put your own `.ct`
+file (maximum 4 MB) in the same folder as `ShadowFlare.exe`. The running helper
+checks the selected compatible game folder every three seconds. Exactly one
+CT is imported automatically; no loaded character or additional path setting
+is required. Only that folder's top-level files are checked.
+
+If there are multiple CT files, Atlas leaves them untouched and asks you to
+select one through **Control Desk -> Trainer -> CT dosyası ekle**. The picker
+also works for files stored elsewhere. A previously imported table takes
+precedence, so discovering another file never replaces existing controls or
+enables a cheat. Invalid files show an explanation without stopping Atlas.
 
 The imported XML is treated as data. Lua is not executed, arbitrary symbols
 or DLL addresses are not accepted, and unknown assembly is not executed.
@@ -21,10 +28,12 @@ Table labels, scripts and structure descriptions are shown only after local
 import. Data is persisted in `app/trainer-local/table.json`. This folder is
 ignored by Git and not selected by the package builder. **Tabloyu kaldır**
 restores active imported patches, clears their value freezes and undo data,
-and removes the local table. Atlas-authored controls remain available.
+and removes the local table. It also persists a pause on automatic importing,
+so a table still in the game folder does not immediately reappear. Explicitly
+adding a CT again clears this pause. Atlas-authored controls remain available.
 
-Asset setup always produces an empty trainer catalogue and never searches the
-game folder for a table. Importing old asset ZIPs cannot replace the empty
+Asset setup always produces an empty trainer catalogue; only the running
+companion discovers the user's CT. Importing old asset ZIPs cannot replace the empty
 catalogue or copy a top-level CT file. Packaging rejects a nonempty bundled
 trainer catalogue and excludes `.ct` files and the local import folder.
 

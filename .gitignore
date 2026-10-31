@@ -18,7 +18,7 @@ app/game-launch-settings.tmp
 app/assets/
 app/data.js
 app/trainer-data.js
-app/*.ct
+*.ct
 app/*-sessions/
 app/*-backups/
 app/crash-captures/
