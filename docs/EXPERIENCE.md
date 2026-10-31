@@ -1,68 +1,70 @@
-# EXP etkinliği ve seviyeyi yeniden kazanma
+# EXP events and earning levels again
 
-Kontrol Masası → **EXP etkinliği**: kaydırıcı ve sayı alanı ×1–1000 çalışır.
-Uygula, yaratık öldürmelerinden karaktere yazılan ham EXP’yi çarpar; **×1 · Kapat**
-normal kazanıma döner. Drop çarpanından bağımsızdır. Yoldaş EXP’si, silah/büyü
-gelişimi, öldürme sayaçları ve görev ödülleri çarpılmaz. Çarpan başlangıçta ×1’dir.
+Under **Control Desk > EXP event**, the slider and number field accept ×1–1000.
+**Apply** multiplies the raw EXP awarded to the character for monster kills;
+**×1 > Disable** restores normal gains. This is independent of drop events.
+Companion EXP, weapon/spell development, kill counters and quest rewards are
+not multiplied. The initial multiplier is ×1.
 
-Oyunun özgün seviye atlama kuralı korunur: bir öldürmede en fazla bir seviye
-atlatır ve o anda kalan fazla EXP’yi sıfırlar. Karakterin doğal üst sınırı 100’dür.
+The original level-up rule remains: at most one level per kill, with surplus
+EXP reset on leveling up. The character's natural level cap is 100.
 
-**Statları koru, seviyeyi düşür** alanına mevcut seviyenden küçük bir sayı yazıp
-düğmeye bas. İşlem önce oyunun kendi kayıt işleviyle güncel ilerlemeyi kaydeder,
-doğrular ve yedekler. Oyuna dönüldüğünde seviye bir kez değiştirilir ve mevcut
-EXP sıfırlanır. Temel statlar, eşyalar, görevler ve öğrenilmiş beceriler korunur.
-Sonraki seviye atlamasında oyun kendi sınıf geçmişi ve büyüme tablolarından
-bonusları tekrar ekler. Örneğin 79 → 78 → 79 döngüsü bonusları yeniden verir;
-Atlas bonus miktarlarını elle yazmaz. Seviye/EXP sabitleme ve tek öldürmede
-seviye atlama hilesi açıkken işlem reddedilir.
+In **Lower level, keep stats**, enter a level below your current one and press
+the button. The operation first saves current progress through the game's own
+writer, verifies it and creates a backup. After returning to the game, the
+level changes once and current EXP resets. Base stats, items, quests and
+learned skills remain. At the next level-up, the game adds bonuses again from
+its own class history and growth tables. For example, 79 → 78 → 79 grants
+those bonuses again; Atlas does not write bonus amounts manually. The request
+is rejected while level/EXP freezes or one-kill level-up are enabled.
 
-Atlas’taki yaratık kartında **HAM EXP** seçili varyantın tam hasar katkısıyla,
-çarpansız deneyimini gösterir. 18.788 yerleşim, 1.496 varyant kontrol edildi.
-Enemy Hole’ın bir varyantında yerleşime göre 600 veya 800 EXP bulunduğundan
-600–800 aralığı gösterilir. Diğer varyantların her biri tek değere sahiptir.
-Hasar katkısı paylaşıldığında oyunun katkı tablosu önce uygulanır, EXP çarpanı
-sonra devreye girer.
+Monster cards show **RAW EXP** for the selected variant at full damage
+contribution, before multipliers. The extraction checked 18,788 placements and
+1,496 variants. One Enemy Hole variant has 600 or 800 EXP depending on its
+placement, so it displays 600–800. Other variants each have one value. When
+damage contribution is shared, the game's contribution table applies before
+the EXP multiplier.
 
-## Native uygulama
+## Native implementation
 
-- ShadowFlare v2.004 oyuncu öldürme EXP yolu: `0x4134a0`.
-- `0x413579` noktasındaki tam iki komut (8 bayt) geçici yönlendirilir. Girişte
-  EAX mevcut EXP, EDX hesaplanan ham kazanım, ESI yerel oyuncudur. Çarpılan
-  toplam oyuncu `+0xe8` alanına yazılır; işlevin geri kalanı özgün kalır.
-  Normal akıştaki bir sonraki bayrak kullanımı kendi CMP komutundan gelir.
-- ×1, çok oyunculu mod veya 5 saniyelik yardımcı kalp atışının süresi dolduğunda
-  tam özgün komutlar çalışır. Kapatmada yönlendirme kaldırılır. Aktif çarpanda
-  64 bit çarpım ve taşma kontrolü, 32 bit EXP sayacının sıfıra sarmasını önler.
-- Senaryo değerlerindeki alan 13, native yaratık `+0x17c` alanına gider.
-  Tablo 14 hasar katkısını; tablo 13 bir sonraki seviye için gereken EXP’yi verir.
-- Seviyeyi düşürme, oyuncu güncelleme girişindeki tek seferlik istekle oyun
-  iş parçacığında yürür. Yalnızca `+0x34` ve `+0xe8` değiştirilir; `0x450080`
-  özgün türetilmiş statları yeniler. Temel statların `+0x38..+0xbf` aralığı
-  işlem öncesi/sonrası karşılaştırılır. Fark varsa önceki statlar, seviye ve EXP
-  geri yüklenir. Oyuncu, harita, canlılık ve beklenen seviye yeniden denetlenir.
-- Özgün `0x412fb0` seviye atlama işlevi önce seviyeyi artırır, sınıf geçmişini
-  kaydeder, sonra tablodaki bonusları temel statlara **ekler**. Daha önce ulaşılan
-  en yüksek seviyeyi kontrol eden bir engel bulunmuyor. İşlev değiştirilmez.
+- ShadowFlare v2.004 player kill-EXP path: `0x4134a0`.
+- Two complete instructions at `0x413579` (8 bytes) are temporarily redirected.
+  At entry, EAX holds current EXP, EDX the calculated raw gain and ESI the local
+  player. The multiplied total is written to player `+0xe8`; the rest of the
+  function remains original. The next flag use in normal flow comes from its own CMP.
+- At ×1, in multiplayer or after the five-second companion heartbeat expires,
+  the exact original instructions run. Disabling removes the detour. During an
+  active event, a 64-bit product and overflow checks prevent the 32-bit EXP
+  counter from wrapping to zero.
+- Scenario field 13 populates native monster `+0x17c`. Table 14 provides damage
+  contribution; table 13 provides the EXP required for the next level.
+- Lowering the level runs on the game thread through a one-shot request at the
+  player update entry. Only `+0x34` and `+0xe8` change; original `0x450080`
+  refreshes derived stats. Base stats at `+0x38..+0xbf` are compared before and
+  after. Any difference restores previous stats, level and EXP. Player, map,
+  living state and expected level are rechecked.
+- Original level-up function `0x412fb0` first increases level, records class
+  history, then **adds** table bonuses to base stats. No highest-level-ever
+  check blocks repeating a level. That function is not modified.
 
-`experience-plan.json` desteklenen native blokların SHA-256 değerlerini içerir.
-Yeniden üretmek için geliştirme ortamında `python tools/build_experience_plan.py`
-çalıştırılır; araştırma dizinindeki EXE/tablo/yerleşim dökümleri gerekir. Araç,
-yerel `data.js` varyantlarını da gerçek yerleşimlerin EXP aralıklarıyla günceller.
+`experience-plan.json` contains SHA-256 fingerprints for supported native blocks.
+Developers can regenerate it with `python tools/build_experience_plan.py`; local
+EXE/table/placement research dumps are required. The builder also updates local
+`data.js` variants with EXP ranges from actual placements.
 
-## Doğrulama
+## Verification
 
-`tests/test_experience.py` x86 emülatöründe katsayıları, kalp atışı, çok oyunculu
-geçişi, taşmayı, ABI’yi ve seviye işlemini çalıştırır. Özgün EXE fikstürü mevcutsa
-gerçek öldürme EXP ve seviye atlama komutları yürütülür: katkı → çarpan sırası,
-tek öldürme sayacı, EXP sıfırlama ve iki defa 79 → 78 → 79 bonusu doğrulanır.
-Sadece tablo ve ses/arayüz bağımlılıkları test ikameleriyle sağlanır.
-Node kontrol testi, çarpan taslağının polling ile kaybolmadığını, sınırları,
-seçili karakter bağını ve seviye isteği sonucunun arayüze yansımasını kontrol eder.
+`tests/test_experience.py` executes multipliers, heartbeat, multiplayer fallback,
+overflow, ABI and level changes in an x86 emulator. With the original EXE fixture,
+it runs real kill-EXP and level-up instructions, checking contribution-before-
+multiplier order, one kill-counter increment, EXP reset and two repetitions of
+79 → 78 → 79 bonuses. Only table and sound/UI dependencies use test doubles.
+The Node control test checks polling preserves the multiplier draft, bounds,
+character binding and display of the completed level request.
 
-Canlı denemede 81 → 80 geçişinin temel statları bayt düzeyinde aynı kaldı.
-Karakter yeniden 81 olduğunda HP 1.635 → 1.665, MP 1.435 → 1.465,
-Strength 434 → 438 ve Attack 320 → 326 ölçüldü. Native EXP kancası
-100.000 ham EXP’nin ×1000 ile 100.000.000 yazıldığını kaydetti. Deneme
-sonunda etkinlik ×1’e kapatıldı. Tarayıcıda kontroller, gerçek karakter seviyesi,
-mob EXP kartı ve aç/kapat işlemi doğrulandı; konsol hatası görülmedi.
+In the live 81 → 80 test, base stats remained byte-identical. After returning
+to 81, HP increased 1,635 → 1,665, MP 1,435 → 1,465, Strength 434 → 438
+and Attack 320 → 326. The native hook recorded 100,000 raw EXP becoming
+100,000,000 at ×1000. The event was returned to ×1 afterward. Browser controls,
+actual character level, the monster EXP card and toggles were verified with no
+console errors.

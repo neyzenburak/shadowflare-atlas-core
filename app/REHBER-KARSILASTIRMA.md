@@ -1,58 +1,59 @@
-# ShadowFlare Premium rehberi ile oyun verisinin karşılaştırılması
+# Comparing the Premium guide with game data
 
-18 Ekim 2026. Kaynak: kullanıcının `herşey/Guide.html` dosyasından bağlanan 15
-Premium eşya sayfası ve bu sayfalardaki özgün JPG’ler. Orijinaller değiştirilmedi.
-Görev ve harita görsellerindeki bütün yazılar bu karşılaştırmanın kapsamında değil.
+18 October 2026. Sources: 15 Premium item pages linked from the user's local
+`herşey/Guide.html` and their original JPGs. The originals were not modified.
+Text in quest and map images is outside this comparison's scope.
 
-## Rehberin mantığı
+## How the guide is organized
 
-HTML sayfalarında eşya kayıtları veya JavaScript ile çalışan bir sınıflandırıcı yok.
-Sayfalar önceden hazırlanmış uzun JPG’leri gösteriyor. Eşyalar tek/çift el kılıcı,
-katana, balta, arbalet, asa, zırh, başlık, bacaklık, kalkan ve aksesuar başlıklarına
-ayrılmış. Bazı başlıklar gereken seviyeye göre ayrıca bölünmüş. Bu nedenle HTML
-metninde bir eşya adını aramak, görsellerdeki eşyaları bulmuyor.
+The HTML contains no item records or JavaScript classifier. It displays long,
+pre-rendered JPGs. Items are grouped into one-/two-handed swords, katanas, axes,
+crossbows, staves, armor, helmets, greaves, shields and accessories. Some groups
+are also split by required level. Searching the HTML for an item name therefore
+does not find the items shown inside images.
 
-## Sonuç
+## Findings
 
-Oyun verisinde kalite sınıfı 2 olan 457 Premium kayıt var. Rehberde 452 panel tespit
-edildi. Başlıklar OCR ile çıkarılıp düşük güvenli okumalar özgün görsel üzerinden
-kontrol edildi. 443 kayıt eşleştirildi. Aynı adlı dokuz Monolis paneli ve dokuz
-Monolis kaydı var; aile rehberde mevcut, tek tek renk/özellik varyantları eşleştirilmedi.
+The game data has 457 Premium records with quality class 2. The guide contains
+452 identified panels. Titles were extracted with OCR; low-confidence readings
+were checked against the originals. There are 443 individually matched records.
+Nine Monolis panels and nine Monolis records share a name: the family is present,
+but individual color/property variants have not been matched.
 
-İncelenen Premium listelerinde şu beş kaydın adı bulunmuyor:
+These five names are absent from the reviewed Premium lists:
 
-| Kayıt | Ad | Gereken seviye | Standart drop kaynağı |
+| Record | Name | Required level | Standard drop source |
 |---|---|---:|---|
-| 0:13000600 | Caster Force | 40 | Var; örneğin Devil Jurg |
-| 0:80000041 | 備前長船義直 | 35 | Var; örneğin Ancient Dragon |
-| 1:31500 | Saint Robe — Premium kaydı | 50 | Var; örneğin Devil Dignosis |
-| 2:200007 | Mithril Pendant | 25 | Var; örneğin Phantom Extra Gargoyle |
-| 2:200020 | Kyanite Ring | 30 | Var; örneğin Ancient Dragon |
+| 0:13000600 | Caster Force | 40 | Yes; for example Devil Jurg |
+| 0:80000041 | 備前長船義直 | 35 | Yes; for example Ancient Dragon |
+| 1:31500 | Saint Robe: Premium record | 50 | Yes; for example Devil Dignosis |
+| 2:200007 | Mithril Pendant | 25 | Yes; for example Phantom Extra Gargoyle |
+| 2:200020 | Kyanite Ring | 30 | Yes; for example Ancient Dragon |
 
-Saint Robe’un aynı adlı Normal kaydı da var. Buradaki sonuç yalnızca Premium
-`1:31500` kaydı içindir. Aynı isim, aynı kalite veya aynı kayıt demek değildir.
+Saint Robe also has a Plain record with the same name. This finding concerns
+only Premium `1:31500`; a shared name does not imply the same quality or record.
 
-Bu beş eşya yalnızca dosyada duran erişilemez kayıtlar değil: incelenen standart
-drop tablolarında seçilebilir adaylar ve senaryolarda bu grupları kullanan yaratıklar
-bulunuyor. Canlı öldürme deneyi yapılmadı. Rehberde bulunmamak, bir eşyanın beta,
-kaldırılmış, kullanılmayan veya daha önce kimsenin bilmediği içerik olduğunu kanıtlamaz.
+These five are not merely unreachable file entries: they are selectable
+candidates in the reviewed standard tables, and scenarios contain monsters
+using those groups. No live-kill experiment was performed. Absence from the
+guide does not prove beta, removed, unused or previously unknown content.
 
-## Tesla Blade düzeltmesi
+## Tesla Blade correction
 
-İki Tesla Blade de `sw51_80.jpg` içinde var:
+Both Tesla Blades appear in `sw51_80.jpg`:
 
-| Kayıt | Başlığın yaklaşık Y konumu | Gereken seviye | Temel Attack | Sale Price |
+| Record | Approximate title Y | Required level | Base Attack | Sale Price |
 |---|---:|---:|---:|---:|
 | 0:80000128 | 2689 px | 75 | 3000 | 10000 |
 | 0:80000127 | 3414 px | 80 | 5400 | 50000 |
 
-Ad, temel saldırı, seviye ve fiyat iki ayrı oyun kaydıyla eşleşiyor. Atlas içindeki
-kaynak düğmesi ilgili rehber görselini doğrudan bu konuma kaydırır.
+Name, base Attack, level and price match two separate game records. Where the
+local guide image is available, the Atlas source button scrolls to this position.
 
-## Görünüm
+## Presentation
 
-Gerçek Font00.njp bitmap fontu ve gerçek envanter ikonları kullanılıyor. Temel
-değerler ek özelliklerden ayrı gösteriliyor. Örneğin Knuckle Breaker’da temel
-Attack 20 ve ek Attack +45 iki farklı bölümdedir. Accessory gereken seviyeleri de
-oyun kaydının kendi alanından okunuyor. Çerçeve yeniden çizildi; koyu taş dokusu
-oyunun özgün Status.njp arayüz görselinden alındı.
+Actual Font00.njp bitmap glyphs and inventory icons are used. Base values are
+shown separately from extra properties: Knuckle Breaker's base Attack 20 and
+additional Attack +45 occupy different sections. Accessory required levels
+come from each game record's own field. The frame was redrawn, while its dark
+stone texture comes from the original Status.njp interface artwork.

@@ -1,120 +1,123 @@
-# Premium Chronicle · v2
+# Premium Chronicle: v2
 
-Grail, `rarity == 2` olan 457 ayrı katalog kimliğini kapsar. Aynı adlı farklı
-kimlikler ayrı kayıttır. Oyun ve save dosyaları değiştirilmez. Yerel yardımcı
-açıkken tek oyunculu karakterin başarılı yerden çantaya transferleri izlenir.
+The grail covers 457 distinct catalogue identities with `rarity == 2`.
+Different identities sharing a name remain separate entries. Game/save files
+are not modified. With the local companion running, successful ground-to-
+backpack transfers by the single-player character are observed.
 
-Katalogdaki 456 Premium, yaratıkların bağlı olduğu standart drop havuzlarında
-pozitif nominal olasılığa sahiptir. Gamble Boots bu havuzlarda bulunmaz;
-kartında işaretlenir ve **Standart mob havuzunda yok** filtresiyle görülebilir.
-Bu, görev veya özel ödül yollarından da elde edilemeyeceği anlamına gelmez.
+Of these, 456 Premiums have a positive nominal chance in the standard pools
+used by monsters. Gamble Boots is absent from those pools; its card is marked
+and available through **Not in standard monster pools**. This does not rule
+out quest or special reward routes.
 
-## Elde edilen bilginin anlamı
+## What the evidence means
 
-- **Yerden toplandı:** Takip açıkken oyun çantaya eklemeyi tamamladı. İlk
-  toplama zamanı, bölge ve sonraki toplama sayısı SQLite'a kaydedilir. Satmak,
-  yere bırakmak veya karakterden çıkmak geçmiş kaydı silmez.
-- **Takip öncesinde mevcut:** İlk save okumasındaki ekipman/çanta veya bu
-  karaktere ilk canlı bağlanmadaki ekipman/çanta/depo taramasında görüldü.
-  Tarih, hangi yaratıktan düştüğü ve satın alınıp alınmadığı çıkarılmaz.
-- **Elle işaretlendi:** Kullanıcı geçmiş bir buluntuyu hatırladığı için Buldum'a
-  bastı. Bu işaret geri alınabilir; otomatik toplama kanıtını silmez.
-- **Kaydı yok:** Günlüğün kanıtı yoktur. Eşyanın geçmişte hiç düşmediği sonucu
-  çıkarılamaz. Eski satılan eşyaların tam geçmişi save eşya listesinden bulunamaz.
+- **Picked up from the ground:** Tracking observed the completed backpack
+  insertion. SQLite stores the first pickup time, region and later pickup
+  count. Selling, dropping or leaving the character does not erase that history.
+- **Owned before tracking:** Seen in equipment/backpack on the first save scan,
+  or equipment/backpack/storage on the first live connection to this character.
+  This cannot establish the date, source monster or whether it was purchased.
+- **Marked manually:** The user pressed Found it to record a remembered find.
+  The mark can be removed without deleting automatic pickup evidence.
+- **Not recorded:** The journal has no evidence. This does not prove the item
+  never dropped. A save's item list cannot reconstruct all previously sold items.
 
-İlerleme, bu üç kanıt türünün birleşimidir; aynı eşya bir kere sayılır.
-Mevcut veya elle işaretli eşya sonradan toplanırsa tarih ve toplama sayısı
-eklenir, toplam tekrar artmaz. Yeni grail bildirimi Atlas sayfasında gösterilir;
-oyun içi tooltip veya identify sistemi değiştirilmez.
+Progress is the union of the three evidence types; each item counts once.
+Picking up an already-owned or manually marked item adds its date and pickup
+count without increasing the collection total again. First-find notifications
+appear in Atlas; in-game tooltips and identification are not changed.
 
-## Save okuması ve karakter ayrımı
+## Save decoding and character separation
 
-`ShadowFlare0005` biçimi salt okunur çözülür. Açık karakter başlığından sonra
-gövde boyutu, XOR anahtarı ve signed-byte sağlama toplamı gelir. Gövde önce
-256 baytlık native ters dönüşüm tablosuyla açılır, sonra XOR uygulanır.
-Sağlama toplamı, boyut ve yinelenen karakter başlığı kontrol edilir.
-11 ekipman alanı ve ana çanta kayıtları, boyut alanlarına göre okunur; dosyada
-eşya kimlikleri aranarak tahmin yapılmaz. Devam eden autosave'in eksik veya
-tutarsız okunması listeye aktarılmaz; sonraki tarama beklenir.
+`ShadowFlare0005` is decoded read-only. The clear character header is followed
+by body size, XOR key and signed-byte checksum. The body is first decoded with
+the 256-byte native inverse table, then XOR is applied. Checksum, size and the
+repeated character header are validated. Eleven equipment fields and main
+backpack records are read according to their size fields, without guessing
+by searching for item IDs. An incomplete or inconsistent read during autosave
+is ignored until the next scan.
 
-Profil kimliği oyun klasörü + save yuvası + karakter adından türetilir. Aynı
-adlı farklı save'ler ayrıdır. Aynı yuvayı aynı adla yeni karakter için yeniden
-kullanmak eski profili paylaşır; oyunda doğrulanmış kalıcı karakter GUID'si
-bulunmadığından böyle bir yeniden oluşturmayı otomatik ayırma iddiası yoktur.
-Kayıt yuvası/adı değiştirilirse ayrı profil oluşur. Açık karakterin save dosyası,
-oyunun kendi aktif dosya nesnesinden alınır; benzer isimle eşleme yapılmaz.
+Profile identity derives from game folder, save slot and character name.
+Different saves with the same name remain separate. Reusing the same slot and
+name for a new character shares the old profile: no verified persistent
+character GUID is available to distinguish that recreation automatically.
+Changing the slot or name creates a separate profile. The active save path
+comes from the game's own active file object, not a similar-name match.
 
-## Native gözlem
+## Native observation
 
-`grail_native.py` üç doğrulanmış girişe geri alınabilir detour yerleştirir:
+`grail_native.py` places reversible detours at three verified entry points:
 
-1. `0x449ef0`: Yerden toplama. Gerçek dünya nesne kimliği, tek oyunculu mod,
-   boş imleç ve Premium sınıfı doğrulanınca bekleyen eşya/karakter kimliği
-   özel alana alınır. Özgün işlev çalışır. Başarısız dönüşte bekleyen işaret
-   temizlenir. İmleçte başka eşya varken başarısız ikinci tıklama öncekinin
-   bekleyen kaydını bozmaz.
-2. `0x466bc0`: Özgün listeye ekleme talimatları aynen yürütülür. Eklenen nesne
-   bekleyen yerden toplama nesnesiyse ve hedef tam olarak bu karakterin ana
-   çantasıysa olay yayımlanır. Envanter açıkken imleçte tutma olay oluşturmaz;
-   sonradan çantaya yerleştirme oluşturur. Doğrudan depoya koyma sayılmaz.
-3. `0x465640`: İmleçteki bekleyen nesne silinirse işaret temizlenir. Böylece
-   yeniden kullanılan bellek adresi bir alışverişi toplama gibi gösteremez.
+1. `0x449ef0`: Ground pickup. Once world object ID, single-player mode, empty
+   cursor and Premium quality are verified, pending item/character identities
+   are stored privately. The original function runs. Failure clears the pending
+   mark. A failed second click while holding another item does not corrupt the
+   previous pending pickup.
+2. `0x466bc0`: Original list-insertion instructions run unchanged. An event is
+   published only when the inserted object matches the pending ground pickup
+   and the destination is exactly this character's main backpack. Holding it
+   on the cursor with inventory open does not count; later backpack placement
+   does. Direct insertion into storage does not count.
+3. `0x465640`: Deleting the pending cursor object clears its mark. A reused
+   memory address therefore cannot turn a merchant purchase into a pickup.
 
-Satın alma, ödülün doğrudan çantaya eklenmesi, tam çanta nedeniyle başarısız
-tıklama ve Premium olmayan eşyalar yeni toplama kaydı üretmez. Elle oluşturulup
-**yere bırakılan** bir eşyanın sonradan toplanması da yerden toplamadır; sistem
-bir eşyanın ilk kez hangi düşmandan üretildiğini kanıtlamaz.
+Purchases, rewards inserted directly into the backpack, failed full-backpack
+clicks and non-Premium items do not create pickup records. An item manually
+created and **dropped on the ground** does count when subsequently collected;
+the system does not prove which enemy originally generated an item.
 
-Küçük native kayıtlar önce tamamlanır, sonra sıra numarası yayımlanır. Python
-yaklaşık 250 ms'de bir bunları kalıcı günlüğe geçirir. 2.048 olaylık halka,
-ganimet/eşya sınırı değildir. Tüketici bu halkayı aşacak kadar gecikirse kayıp
-sayısı kalıcı olarak saklanır ve arayüzde gösterilir. Takip yardımcının kapalı
-olduğu zamanı geriye dönük dolduramaz. Kapatılırken girişler geri alınır,
-tamamlanan olaylar boşaltılır, devam eden çağrı ve komut işaretçileri güvenli
-duruma gelince özel bellek serbest bırakılır.
+Small native records are completed before publishing their sequence number.
+Python persists them approximately every 250 ms. The 2,048-event ring is not
+a loot/item cap. If the consumer falls behind far enough to overrun it, the
+lost-event count is persisted and displayed. Tracking cannot backfill time
+when the companion was closed. Shutdown restores entry points, drains completed
+events and frees private memory once in-flight calls and instruction pointers
+are safe.
 
-Sağ tıkla satış aynı silme işlevini doğrular. `Grail.original_bytes`, yalnızca
-kendi kurulu detour baytları hâlâ birebir eşleşiyorsa özgün görünümü sağlar;
-QuickSell'in SHA-256 kontrolleri bu görünümde çalışır. Başka bir yama gizlenmez.
+Right-click selling verifies the same deletion function. `Grail.original_bytes`
+provides the original view only when its own installed detour bytes still match
+exactly; QuickSell's SHA-256 checks use that view. Foreign patches are not hidden.
 
-## Saklama ve arayüz
+## Storage and interface
 
-v2, drop filtresi ve kırmızı ışın için karaktere bağlı ortak bir native tablo
-yayınlar. Arayüzde gezilen başka profil bu tabloyu değiştirmez. Gerçek yerel
-oyuncu, ad ve save yolu her okumada doğrulanır; karakter değişimindeki eski
-tablo kullanılmaz. Veriler yalnızca değişince oyun kısa süre duraklatılarak
-yayınlanır. Bu sırada bekleyen toplama olayları yeniden boşaltılır; henüz
-Python’a aktarılmamış bir başarılı toplamanın işareti kaybolmaz.
+v2 publishes a shared, character-bound native table for the drop filter and
+red beams. Browsing another profile does not change that table. The actual
+local player, name and save path are verified on every read, so stale data
+cannot carry across a character change. Updates are published only when data
+changes, briefly suspending the game. Pending pickup events are drained again
+during publication so an unpersisted successful pickup mark is not lost.
 
-Başarılı çanta ekleme hook’u, günlük halkasına yazdıktan hemen sonra ilgili
-tablo kaydını da bulunmuş yapar. İmleçte tutmak, başarısız toplama, depo veya
-satıcı işlemi bu işareti oluşturmaz. Böylece tekrar filtresi ve yerdeki diğer
-kopyaların kırmızı işareti aynı oyun çağrısından sonra güncellenebilir.
-Bağımlı drop/ışın hook’ları kapatılmadan ortak Grail belleği serbest bırakılmaz.
+Immediately after writing to the journal ring, the successful backpack-insertion
+hook also marks the shared table entry as found. Cursor holding, failed pickups,
+storage and merchant operations do not set that mark. The duplicate filter and
+red spirals on other ground copies can therefore update after the same game call.
+Shared grail memory is not freed before dependent drop/beam hooks are disabled.
 
-Veri: `app/grail-data/chronicle.sqlite3`. İşlemler transaction kullanır; DB
-bağlantıları her işlemde kapatılır. Bu klasör, kayıt yedekleri ve native oturum
-manifestleri Git'e ve dağıtım ZIP'ine dahil edilmez. **Günlüğü indir**, seçili
-profilin kanıt alanlarını JSON olarak indirir. Oyun görselleri mevcut yerel
-Atlas ikonlarıdır. Arama, kategori/durum filtresi, seviye/isim/tarih sıralaması,
-48 kartlık sayfalama, karakter seçimi ve açık karakteri otomatik takip vardır.
+Data lives in `app/grail-data/chronicle.sqlite3`. Operations use transactions,
+and DB connections close after each operation. This folder, save backups and
+native session manifests are excluded from Git and distribution ZIPs.
+**Download journal** exports the selected profile's evidence fields as JSON.
+Artwork uses existing local Atlas icons. The UI provides search, category/status
+filters, level/name/date sorting, 48-card pages, character selection and automatic
+following of the active character.
 
-## Doğrulama
+## Verification
 
-14 grail testi: özgün EXE'de gerçek toplama dalı, yer bulma, listeye ekleme ve
-silme kodları Unicorn'da yürütülür. UI/ses ve harita çıkarma bağımlılıkları test
-nesneleriyle sağlanır. Başarı, dolu çanta, imleçten yerleştirme, ikinci başarısız
-tıklama, satıcı/ödül istisnaları, nesne adresinin yeniden kullanılması, depo,
-halka sarılması, QuickSell ile birlikte satış ve özgün SHA denetimleri kapsanır.
-Saf veri testleri profil ayrımı, kalıcılık, tekrar sayımı, elle işaretin geri
-alınması, save çözümü ve bozuk save reddini kapsar.
+Fourteen grail tests execute the original EXE's actual pickup branch, slot
+search, insertion and deletion code in Unicorn. UI/sound and map-extraction
+dependencies use test doubles. Coverage includes success, full backpack,
+cursor placement, a failed second click, merchant/reward exclusions, reused
+object addresses, storage, ring wraparound, selling alongside QuickSell and
+original SHA checks. Pure-data tests cover profile separation, persistence,
+duplicate counts, removal of manual marks, save decoding and corrupt-save rejection.
 
-23 Ekim 2026 canlı doğrulaması: açık karakterin Bloody No-Mask eşyasını
-yerden çantaya alması kaydedildi; tarih/bölge/kimlik ve bir toplama doğrulandı.
-Önceden mevcut olduğu için toplam koleksiyon sayısı artmadı. Arayüzde karakter
-değiştirme, arama, elle işaretleme/geri alma ve gerçek JSON indirme doğrulandı.
-Günlük, yardımcı yeniden başlatıldıktan sonra da korunur.
-Sonrasında Knuckle Breaker ilk kez toplandı; Cold Ruins bölgesi ve toplama
-zamanı kaydedildi, toplam 3/457 oldu ve Atlas'ta gerçek ilk-buluntu bildirimi
-göründü. Böylece hem mevcut eşyanın yeniden toplanması hem yeni kayıt ve
-bildirim yolu canlı oyunda doğrulandı.
+Live validation on 23 October 2026 recorded Bloody No-Mask moving from ground
+to backpack, including time, region, identity and one pickup. Because the item
+was already owned, the collection total did not rise. Character switching,
+search, marking/unmarking and actual JSON download were verified in the UI.
+The journal survived a companion restart.
+
+A later first pickup of Knuckle Breaker recorded Cold Ruins and its pickup time,
+raised progress to 3/457 and displayed a real first-find notification. Both
+recollecting an owned item and recording/notifying a new entry were verified live.

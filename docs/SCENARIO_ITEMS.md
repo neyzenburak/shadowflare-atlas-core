@@ -1,75 +1,76 @@
 # Misc / Special / Scenario Items
 
-Atlas’ın beşinci sekmesi. Çevrimdışı çalışır; oyuna bağlanmaz, görev veya save
-durumu değiştirmez. Harita düğmeleri Atlas’ın gerçek oyun haritasını açar.
-Oyunda yolculuk için Haritalar’daki mevcut girişe ışınlanma düğmesi kullanılabilir.
+The fifth Atlas tab works offline. It does not connect to the game or change
+quests or saves. Its map buttons open the actual game maps inside Atlas. To
+travel in the running game, use **Teleport to entry point** in **Maps**.
 
-## Kapsam
+## Coverage
 
-- 39 kayıt: on tüketilebilir ve `4:99000000–99000028` aralığındaki 29 özel eşya.
-- 15 eşya türünün 12 haritada toplam 84 hazır konumu.
-- Dört kart takası; gereken malzemenin konumuna ve NPC’nin haritasına bağlantılar.
-- Dört koruyucu grubu yenildikten sonra oluşan senaryo ödülü.
-- Dorojan’ın panzehir diyaloğu ve Barshival’in emanet teslim paketi.
-- Standart yaratık tablolarındaki özel eşya kaynakları ve açık NPC teslim dalları.
-- White Cloth, Red Thread ve Silver Needle: edinme yolu doğrulanmadı.
-  Mrs. Morris’in bu eşyaları teslim alan dalı ayrıca gösterilir. “Kullanılmıyor”
-  veya “beta eşyası” sonucu çıkarılmaz.
+- 39 entries: ten consumables and 29 special items in `4:99000000–99000028`.
+- 84 fixed placements for 15 item types across 12 maps.
+- Four card trades, linking to ingredient locations and the NPC's map.
+- Four scenario rewards created after defeating their guardian groups.
+- Dorojan's antidote dialogue and Barshival's relic delivery package.
+- Special-item sources in standard monster tables and available NPC turn-in branches.
+- White Cloth, Red Thread and Silver Needle have unverified acquisition routes.
+  Mrs. Morris's branch that accepts these items is shown separately. This does
+  not establish that the items are unused or were removed during development.
 
-Arama eşya/NPC/harita adlarını ve takas malzemesinin haritasını kapsar.
-Kaynak türü ve eşya türüyle filtrelenir. Aynı eşyanın farklı edinme yolları
-ayrı adımlar olarak gösterilir. Atlas eşya panelinden rehbere dönüş bağlantısı var.
+Search covers item, NPC and map names, including the map where a trade
+ingredient is found. Filters select source and item types. Different acquisition
+routes for the same item have separate steps. Atlas item panels link back to
+this guide.
 
-## Doğrulanan tetikleyiciler
+## Verified triggers
 
-Kart konuşmaları **32 numaralı “Jurg’u durdur” görevinin tamamlanmasını** ister.
-Üzerinde aynı kartın bulunması konuşma dalını değiştirir. Takasta bir malzeme
-alınır; kart NPC’nin **o anki** X + 200 / Y konumuna bırakılır. İşaret, NPC’nin
-başlangıç konumudur; NPC hareket edebilir.
+Card dialogue requires **completion of quest 32, Stop Jurg**. Carrying the same
+card changes the available dialogue branch. A trade consumes one ingredient;
+the card appears at the NPC's **current** X + 200 / Y position. Markers show
+starting positions, and NPCs may move.
 
-| Kart | NPC | NPC haritası | Malzeme | Malzemenin hazır haritası |
+| Card | NPC | NPC map | Ingredient | Fixed ingredient location |
 |---|---|---|---|---|
 | Jack | Oscar | Town of Losmans | Mandragora | Lunafuld Beach |
 | Queen | Quina | Ponse, Village of Dwarves | Akebi Fruit | Gungstonwald |
 | King | Buzzed | A Town of Antalusia | Vitality Source | Ruins of Carn |
 | Joker | Barmera | Town of Calado | Mental Source | Coldea Cave |
 
-| Senaryo ödülü | Harita | Yenilmesi gereken koruyucular |
+| Scenario reward | Map | Guardians to defeat |
 |---|---|---|
-| Angel’s Nail | Dragon Cave | Magic Dragon ×2, Saint Dragon |
+| Angel's Nail | Dragon Cave | Magic Dragon ×2, Saint Dragon |
 | Silver Orb | The Ruins of Lukuna | Dark Lesser Demon |
 | Gold Orb | The Ruins of Zeres | Lightning Lesser Demon |
 | Tears of Oberon | Dark Elves Hiding Place | Flame / Water / Earth / Lightning / Dark Crimson |
 
-Ödüller koruyucuların standart drop havuzundan gelmez. Senaryo, koruyucu
-grubunda etkin aktör kalmadığını kontrol edip eşyayı sandığın konumunda üretir.
-Aynı ödülün tekrar oluşmasını ayrı bir senaryo durumuyla önler.
+These rewards do not come from the guardians' standard loot pools. The scenario
+checks that no active actors remain in the guardian group, then creates the
+item at the chest location. A separate scenario flag prevents repeat creation.
 
-Dorojan, zehirlenme hikâyesindeki panzehir görevinde Ponero Cave’den getirilen
-Fruit of Poreno karşılığında Antidote verir. Barshival ise 37 numaralı
-“Kutsal emanetleri Aziz Sena’ya götür” görevini başlatırken üç emaneti doğrudan
-özel eşya alanına koyar. Bunlar erken oyunda koşulsuz eşya alma yöntemleri değildir.
+During the poisoning storyline's antidote quest, Dorojan gives Antidote in
+exchange for Fruit of Poreno brought from Ponero Cave. When starting quest 37,
+Take the sacred relics to Saint Sena, Barshival places the three relics directly
+in the special-item area. These are not unconditional early-game item sources.
 
-## Veri ve koordinatlar
+## Data and coordinates
 
-`tools/build_scenario_items.py` 209 MCT ve 209 SCS dosyasını sınır/EOF
-kontrolüyle okur. Elle açıklanan ödül komutlarını, NPC referanslarını, görev 32
-koşulunu ve sayısal Table.Tbd gruplarını kontrol eder; tanımadığı biçimde durur.
-NPC’nin `DELETEITEM` komutu edinme değil **kullanım/teslim** bağlantısıdır.
-Bu bağlantılar ayrı tutulur. MCT/SCS dosyalarının SHA-256 değerleri veriyle saklanır.
+`tools/build_scenario_items.py` reads 209 MCT and 209 SCS files with bounds/EOF
+checks. It validates the annotated reward commands, NPC references, quest 32
+condition and numeric Table.Tbd groups, and stops on unrecognized formats.
+An NPC's `DELETEITEM` command indicates **use or turn-in**, not acquisition;
+those links are kept separate. Source MCT/SCS SHA-256 values accompany the data.
 
-Haritadaki işaretler yerel dünya koordinatlarından oyunun dönüşümüyle hesaplanır:
+Markers use the game's projection from local world coordinates:
 `screenX = trunc((X-Y)*15/100)`, `screenY = trunc((X+Y)*10/100)`.
-Negatif değerlerde C’nin sıfıra doğru bölmesi korunur. Yaratık ve çevre çizimi
-değişmez; işaretler yalnızca Atlas haritasına eklenen bir katmandır.
+C's division toward zero is preserved for negative coordinates. Monster and
+scenery rendering is unchanged; markers are a layer over the Atlas map.
 
 ```powershell
-python tools/build_scenario_items.py --game '\\KEENETIC-7191\WinToUSB\ShadowFlare'
+python tools/build_scenario_items.py --game 'C:\Games\ShadowFlare'
 node tests/test_scenario_items.cjs
-# DOM testi için jsdom geliştirme bağımlılığı gerekir:
+# The DOM test requires the jsdom development dependency:
 node tests/test_scenario_page.cjs
 ```
 
-Üretilen `app/assets/scenario-items.js` oyun verisidir: özel Git deposunda
-tutulmaz; yerel ZIP’e dahil edilir ve mevcut asset aktarımıyla taşınır.
-Derleme oyun dosyalarını, save’i ve canlı yardımcı ayarlarını değiştirmez.
+The generated `app/assets/scenario-items.js` contains game-derived data. It is
+excluded from Git, included in local ZIPs and supported by the existing asset
+importer. Building it does not change game files, saves or live companion settings.

@@ -1,6 +1,6 @@
 # Native custom-resolution startup
 
-Control Desk -> **ShadowFlare’i başlat** accepts width, height and the game
+Control Desk -> **Launch ShadowFlare** accepts width, height and the game
 folder. The default is 1920x900. Settings apply on the next start; an existing
 game is never closed or restarted by the launch button.
 

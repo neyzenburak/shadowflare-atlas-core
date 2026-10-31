@@ -1,119 +1,120 @@
-# Yoğun ganimet: 23 Ekim 2026
+# Heavy loot: 23 October 2026
 
-Son sürüm: render performansı v11. Oyuncu yoğun eşya yığınları arasında
-20 saniye yürürken, 2.293 yer eşyası korunarak **29,65 FPS** ölçüldü.
-Oyuncu, önceki belirgin yürüyüş kasmasının düzeldiğini doğruladı.
+The final recorded implementation is rendering performance v11. During a
+20-second walk among dense loot piles, it measured **29.65 FPS** while keeping
+all 2,293 ground items. The player confirmed that the previous movement stutter
+had improved.
 
-| Yürüyüş ölçümü | Sonuç |
+| Walking measurement | Result |
 |---|---:|
-| Tamamlanan kare / süre | 593 / 20,0004 sn |
-| Medyan kaydedilmiş kare aralığı | 33,19 ms |
-| %95 / %99 yüzdelik | 37,55 / 41,94 ms |
-| En uzun kaydedilmiş aralık | 60,20 ms |
-| 50 ms / 100 ms üstü kaydedilmiş aralık | 2 / 0 |
+| Completed frames / duration | 593 / 20.0004 s |
+| Median recorded frame interval | 33.19 ms |
+| 95th / 99th percentile | 37.55 / 41.94 ms |
+| Longest recorded interval | 60.20 ms |
+| Recorded intervals over 50 ms / 100 ms | 2 / 0 |
 
-Ölçüm oyun kare tamamlanma sayacının yaklaşık 2 ms aralıkla okunmasıdır;
-oyun thread'leri durdurulmaz. Okumalar arasında kaçırılan 25 kare geçişi
-ayrı sayılır; bunlar için tek tek kare süresi uydurulmaz. FPS bütün kare
-farkından hesaplanır; yüzdelikler yalnızca kaydedilebilen aralıklara aittir.
+Measurement polls the game's completed-frame counter about every 2 ms without
+suspending game threads. The 25 frame transitions missed between reads are
+counted separately; their individual timings are not invented. FPS uses the
+whole counter difference, while percentiles use only captured intervals.
 
-## Karşılaştırma ve sınırlar
+## Comparison and limits
 
-İlk karşılaştırma aynı süreç, aynı görünüm ve 2.293 eşya ile yapıldı:
+The first comparison used the same process, view and 2,293 items:
 
-| Uygulama | Kare | Süre | FPS |
+| Implementation | Frames | Duration | FPS |
 |---|---:|---:|---:|
-| Önceki doğrudan liste sıralaması | 73 | 5,0003 sn | 14,60 |
-| Artımlı ilişki tablosu | 121 | 5,0039 sn | 24,18 |
-| İlişki tablosu + ardışık örtüşme aramaları | 121 | 5,0007 sn | 24,20 |
+| Previous direct list sorting | 73 | 5.0003 s | 14.60 |
+| Incremental relation table | 121 | 5.0039 s | 24.18 |
+| Relation table + sequential overlap lookups | 121 | 5.0007 s | 24.20 |
 
-Son ekleme bu ilk görünümde belirgin ek FPS kazancı göstermedi; tekrarlı
-indeks aramalarını kaldırdı. Sonraki vurgu döngüsü düzeltmesinde yaklaşık
-28 FPS görüldü. Oyuncu, envanter doluyken toplama girişiminin bile akıcılığı
-değiştirdiğini; bazı yoğun konumlarda durunca hâlâ kasma olduğunu bildirdi.
+The final addition gave no clear extra FPS in that initial view, but removed
+repeated index searches. A later highlight-loop fix reached about 28 FPS. The
+player reported that even attempting a pickup with a full backpack changed
+smoothness, and standing at some dense positions still stuttered.
 
-Ara v10 sürümünde dururken yaklaşık 29 FPS görülmesine rağmen oyuncu
-yürürken hâlâ kasma bildirdi. Görünen liste boyu değişince önbelleğin
-yeniden kurulması v11'de giderildi. Son ölçüm yürüyüş sırasında alındı.
+Intermediate v10 reached about 29 FPS while stationary, but movement still
+stuttered. v11 removed cache rebuilds caused by visible-list size changes.
+Its final measurement was taken while walking.
 
-Son ölçüm öncekilerle aynı oyun sürecinde ve aynı 2.293 eşya ile alındı;
-karakter bu arada hareket ettiği için ilk 14,60 FPS kaydıyla birebir aynı
-kameradan alınmış bir karşılaştırma değildir. Bütün yoğunluklarda sabit FPS
-veya oyunun bütün hatalarının giderildiği iddia edilmez.
+The final run used the same process and 2,293 items as earlier measurements,
+but the character had moved, so it is not a camera-identical comparison with
+the initial 14.60 FPS result. No fixed FPS across all densities or correction
+of every game bug is claimed.
 
-Thread örneklemesi bağlamları okumak için kısa durdurmalar yapar ve ölçümü
-etkileyebilir. Pasif sayaç kaydı thread durdurmaz; iki yöntem ayrı tutulur.
-Yerel teşhis kayıtları ve bellek görüntüleri GitHub'a yüklenmez.
+Thread-context sampling briefly suspends threads and can affect performance.
+Passive counter recording does not; the two methods are kept separate. Local
+diagnostics and memory images are not uploaded to GitHub.
 
-## Son değişiklik neden gerekliydi?
+## Why the final change was needed
 
-Liste sırası kayan nesneler, önceki önbellekte pek çok sabit nesneyi değişmiş
-gösteriyordu. Yalnızca nesnenin bellek adresini eşlemek de canlı oyunda işe
-yaramadı: çizim nesnelerinin yeniden kurulması önbelleği sürekli bozdu.
-Bu deneme yaklaşık 15 FPS kaldı ve son sürümde kullanılmıyor.
+Objects shifting position in the list made the previous cache treat many fixed
+objects as changed. Matching only object memory addresses also failed live:
+recreated render objects continually invalidated the cache. That attempt stayed
+near 15 FPS and is not part of the final implementation.
 
-v11, sıralamayı belirleyen tam `(left, top, right, bottom, group)` değerlerini
-eşler. Hash yalnızca aday bulur; beş değerin tamamı ayrıca karşılaştırılır.
-Eşleşen eski geometri aynı matris hücresini kullanır. İlk geçişte eşleşmeyen
-girdiler, değişmeyenler eşlendikten sonra boşta kalan hücrelere atanır.
-Yalnızca değişen geometriye bağlı satır ve sütunlar yeniden hesaplanır.
-Girdi sırası ayrıca tutulur; özgün eşitlik ve döngü çözme davranışı korunur.
+v11 matches the complete sorting geometry `(left, top, right, bottom, group)`.
+Hashing only finds candidates; all five values are compared exactly. Matching
+old geometry reuses the same matrix cell. After unchanged inputs are matched,
+unmatched inputs from the first pass take remaining free cells. Only rows and
+columns involving changed geometry are recomputed. Original input order is
+stored separately to preserve tie-breaking and cycle resolution.
 
-Birbirinin aynı konum ve geometriye sahip eşyalar ayrı girdiler olarak
-eşlenir. Görsel birleştirme, eşya silme veya eşya/tur sınırı uygulanmaz.
-Farklı listeler için sekiz önbellek girdisi vardır. Bu sayı eşya kapasitesi
-değildir. Alan, ihtiyaç arttıkça 256 kaydın katlarına büyür; görünen nesne
-sayısı azalınca korunur. Bir girdi değiştirilirse eski alan serbest bırakılır.
+Items with identical positions/geometries remain distinct inputs. There is
+no visual merging, deletion or item/roll cap. Eight cache entries serve
+different lists; that is not an item capacity limit. Allocations grow in
+multiples of 256 records and remain allocated when the visible count shrinks.
+Replacing an entry frees its old allocation.
 
-Yürürken özgün listeden çıkan geometriye ait hesaplar bellekte kalabilir.
-Etkin girdi bit maskesi, derece ve sıralama hesabına yalnızca o karede
-özgün oyunun listelediği nesneleri dahil eder. İlişkilerin ters matrisi,
-görünen liste boyu değişince bütün ilişkileri yeniden kurmadan etkin giriş
-derecelerini hesaplamayı sağlar. Yeni görünen nesneler bütün eski nesnelerin
-tekrar hesaplanmasına yol açmaz.
+Relations for geometry that leaves the original list during movement may remain
+cached. An active-input bitmask includes only objects listed by the original
+game in that frame when calculating degrees and order. The transposed relation
+matrix computes active indegrees without rebuilding every relation when visible
+list size changes. Newly visible objects do not force every old object to be
+recomputed.
 
-## Korunan davranış
+## Preserved behavior
 
-- Sıralama ilişkisi özgün DLL ile aynıdır; işaretli 32 bit toplama davranışı
-  ve döngüsel bağımlılıklarda ilk kalan nesnenin seçilmesi korunur.
-- Eşit öncelikli adaylarda özgün girdi sırası korunur. Taşınan hücrelerde
-  özgün flags/transparency sıfırlama davranışı uygulanır.
-- Önceki render nesnesi veya hücresi üzerinden veri okunmaz. Güncel hücreler
-  her çağrıda yenilenir. Hash çakışması yaklaşık eşleşme sayılmaz.
-- Bellek ayrılamazsa önceki tam liste algoritması çalışır; eşya silinmez.
-- Ardışık arama yalnızca dört doğrulanmış döngüde kullanılır: üç örtüşme
-  döngüsü ve bir nesne vurgu döngüsü. Çağıran, liste, baş hücre, stack frame
-  ve sıralama nesli kontrol edilir. Diğer çağrılar özgün Get işlevini kullanır.
-- Vurgu döngüsünün kodu, eriştiği RGB işlevleri ve import hedefleri doğrulanır;
-  bu döngü nesne bağlantılarını veya liste üyeliğini değiştirmez.
-- Yardımcı kapanırken çağrılar geri alınır; etkin çağrılar bitince önbellek
-  alanları ve 8 KB kod alanı serbest bırakılır.
+- The relation matches the original DLL, including signed 32-bit addition
+  behavior and choosing the first remaining object in dependency cycles.
+- Original input order breaks equal-priority ties. Moved cells retain original
+  flag/transparency reset behavior.
+- No data is read through old render objects/cells. Current cells refresh on
+  every call. A hash collision never counts as an approximate match.
+- Allocation failure falls back to the previous full-list algorithm without
+  deleting items.
+- Sequential lookup applies only to four verified loops: three overlap loops
+  and one object-highlight loop. Caller, list, head cell, stack frame and sort
+  generation are checked; other calls use original Get.
+- Highlight-loop code, accessed RGB functions and import targets are verified.
+  The loop does not change object links or list membership.
+- Shutdown restores calls, then frees cache allocations and the 8 KB code area
+  once active calls finish.
 
-Her önbellek alanının boyu, büyüyen kapasite `C`, `H = nextpow2(2*C)` ve
-satır genişliği `S = C/8` için:
+Each cache allocation uses growing capacity `C`, `H = nextpow2(2*C)` and row
+width `S = C/8`:
 
 ```text
-48*C + 8*H + S + 2*C*S bayt
+48*C + 8*H + S + 2*C*S bytes
 ```
 
-İlk bölüm metadata, sonuç sırası, derece, değişen girdiler ve özgün girdi
-sırasıdır; diğer bölümler tam geometri araması, etkin girdi maskesi ve
-ilişkilerin iki yönlü bit tablolarıdır.
+The first section holds metadata, result order, degrees, changed inputs and
+original input order. The others contain exact geometry lookup, the active
+input mask and forward/transposed relation bit tables.
 
-## Doğrulama ve kapsam
+## Verification and scope
 
-33 test yerel özgün DLL'yi Unicorn'da oracle olarak çalıştırır. Özgün EXE
-bulunduğunda vurgu döngüsü de iki sürümle yürütülür; RGB değişimleri, nesne
-bağlantıları ve döngü sonundaki register değerleri karşılaştırılır.
+Thirty-three tests execute the local original DLL in Unicorn as the oracle.
+With the original EXE available, both highlight-loop versions also run, comparing
+RGB changes, object links and final register values.
 
-Testler sıralama, hücre özellikleri, çift yönlü bağlantılar, stack/register
-düzeni, negatif ve taşan koordinatlar, yenilenen render hücreleri ve nesneleri,
-değişen geometri, değişen girdi sırası, aynı geometrili yinelenen girdiler,
-kasıtlı hash çakışmaları, görünürlük değişimleri, etkin olmayan geometrinin
-sıralamadan dışlanması, kapasite büyümesi, liste boyuna geri dönüş, önbellek tahliyesi ve bellek
-ayırma başarısızlığını kapsar. 5.000 nesne kapasite sınırı olmadan korunur;
-iki Get türünde de 5.000 ardışık arama doğrulanır. Farklı nesil/listeler ve
-yabancı çağrılar özgün yola döner.
+Coverage includes sorting, cell properties, bidirectional links, stack/register
+layout, negative/overflowing coordinates, refreshed render cells/objects,
+changed geometry/order, duplicate geometry, deliberate hash collisions,
+visibility changes, excluding inactive geometry, capacity growth, return to a
+previous list size, cache eviction and allocation failure. All 5,000 objects
+remain without a capacity cap; 5,000 sequential lookups are verified for both
+Get types. Different generations/lists and foreign callers use the original path.
 
-Özgün EXE/DLL test dosyaları ve kişisel oyun verileri yerel kalır. Çalışma
-zamanında assembler, Unicorn veya başka pip bağımlılığı gerekmez.
+Original EXE/DLL fixtures and personal game data stay local. Runtime requires
+no assembler, Unicorn or additional pip dependency.

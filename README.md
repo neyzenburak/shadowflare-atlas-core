@@ -34,8 +34,8 @@ implementation is bundled. A CT can be imported locally by its owner. The
 Atlas interface supports Turkish and English through the **TR / EN** buttons
 in the top-right corner. The selection is remembered locally.
 
-This README is in English. Several linked technical documents are in Turkish;
-the Turkish interface labels are included below alongside their English meaning.
+The README and linked technical documents are in English. Interface instructions
+below use the English labels; switch to **EN** to follow them in the app.
 
 The language switch covers all five tabs, filters, item properties, scenario
 instructions, accessible labels and live status/error messages. It preserves
@@ -152,10 +152,10 @@ cd shadowflare-atlas-core
 .\start.cmd
 ```
 
-Access to this private repository and your own compatible game installation
-are required. Keep the first-run window open: decoding monster animations and
-165 original map resources takes time. Progress is shown by phase. Running
-`start.cmd` again resumes completed work after an interruption.
+Your own compatible game installation is required. Keep the first-run window
+open: decoding monster animations and 165 original map resources takes time.
+Progress is shown by phase. Running `start.cmd` again resumes completed work
+after an interruption.
 The original full-edition clean build took approximately **47 minutes** on
 the development PC. Core omits its language-resource phase; first-build time
 still depends on your PC. This happens once, while a complete local ZIP skips
@@ -193,8 +193,8 @@ the desktop shortcut.
 
 ## Start the game at a custom resolution
 
-**Control Desk → ShadowFlare’i başlat** contains width/height fields,
-the game folder and **Oyunu başlat**. The default is **1920×900**. Save a
+**Control Desk → Launch ShadowFlare** contains width/height fields,
+the game folder and **Launch game**. The default is **1920×900**. Save a
 preference for the next launch, or start the game directly from the card.
 `ShadowflareConfigurator.exe` and `ShadowflarePatcher.exe` are no longer
 required. Core uses its own native viewport implementation, authored against
@@ -258,11 +258,11 @@ Place your own `.ct` file beside `ShadowFlare.exe`. When exactly one CT is
 present, the running companion imports it automatically; no separate path
 setting or loaded character is needed. It also notices a file added while
 Atlas is running. If several CT files are present, choose one through
-**Control Desk -> Trainer -> CT dosyası ekle**. This picker also accepts a CT
+**Control Desk -> Trainer -> Add CT file**. This picker also accepts a CT
 stored elsewhere. Existing imports take precedence and are not replaced.
 
 Imported data stays under `app/trainer-local/`; it is excluded from Git and
-local ZIPs. **Tabloyu kaldır** disables imported patches, removes the local
+local ZIPs. **Remove table** disables imported patches, removes the local
 table and pauses automatic importing until you explicitly add a CT again.
 Importing never enables cheats or runs Lua. It does not rebuild the atlas,
 download a table or contact a table hosting service.
@@ -290,8 +290,7 @@ rolls therefore do not multiply white/Magic equipment or consumables. Mine
 and gold retain their normal behavior. Atlas item/map probabilities reflect
 the selected policy. See [drop events](docs/DROP_EVENT.md).
 
-**Do not drop Premiums already found by this character**
-(`Grail’de bu karakterin buldukları droplanmasın`) rejects known Premium
+**Exclude Premiums already found by this character** rejects known Premium
 results, including the normal roll, without rerolling. It also works at ×1.
 The selected character's journal determines the filter; existing ground
 items remain in place.
@@ -302,11 +301,11 @@ The **Beyaz / mavi ganimet** card temporarily hides or shows white/Magic
 equipment and its mouse hit-testing, making Premiums easier to select.
 Blue beams attached to hidden Magic equipment are hidden too.
 
-**Yerdeki beyaz ve mavileri sat** sells eligible ground equipment at the
+**Sell white and Magic ground loot** sells eligible ground equipment at the
 game's unidentified sale price. The proceeds stay on the ground at the
 character's feet and are excluded from auto-pickup so you can collect them
 manually. Premiums, consumables, Mine and existing gold are retained.
-Selling is permanent. The optional **İşlemden önce kaydet** checkbox saves
+Selling is permanent. The optional **Save before operation** checkbox saves
 and backs up progress before the operation.
 See [ground-loot controls](docs/GROUND_LOOT.md).
 
@@ -352,7 +351,7 @@ See [gold capacity](docs/GOLD_CAPACITY.md).
 
 With a merchant open, right-click a backpack item to sell it. This shortcut
 is enabled by default when the companion starts and can be disabled through
-**Sağ tıkla sat**. The game determines the price, eligibility and available
+**Right-click to sell**. The game determines the price, eligibility and available
 gold space. Rejected sales leave the item in its original position; equipped
 items are not sold by this shortcut. See [quick selling](docs/QUICK_SELL.md).
 
@@ -367,7 +366,7 @@ available. Search, missing-item filters, character selection and JSON export
 are supported. See [the grail journal](docs/GRAIL.md).
 
 The journal is local: `app/grail-data/chronicle.sqlite3`. It is excluded from
-Git and distribution ZIPs. Export it through **Günlüğü indir**, or copy the
+Git and distribution ZIPs. Export it through **Download journal**, or copy the
 `grail-data` folder while the companion is stopped.
 
 - **Premium beams:** Gold beams, a small halo and rising sparkles follow
@@ -384,7 +383,7 @@ Git and distribution ZIPs. Export it through **Günlüğü indir**, or copy the
 - **Ctrl + left-click teleport:** With inventory, map and other game panels
   closed, teleport to walkable ground. Invalid destinations are rejected.
   See [Ctrl teleport](docs/CTRL_TELEPORT.md).
-- **Map travel:** **Haritalar → Giriş noktasına ışınlan** moves to the selected
+- **Map travel:** **Maps → Teleport to entry point** moves to the selected
   scenario's native entry point. It supports 209 scenario maps; three
   scenario-less previews are not travel destinations. Its optional save
   checkbox is remembered separately from ground-sale saving, and both
@@ -395,7 +394,7 @@ Git and distribution ZIPs. Export it through **Günlüğü indir**, or copy the
   attack. Large overlapping batches can severely slow the game.
   See [monster spawning](docs/MOB_SPAWN.md).
 - **EXP event:** Multiply raw monster EXP by **×1–1000**. Monster cards show
-  the unmodified EXP range. **Statları koru, seviyeyi düşür** saves and backs
+  the unmodified EXP range. **Lower level, keep stats** saves and backs
   up progress, lowers the level without removing base stats and resets EXP.
   Earning that level again grants the game's normal bonuses again.
   See [EXP and level controls](docs/EXPERIENCE.md).
@@ -406,7 +405,7 @@ Git and distribution ZIPs. Export it through **Günlüğü indir**, or copy the
 
 ## Warrior special skills
 
-Enable **Özel yetenekler**, close game panels and use **left Alt + right-click**
+Enable **Special skills**, close game panels and use **left Alt + right-click**
 with a Warrior:
 
 - **Omega beam:** A red beam follows a 45°/90° route around obstacles, with
@@ -424,8 +423,7 @@ See [special skills](docs/OMEGA_BEAM.md).
 ## Repository layout
 
 - `app/`: browser interface, local companion and runtime patch modules.
-- `docs/`: feature notes, algorithms and assembly explanations; some documents
-  are in Turkish.
+- `docs/`: English feature notes, algorithms and assembly explanations.
 - `tools/`: asset import, data builders, native-code builders and local packaging.
 - `tests/`: JavaScript/DOM checks and optional native x86 verification.
 

@@ -1,57 +1,60 @@
-# AI kapalı yaratık doğurma
+# Spawning monsters with AI disabled
 
-Drop Atlas'ta bir yaratık ve görünüm/drop varyantı seç. Görselin altındaki
-**Adet** alanına 1–2000 arasında tam sayı yazıp **Seçili yaratığı yanıma doğur**
-düğmesine bas. Oyuna dön; istek oyun döngüsünde tamamlanır. Bir istekteki bütün
-yaratıklar aynı dünya koordinatında, iç içe yerleştirilir.
+Select a monster and appearance/loot variant in Drop Atlas. Enter a whole
+number from 1 to 2000 in **Quantity** below its preview, then press **Spawn
+selected monster nearby**. Return to the game; its update loop completes the
+request. Every monster in one batch overlaps at the same world coordinates.
 
-**Son doğurduğum grubu kaldır**, yalnızca son isteğin yaratıklarını ganimet ve
-deneyim üretmeden geri alır. Normal yaratıklara dokunmaz. Grup zaten yoksa
-eksik örnekler atlanır. İlgili canlılık/etkileşim kayıtları da temizlenir;
-mevcut görev bayrakları korunur.
+**Remove my last spawned group** removes only the last request's monsters,
+without producing loot or EXP. Normal monsters are untouched. Missing members
+of an already-partially-removed group are skipped. Associated living/interaction
+records are cleaned up while existing quest flags are preserved.
 
-2000 adedin kod testini geçmesi, oyunda akıcı çizileceği anlamına gelmez.
-Canlı denemede 2000 Dread Raptor ciddi yavaşlamaya yol açtı; son grup geri
-alındığında 5 saniyelik ölçüm 29,8 FPS ve 50 ms üstünde sıfır kare verdi.
-Küçük adetlerle başla; 2000 bir performans garantisi değildir.
+Passing a 2000-instance code test does not mean the game renders that batch
+smoothly. A live batch of 2000 Dread Raptor caused severe slowdown. After removing
+the last group, a five-second measurement showed 29.8 FPS with no frames over
+50 ms. Start small; 2000 is not a performance guarantee.
 
-İlk nokta, karakterin yakınında yaratığın gerçek gövdesinin sığdığı yürünebilir
-zeminde aranır. Sonraki örnekler aynı noktayı paylaşır. Her birinin kimliği,
-canı, isabet kaydı ve ölümü ayrıdır. Seçili senaryo varyantının canı, seviyesi,
-görünümü, parça renkleri ve drop grubu kullanılır. Ölümde etkin drop çarpanı ve
-Grail filtresi dahil mevcut ganimet kuralları çalışır.
+The initial point is nearby walkable ground with enough room for the monster's
+actual body. Later instances share that point. Each has a separate identity,
+HP, hit registration and death. The selected scenario variant supplies HP,
+level, appearance, part colors and loot group. Death uses current loot rules,
+including the active multiplier and grail filter.
 
-Canlıyken yürümez ve saldırmaz. Hasar, hedefleme, ölüm animasyonu, ganimet ve
-nesnenin temizlenmesi oyunun özgün yollarını kullanır. Diğer yaratıkların AI'ı
-değişmez. Doğurulan yaratıklar kalıcı bir harita düzenlemesi değildir.
+Living spawned monsters do not walk or attack. Damage, targeting, death
+animation, loot and cleanup follow original game paths. Other monsters' AI is
+unchanged. These spawns are not persistent edits to the map.
 
-## Uygulama
+## Implementation
 
-- `mob_spawn.py`, Atlas örneğini özgün `Scenario.Mct` kaydıyla doğrular.
-  79 alanlı kaynak özellikleri, özgün yükleyicinin 72 alanlı düzenine çevrilir.
-- Görünümde etkin parça maskeleri ve RGB çarpanları korunur. Kaynak animasyon
-  dizilerinin uzunluğu ile modelin kullandığı gerçek parça sayısı ayrıdır.
-- Ana oyun iş parçacığında özgün nesne fabrikası, ortak kurucu, özellik
-  yükleyici ve ad yükleyici çağrılır. Her örnek için yeni, boş bir kimlik alınır.
-- Canlı düşman tablosuna ve üç etkileşim bayrağına sıralı kayıt eklenir.
-  Mevcut görev ve yaratık kayıtlarının bütün alanları korunur. Dizilerin belleği
-  oyunun kendi ayırıcısıyla ayrılır; özgün harita temizleyicisi tarafından salınır.
-- Yalnızca yeni örneğin sanal yöntem tablosundaki güncelleme işlevi değiştirilir.
-  Boşta çizim/animasyon çalışır; boşta animasyondaki üç saldırı üretimi kaldırılır.
-  Can sıfır olduğunda özgün ölüm güncellemesine dönülür.
-- `+34c` etkinlik alanı sıfırdır: özgün mermi kodu aksi halde görünür hedefi
-  atlar. `+34` kaynak etiket yüksekliğidir; ad ve can çubuğu ayakta kalmaz.
-- Geçici istek yönlendirmesi kaldırılıp belleği serbest bırakılır. Ortak pasif
-  davranış sayfası, örneklerin dönüş adresleri geçerli kalsın diye oyun kapanana
-  kadar tutulur. Yardımcı yeniden açıldığında doğrulanmış sayfa tekrar kullanılır.
+- `mob_spawn.py` validates the Atlas record against its original `Scenario.Mct`
+  entry. The 79-field source properties are converted into the original loader's
+  72-field layout.
+- Active part masks and RGB multipliers are preserved. Source animation-array
+  length is separate from the model's actual part count.
+- The original object factory, shared constructor, property loader and name
+  loader run on the main game thread. Each instance receives a new unused ID.
+- Records are appended in order to the live enemy table and three interaction
+  flags. Every field of existing quest/monster records is preserved. Arrays
+  use the game's own allocator and are freed by its original map cleanup.
+- Only the new instance's virtual-table update function changes. Idle drawing
+  and animation remain active; three attack-producing paths in the idle
+  animation are removed. At zero HP, the original death update resumes.
+- Activity field `+34c` is zero; otherwise the original projectile code skips
+  a visible target. `+34` is the source label height, keeping the name/HP bar
+  above the monster instead of at its feet.
+- The temporary request detour is removed and freed. The shared passive code
+  page remains until game exit so instance return addresses stay valid. A
+  restarted companion reuses that page after verification.
 
-Adet sınırı hem HTML hem sunucu tarafında doğrulanır. Kısmen tamamlanan bir
-istekte gerçek oluşturulan adet bildirilir; otomatik tekrar gönderilmez.
-Oturum kayıtları `app/mob-spawn-sessions/` altındadır; Git'e ve ZIP'e eklenmez.
+Quantity bounds are enforced in HTML and on the server. Partial requests
+report the actual created count and are not retried automatically. Session
+records live under `app/mob-spawn-sessions/`, excluded from Git and ZIPs.
 
-## Kontroller
+## Verification
 
-`tests/test_mob_spawn.py`, x86 kodunu Unicorn'da çalıştırır: fabrika çağrı
-sırası, zemin reddi, kimlik çakışması, etkileşim kayıtlarının korunması, özgün
-özellik dönüşümü, parça renkleri, pasif güncelleme, ölüm geçişi ve aynı noktada
-2000 ayrı örnek. Özgün EXE fikstürü varsa planın kod özetleri de doğrulanır.
+`tests/test_mob_spawn.py` executes x86 in Unicorn: factory-call order, terrain
+rejection, ID collisions, interaction-record preservation, original property
+conversion, part colors, passive updates, death transition and 2000 distinct
+instances at one point. With the original EXE fixture, plan code fingerprints
+are checked too.

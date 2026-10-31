@@ -7,7 +7,7 @@ CT is imported automatically; no loaded character or additional path setting
 is required. Only that folder's top-level files are checked.
 
 If there are multiple CT files, Atlas leaves them untouched and asks you to
-select one through **Control Desk -> Trainer -> CT dosyası ekle**. The picker
+select one through **Control Desk -> Trainer -> Add CT file**. The picker
 also works for files stored elsewhere. A previously imported table takes
 precedence, so discovering another file never replaces existing controls or
 enables a cheat. Invalid files show an explanation without stopping Atlas.
@@ -26,7 +26,7 @@ patches are rejected instead of being layered over unknown bytes.
 
 Table labels, scripts and structure descriptions are shown only after local
 import. Data is persisted in `app/trainer-local/table.json`. This folder is
-ignored by Git and not selected by the package builder. **Tabloyu kaldır**
+ignored by Git and not selected by the package builder. **Remove table**
 restores active imported patches, clears their value freezes and undo data,
 and removes the local table. It also persists a pause on automatic importing,
 so a table still in the game folder does not immediately reappear. Explicitly

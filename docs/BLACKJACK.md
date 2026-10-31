@@ -1,42 +1,46 @@
-# Her elde Blackjack · K + A
+# Blackjack every hand: K + A
 
-**Kontrol Masası → Trainer → Hileler** altında açılır/kapanır. Trainer aramasına
-`blackjack` yazabilirsin. Açıldıktan sonra **yeni bir el başlat**; ilk iki oyuncu
-kartı sırasıyla **King ve Ace** olur. Kapatılınca normal dağıtım geri gelir.
+Toggle **Control Desk > Trainer > Atlas > Blackjack every hand**. You can also
+search the trainer for `blackjack`. After enabling it, **start a new hand**:
+the player's first two cards are **King, then Ace**. Disabling restores normal
+dealing.
 
-Oyunun 17. ve 22. kule katındaki iki blackjack konuşması aynı dağıtıcıyı
-kullandığından ikisinde de geçerlidir. Bahis, devam etme, galibiyet serisi ve
-eşya/depo ödülü oyunun kendi akışıyla yürür. İki taraf da iki kartla 21 bulursa
-beraberlik sayılır. Bu seçenek mevcut bir elin açılmış kartlarını değiştirmez.
+The blackjack conversations on tower floors 17 and 22 use the same dealer,
+so the option works in both. Betting, continuing, winning streaks and item or
+storage rewards follow the game's normal flow. Two natural blackjacks still
+produce a draw. Cards already dealt in an existing hand are not changed.
 
-## Uygulama
+## Implementation
 
-- `blackjack.py`, `40361C` adresindeki yedi baytlık komut sınırına geçici bir
-  yönlendirme kurar. Oyunun EXE veya senaryo dosyaları değiştirilmez.
-- Yalnızca `48D7F0` blackjack nesnesinin **oyuncu** elindeki ilk iki çekiliş
-  değiştirilir. Krupiye, sonraki kartlar ve başka nesneler özgün yolu kullanır.
-- Kart adayının rengi korunur; aynı kartın iki kez gelmesini engelleyen özgün
-  kontrol gerekirse yeni renk çeker. Joker adayı, geçerli bir K/A rengine çevrilir.
-- Kapalı kart işareti, kart sayıları, As’ın 1/11 hesabı ve sonuç karşılaştırması
-  oyunun özgün kodunda kalır. Genel rastgele sayı üreteci yamalanmaz.
-- Etkinleştirmeden önce dağıtıcı, sıfırlama, puan/sonuç ve betik girişlerinin
-  SHA-256 değerleri kontrol edilir. Farklı kod varsa üzerine yazılmaz.
-- Trainer’ın mevcut yedekleme, işlem kilidi, kod uygulama ve geri alma yolunu
-  kullanır. Trainer reseti veya yardımcının normal kapanışı özgün kodu geri yükler.
+- `blackjack.py` places a temporary detour over the seven-byte instruction
+  boundary at `40361C`. No game EXE or scenario file is modified.
+- Only the first two draws in the **player's** hand of blackjack object
+  `48D7F0` are changed. The dealer, later draws and other objects use the
+  original path.
+- The candidate card's suit is kept. The original duplicate-card check can
+  draw another suit if necessary. Joker candidates become valid K/A cards.
+- Face-down flags, card counts, Ace's 1/11 scoring and result comparison remain
+  in the original code. The general random number generator is not patched.
+- SHA-256 values for dealing, reset, score/result and script entry points are
+  checked before activation. Unrecognized code is not overwritten.
+- The existing trainer backup, operation lock, patching and restoration paths
+  are used. Resetting the trainer or normally closing the companion restores
+  the original code.
 
-Özgün Cheat Engine kayıtları değişmez; ek kayıt `trainer-extras.js` içinde ayrı
-tutulur. Denetim, Trainer API sürümü 2’den eski yardımcıda etkinleşmez.
+This Atlas-authored entry is separate in `trainer-extras.js`; imported Cheat
+Engine records are not modified. Core requires Trainer API version 3 or newer
+for this control.
 
-## Kontroller
+## Verification
 
-`tests/test_blackjack.py` özgün EXE’nin gerçek x86 dağıtım, puanlama ve sonuç
-işlevlerini Unicorn’da çalıştırır. 128 başlangıç eli, kart tekilliği, renk
-çakışmasında yeniden çekme, Joker, kapalı kart, sonraki çekiliş, başka nesne,
-beraberlik, kapatma ve Trainer reseti kontrol edilir.
+`tests/test_blackjack.py` runs the original EXE's actual x86 dealing, scoring
+and result functions in Unicorn. It checks 128 initial hands, card uniqueness,
+redrawing a conflicting suit, Jokers, face-down flags, later draws, other
+objects, draws, disabling and trainer reset.
 
-`tests/test_trainer_blackjack.cjs` DOM ortamında görünürlüğü, aramayı,
-eski yardımcı uyumluluğunu ve aç/kapat isteklerini doğrular; `jsdom` gerekir.
-Canlı oyunda da yeni ellerde K + A görülerek doğrulandı.
+`tests/test_trainer_blackjack.cjs` checks visibility, search, compatibility with
+older companions and toggle requests in a DOM environment; it requires `jsdom`.
+New hands with K + A were also verified in a running game.
 
 ```powershell
 python -m unittest discover -s tests -p test_blackjack.py -v

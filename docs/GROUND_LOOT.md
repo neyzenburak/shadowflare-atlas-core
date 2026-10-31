@@ -1,68 +1,68 @@
-# Yerdeki ganimet görünürlüğü ve satış
+# Ground loot visibility and selling
 
-Kontrol Masası’ndaki **Beyaz / mavi ganimet** kartında iki ayrı işlem var:
+The **White / Magic loot** card in Control Desk provides two separate actions:
 
-- **Gizle / Göster:** yerdeki Plain ve Magic silah, zırh ve aksesuarları geçici
-  olarak gizler. Premium, tüketilebilirler, Mine, altın ve özel eşya türleri
-  görünür kalır. Görünmeyen ekipman fare seçimini engellemez; tekrar gösterince
-  aynı eşya geri görünür. Magic ışını da bu görünürlük seçimine uyar.
-- **Yerdeki beyaz ve mavileri sat:** mevcut haritanın bütün uygun ekipmanını
-  oyunun teşhis edilmemiş satış bedelinden altına çevirir. **İşlemden önce
-  kaydet** seçiliyse güncel karakter kaydedilir ve Save klasörü yedeklenir. Altın karakterin ayağına
-  bırakılır ve elle alınır. Bu işlem kalıcıdır.
+- **Hide / Show:** Temporarily hide ground Plain/Magic weapons, armor and
+  accessories. Premiums, consumables, Mine, gold and special items stay visible.
+  Hidden equipment does not block mouse selection; showing it again restores
+  the same item. Magic beams follow the visibility setting too.
+- **Sell white and Magic ground loot:** Convert all eligible equipment on the
+  current map into gold at the game's unidentified sale value. With **Save before
+  operation** selected, current progress is saved and the Save folder backed up.
+  Gold is left at the character's feet for manual pickup. Selling is permanent.
 
-Kayıt kutucuğu varsayılan olarak kapalıdır. Seçim tarayıcıda hatırlanır;
-haritaya ışınlanmanın kayıt seçimi ayrıdır. Kutucuk kapalıyken Atlas’ın ön
-kayıt/yedek adımı atlanır. Seviye düşürme gibi diğer özelliklerin kayıt davranışı
-bu seçenekle değişmez.
+The save checkbox defaults to off. Its choice is remembered in the browser,
+independently of map travel's save option. With it off, Atlas skips its preliminary
+save/backup step. Other features' saving behavior, such as lowering the level,
+is unaffected.
 
-## Native uygulama
+## Native implementation
 
-`458a1c` yerdeki eşya nesnesinin sprite paketini hazırlamaya başladığı noktadır.
-Gizleme, kategori 0–2 / kalite 0–1 için bu paketi atlayıp `458cc3` ortak
-güncellemesine devam eder. Konum, animasyon fiziği, bağlı listeler ve kayıt
-verisi değişmez. Envanter ve satıcı çizimi ayrı işlevlerde çalışır. Native fare
-sorgusu çizim paketlerinden dünya kimliklerini alır; gizlenen nesnenin paketi
-üretilmediğinden Premium’un önünde seçim hedefi oluşturmaz.
+`458a1c` begins preparing a ground item's sprite packet. Hiding skips this packet
+for categories 0–2 / qualities 0–1 and continues at shared update `458cc3`.
+Position, animation physics, linked lists and save data are unchanged. Inventory
+and merchant rendering use separate functions. Native mouse queries obtain
+world IDs from draw packets, so an object without a packet does not become a
+selection target in front of a Premium.
 
-Satış isteği `443490` üzerindeki mevcut tek seferlik oyun iş parçacığı
-mekanizmasını kullanır. Her aday, dünya kimliğiyle `4299e0` üzerinden tekrar
-bulunur; eşya işaretçisi, harita, kategori ve kalite yeniden doğrulanır.
-Teşhis bayrağı aynı native çağrı içinde geçici olarak 0 yapılır; `4661c0(1)`
-satıcı bedelini hesaplar, ardından özgün bayrak geri konur. Premium elenmesi
-bu hesaplamadan önce yapılır.
+Sales use the existing one-shot game-thread request mechanism at `443490`.
+Each candidate is resolved again by world ID through `4299e0`, with pointer,
+map, category and quality revalidated. Its identification flag is temporarily
+set to 0 within the same native call; `4661c0(1)` calculates the merchant value,
+then the original flag is restored. Premiums are excluded before that calculation.
 
-Toplam 64 bitte tutulur. Gerekli altın nesnelerinin **tamamı**, ekipman
-silinmeden önce oyun fabrikasından ayrılır. Ayırma başarısızsa ayrılan nesneler
-serbest bırakılır; ekipmanlar yerinde kalır. Native `427a00` yerden ayırır,
-`465640` eşya bankasından siler. Başarılı satışların tutarı kadar altın,
-`466440` / `4663e0` / `427970` ile normal altın nesneleri olarak yere konur.
-Kese başına en fazla 2.147.483.647; kalan tutar ek keseye çıkar.
+The total uses 64 bits. **All** required gold objects are allocated through the
+game factory before equipment is deleted. Allocation failure frees the reserved
+objects and leaves the equipment in place. Native `427a00` detaches from the
+world; `465640` deletes from the item bank. Gold equal to successful sales is
+placed as normal gold objects through `466440` / `4663e0` / `427970`.
+Each bag holds at most 2,147,483,647; any remainder creates additional bags.
 
-Grail’in eşya silme çağrısındaki bilinen detour’u, kendi doğrulanmış özgün
-bayt okuyucusuyla hesaba katılır; yabancı değişiklikler SHA kontrolünü geçmez.
-İstek boyunca otomatik toplama duraklar. Satış altınının istisna tablosu
-yayımlandıktan sonra önceki toplama ayarı geri döner. Belirsiz sonuç veya
-yayımlanamayan altın istisnasında otomatik toplama kapatılır.
+The known grail detour at item deletion is accounted for through its verified
+original-byte reader; foreign changes fail SHA validation. Auto-pickup pauses
+throughout the request. Its previous setting resumes after publishing the
+sale-gold exclusion table. An uncertain result or failure to publish exclusions
+disables auto-pickup.
 
-## Satış altınının elle alınması
+## Manual collection of sale gold
 
-`sale-gold-ledger.json` yerel karakter/kayıt dosyası, harita, konum ve tutar
-kaydını tutar. Native otomatik toplama ayrı bir tabloyu okur; kayıt ilk
-eşleşmede canlı dünya kimliğine bağlanır. Aynı adresi alan farklı nesne
-istisnayı devralmaz. Yeni oyun sürecinde konum/tutar eşleşmesi yeniden
-bağlanabilir. Altının kendi kayıt biçimi değiştirilmez. Dosya GitHub’a ve
-dağıtım ZIP’ine girmez; mevcut yerel klasörde tutulur.
+`sale-gold-ledger.json` records local character/save identity, map, position and
+amount. Native auto-pickup reads a separate table; the first match binds a
+record to a live world ID. A different object reusing an address does not inherit
+the exclusion. Position/amount matching can rebind it in a new game process.
+The native gold save format is unchanged. The ledger remains local and is
+excluded from GitHub and distribution ZIPs.
 
-## Doğrulama
+## Verification
 
-`tests/test_ground_loot.py`, üretilmiş x86 kodunu Unicorn’da özgün EXE ile
-çalıştırır: çizim paketi ve fare kimliği, eşdeğer fizik, native satış bedeli,
-teşhis bayrağının korunması, Premium/tüketilebilir ayrımı, fabrika hatasında
-geri alma, 32 bit üstü toplamlar, 1.500 eşyalık yığın ve elle alınacak altın
-ayrımı test edilir. Işın ve gerçek frontend kontrol testleri de bu seçeneği
-kapsar. Assembly kaynakları `tools/native/ground_loot.asm` ve
-`tools/native/loot_qol.asm`; üretim için `tools/build_ground_loot.py` ve
-`tools/build_loot_qol.py` kullanılır. Çalışan yardımcı ek pip paketi istemez.
-`test_operation_save.py` kayıt seçiminin her iki işlemde gerçek kayıt çağrısına
-ulaşmasını, kapalıyken atlanmasını ve salt okunur teşhiste kayıt yapılmamasını doğrular.
+`tests/test_ground_loot.py` executes generated x86 against the original EXE in
+Unicorn: draw packets and mouse IDs, equivalent physics, native sale values,
+identification-flag preservation, Premium/consumable exclusions, rollback on
+factory failure, totals exceeding 32 bits, a 1,500-item pile and manual-only
+sale gold. Beam tests and actual frontend control tests also cover this option.
+Assembly sources are `tools/native/ground_loot.asm` and `tools/native/loot_qol.asm`;
+build them with `tools/build_ground_loot.py` and `tools/build_loot_qol.py`.
+The running companion needs no additional pip package.
+
+`test_operation_save.py` verifies both operations call the actual save path
+when requested, skip it when disabled, and never save during read-only diagnostics.

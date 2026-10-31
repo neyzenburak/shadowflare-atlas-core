@@ -1,6 +1,6 @@
 # High-roll Magic beam
 
-The compact **Değerli Magic ışını** card independently toggles blue native
+The compact **Valuable Magic beams** card independently toggles blue native
 world-render beacons. Premium gold beacons retain their own switch. Selection
 does not hide or modify any items, identify them, change their rolls or record
 them in the Premium grail. The setting persists in local

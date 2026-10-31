@@ -1,41 +1,40 @@
-# Yağmur ve geniş ekran
+# Rain and widescreen
 
-Arayüz düzeltmesinin v7 sürümü, yağmuru etkin çözünürlüğe uyarlar. Ayrı bir
-anahtar gerekmez; **Geniş ekran → Düzeltmeyi uygula** ile birlikte açılır.
-Oyunun mevcut yağmuru kullanılır: haritanın hava koşulu, renk, hız, açı ve
-çizgi uzunluğu korunur. Yağmursuz haritaya yağmur eklenmez.
+Interface fix v7 adapts rain to the active resolution. No separate toggle is
+needed; it is enabled with **Widescreen > Apply fixes**. The existing rain is
+used: map weather, color, speed, angle and line length remain unchanged.
+Maps without rain do not gain it.
 
-Özgün `0x41fe20` yordamı damlaları `rand() % 1000 - 180` aralığında üretir;
-damlanın Y konumu 479'a ulaşınca düğümü serbest bırakır. Geniş ekran yaması
-dünyayı büyütse de bu sabitler aynı kalmıştır. Damlalar sola eğildiğinden,
-ekranın sağına doğanların da aşağı inerken görünür alana girmesi gerekir.
+Original routine `0x41fe20` spawns drops in `rand() % 1000 - 180` and frees a
+node when its Y position reaches 479. Widescreen enlarged the world without
+changing those constants. Since drops slope left, ones born to the right of
+the screen must enter the visible area while falling.
 
-Yeni yatay pay `ceil(180 × yükseklik / 480)`, üretim genişliği
-`ekran genişliği + 2 × pay`, silinme eşiği `yükseklik - 1` olur. 640×480'de
-üçü de özgün değerleridir. 1920×900'de pay 338, üretim genişliği 2596 olur.
-Doğum sayısı bu genişliğin 1000'e oranıyla çarpılır. Kesirli kalan sonraki
-kareye aktarılır; böylece yağmur geniş ekranda seyrelmez. Yüksekliğin etkisi
-damlaların uzayan ömründen gelir; doğum sayısı ayrıca yükseklikle çarpılmaz.
+The new horizontal margin is `ceil(180 * height / 480)`, spawn width is
+`screen width + 2 * margin`, and deletion threshold is `height - 1`.
+At 640×480 all three match the original values. At 1920×900 the margin is
+338 and spawn width 2596. Spawn count scales by that width divided by 1000;
+fractional remainder carries into the next frame to preserve density.
+Height already affects drop lifetime and does not multiply spawn count again.
 
-Yama fonksiyon girişinden çağrıyı sarar. Özgün döngü her doğumda yoğunluk
-alanını tekrar okuduğu için alan çağrı süresince ölçeklenir, dönüşten önce
-eski değeri geri yüklenir. Yordamın iki argümanı, dönüş değeri ve koruması
-gereken yazmaçlar korunur. Yağmur kapanınca yeni doğum yapılmaz; mevcut
-damlalar özgün yöntemle silinir. Oyun EXE/DLL dosyaları değiştirilmez.
+The patch wraps the routine at its entry. Because the original loop rereads
+the intensity field for every spawn, that field is scaled for the call and
+restored before returning. Both arguments, return value and callee-saved
+registers are preserved. Turning rain off stops new spawns; existing drops
+expire normally. Game EXE/DLL files are not modified.
 
-Geri alma, kod baytlarını doğrular. Yağmur çağrısı hâlâ sürüyorsa dönüşte
-kullanılacak küçük yama alanı oyun kapanana kadar tutulur. Böylece dönüş
-adresi serbest bırakılmış belleğe işaret etmez.
+Restoration verifies code bytes. If a rain call is still active, its small
+return-code allocation remains until game exit, preventing return into freed memory.
 
-`tests/test_rain_fix.py` özgün x86 kodunu Unicorn ile çalıştırır:
+`tests/test_rain_fix.py` executes original x86 in Unicorn:
 
-- 640×480'de aynı rastgele sayı dizisi, düğümler ve çizim paketleri;
-- 640×480–7680×4320 aralığındaki altı çözünürlükte rüzgâr payı ve sağ alt kapsama;
-- 1000 karede kesirli üretimin tam toplamı, durma ve yoğunluk değişimi;
-- eski alt sınırı geçen damlanın yaşaması ve yeni sınırda serbest bırakılması;
-- özgün `RKC_UPDIB` ve `RKC_DIB` ile 1920×900'ün sağ alt bölgesine gerçek çizgi çizimi;
-- yeni yamaların tam komut sınırları ve içlerine atlayan dal bulunmaması;
-- çağrı sürerken geri alındığında dönüşün tamamlanması ve boşta belleğin serbest bırakılması.
+- Identical random sequence, nodes and draw packets at 640×480.
+- Wind margin and bottom-right coverage at six resolutions from 640×480 to 7680×4320.
+- Exact fractional spawn totals over 1000 frames, stopping and intensity changes.
+- Survival past the old lower boundary and deletion at the new one.
+- Actual bottom-right line drawing at 1920×900 with original `RKC_UPDIB` and `RKC_DIB`.
+- Complete instruction boundaries with no branches jumping inside new patches.
+- Completion when disabled during a call, and freeing idle allocations.
 
-EXE/DLL test dosyaları depoda bulunmaz. `SHADOWFLARE_FIXTURE_DIR`, bu dosyaların
-yerel kopyasını içeren dizine ayarlanabilir.
+EXE/DLL fixtures are not distributed. Set `SHADOWFLARE_FIXTURE_DIR` to the
+folder containing your local copies.

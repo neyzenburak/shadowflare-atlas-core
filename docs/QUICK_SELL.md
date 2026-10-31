@@ -1,59 +1,60 @@
-# Sağ tıkla satış · v1
+# Right-click selling: v1
 
-Satıcı ve envanter açıkken çantadaki eşyaya sağ tık, oyunun özgün satış
-işlemini çalıştırır. **Canlı kontrol → Sağ tıkla sat** paneli açma, kapama ve
-bu etkinleştirmeden beri tamamlanan satış sayısını gösterir. Yardımcı ilk
-açılışta özelliği etkinleştirir; `--no-quick-sell` ile kapalı başlatılabilir.
-Çalışan yardımcının yeniden başlatılması açık/kapalı tercihini korur.
+With merchant and inventory open, right-clicking a backpack item invokes the
+original sale operation. **Live controls > Right-click to sell** provides toggles
+and a count of sales completed since enabling. The companion enables it on
+startup; `--no-quick-sell` starts with it off. Restarting a running companion
+preserves the enabled/disabled choice.
 
-## İşlem
+## Operation
 
-- `0x445a7b` konumundaki envanter sağ tık çağrısı sarılır. Satıcı kapalıysa,
-  çanta gizliyse, elde taşınan eşya varsa veya hedef çanta hücresi değilse
-  özgün `0x44a6f0` işleyicisi çalışır. Çok oyunculu modda kısayol uygulanmaz.
-- Hücreyi özgün `0x447290` hit testi bulur. Mevcut geniş ekran düzeltmesinin
-  koordinat dönüşümü kullanılır; sabit ekran çözünürlüğü varsayılmaz.
-- `0x466b00` çok hücreli eşyanın gerçek kaydını seçer. Eşya çanta listesinden
-  geçici ayrılır ve oyunun elde tutulan eşya alanına yerleştirilir.
-- `0x44831c` özgün satıcı satış dalı, kendi yığın çerçevesiyle çağrılır.
-  Satılabilirlik, normal/satış fiyatları, altın ekleme ve kapasite kontrolü,
-  bildirim ve eşya silme bu dalın kendi çağrılarıdır.
-- Oyun satışı reddederse özgün liste bağlantısı ve boş imleç geri yüklenir.
-  Eşyanın koordinatları ve listedeki sırası korunur. Satılamayan altın kesesine
-  veya fiyatı olmayan eşyaya sağ tık, eşya kullanmaya dönüşmez.
+- The inventory right-click call at `0x445a7b` is wrapped. The original
+  `0x44a6f0` handler runs if the merchant is closed, the backpack is hidden,
+  an item is on the cursor or the target is not a backpack cell. Multiplayer
+  does not use the shortcut.
+- Original `0x447290` hit-testing locates the cell. The existing widescreen
+  coordinate transform is used; no fixed screen resolution is assumed.
+- `0x466b00` finds the actual record of a multi-cell item. The item is temporarily
+  detached from the backpack list and placed in the game's held-item field.
+- Original merchant sale branch `0x44831c` runs with its own stack frame.
+  Sellability, normal/sale prices, gold insertion and capacity checks,
+  notification and item deletion remain its original calls.
+- If the game rejects the sale, the original list link and empty cursor are
+  restored. Item coordinates and list order remain intact. Right-clicking an
+  unsellable purse or unpriced item does not fall through to consuming it.
 
-Satıcının kendi sağ tıkla satın alma işleyicisi `0x44b020` değiştirilmez.
-Takılı ekipman, özel eşya alanı ve Mine alanı satış kısayoluna dahil değildir.
-Satış fiyatı sabitlenmez; mevcut trainer fiyat değişiklikleri de özgün işlevden
-geçer. Oyun EXE dosyası değiştirilmez.
+The merchant's own right-click buying handler `0x44b020` is unchanged.
+Equipped items, special-item slots and the Mine holder are outside this shortcut.
+Prices are not fixed; trainer price changes still pass through the original
+function. The game EXE file is not modified.
 
-## Yaşam döngüsü
+## Lifecycle
 
-Kurulumdan önce çağrı ve ilgili özgün işlevlerin baytları doğrulanır ve kayıt
-yedeği alınır. Yerel `app/quick-sell-sessions/` manifesti önceki/yeni çağrıyı,
-kod alanını ve yedeği kaydeder. Kapatma önce özgün çağrıyı geri getirir; kod
-alanı ancak devam eden çağrı kalmadığında ve hiçbir iş parçacığının komut
-işaretçisi bu alanda olmadığında serbest bırakılır. Yeni oyun sürecine otomatik
-yeniden bağlanılır. Yama tek oyunculu, doğrulanmış v2.004 içindir.
+Before installation, the call and relevant original function bytes are checked
+and saves backed up. Local manifest `app/quick-sell-sessions/` records the old/new
+call, code allocation and backup. Disabling first restores the original call;
+allocation is freed only when no call remains in flight and no thread instruction
+pointer lies inside it. The feature reconnects automatically to a new game
+process. It targets verified single-player v2.004.
 
-## Doğrulama
+## Verification
 
-`tests/test_quick_sell.py` içindeki 10 Unicorn testi, yerel özgün EXE'nin satış
-dalını, liste işlemlerini, hit testini, altın ekleme ve silme işlevlerini yürütür.
-Doğrudan sürükleyerek satış sonucu ile kısayolun envanter, altın, silme ve
-bildirim sonuçları karşılaştırılır. Fiyat tablosu, bildirim kuyruğu ve test
-nesnelerinin oluşturulması/silinmesi test bağımlılıklarıyla sağlanır.
+Ten Unicorn tests in `tests/test_quick_sell.py` execute the local original EXE's
+sale branch, list operations, hit-testing, gold insertion and deletion. Shortcut
+inventory/gold/deletion/notification results are compared with direct drag-to-
+sell results. The price table, notification queue and test-object creation/
+deletion use test dependencies.
 
-Kapsam: 640/1024/1366/1920 genişlikleri; çok hücreli eşyanın bütün hücreleri;
-altın kesesinin dolup yeni kese açılması; dolu çantada altın sığmadığı için
-reddedilme ve birebir geri alma; satılamayan eşya ve altın; özgün sıfır satış
-fiyatı davranışı; boş hücre ve modal pencere; satıcı/çanta kapalı, elde eşya,
-çok oyunculu mod ve ekipman/özel alan için özgün işleyiciye dönüş; art arda
-tıklamalar. Yığın dengesi ve korunması gereken kayıtçılar da kontrol edilir.
+Coverage includes widths 640/1024/1366/1920, every cell of multi-cell items,
+filling a purse and creating another, exact rollback when a full backpack
+cannot accept gold, unsellable items/gold, original zero-sale-price behavior,
+empty cells, modal windows, fallback with merchant/backpack closed or an item
+held, multiplayer, equipment/special areas and repeated clicks. Stack balance
+and callee-saved registers are also checked.
 
-23 Ekim 2026 canlı doğrulamasında kullanıcı sağ tıkla satışı doğruladı. İlk
-sonuçta 13 satış tamamlandı; altın 8.737'den 10.002'ye çıktı ve imleçte eşya
-kalmadı. Arayüzde Kapat/Aç işlemleri de doğrulandı; tekrar açıldıktan sonra
-kullanıcı 4 eşya daha sattı. Yeni 10 test ve mevcut 33 performans testi geçti.
-Otomatik testler başarılı satışları ve reddedilmeyi kapsar; canlı kontrol
-kullanıcının mevcut satıcısında yapıldı.
+During live validation on 23 October 2026, the player confirmed right-click
+selling. Initially 13 sales completed, gold rose from 8,737 to 10,002 and no
+item remained on the cursor. UI toggles were verified; after re-enabling,
+four more items were sold. The ten new tests and existing 33 performance tests
+passed. Automated tests cover both accepted and rejected sales; live validation
+used the player's current merchant.

@@ -1,67 +1,65 @@
-# Güdümlü ok ve taş
+# Homing arrows and stones
 
-**Canlı kontrol → Güdümlü ok ve taş → Aç / Kapat.** Crossbow, bowgun,
-bow ve slingshot ailesindeki normal silah atışları, doğrudan hedeflenen
-yaratığı Flame Strike'ın kendi yönlendirme koduyla takip eder. Seçim yerel
-`app/homing-settings.json` dosyasında saklanır; yeni kurulumda kapalıdır.
+Use **Live controls > Homing arrows and stones > Enable / Disable**. Normal
+weapon shots from the crossbow, bowgun, bow and slingshot families follow a
+directly targeted monster through Flame Strike's own steering code. The local
+preference is stored in `app/homing-settings.json`; new installations default to off.
 
-Tekli ve çoklu atışlarda her mermi ayrı takip eder. Silahın ok/taş sayısı,
-yelpaze açıları, görünüşü, hasar verisi, hızı, yaşam süresi ve çarpışma
-denetimi korunur. Değişiklik yeni mermilere uygulanır; aç/kapat sırasında
-havadakiler mevcut uçuşunu tamamlar. Yaratık hedeflenmeden zemine ateş
-edilirse özgün uçuş kullanılır. Hedef ölür veya kaybolursa oyunun kendi
-Flame Strike davranışı takibi bırakır; yeni hedef seçilmez. İsabet ve
-duvar kontrolü özgün oyundadır; bu özellik isabet garantisi vermez.
+Every projectile tracks independently in single and multiple shots. Weapon
+shot count, spread angles, appearance, damage data, speed, lifetime and collision
+checks are preserved. Only new projectiles change; those already airborne
+finish their current flight. Firing at the ground without targeting a monster
+uses the original flight. If the target dies or disappears, native Flame Strike
+behavior stops tracking without selecting another target. Original hit/wall
+checks remain; this feature does not guarantee a hit.
 
-## Native uygulama
+## Native implementation
 
-`0x42a777`, normal silah efektinin mermi oluşturma çağrısıdır. Özgün
-`CALL 0x429dd0`, çağrının ABI'sini koruyan kısa bir sarmalayıcıya yönlenir.
-Sarmalayıcı EFLAGS ve bütün genel yazmaçları korur. Yalnızca tek oyuncuda,
-yerel karakterin aynı haritadaki normal silah efektlerinde (0–7) ve yaşayan
-bir yaratık hedefinde çalışır. Büyü efektleri ve düşman atışları kapsam dışıdır.
+`0x42a777` is the normal weapon effect's projectile-creation call. Original
+`CALL 0x429dd0` is redirected to a short wrapper preserving the call ABI,
+EFLAGS and all general-purpose registers. It only applies in single-player
+to the local character's normal weapon effects (0–7), on the same map and
+with a living monster target. Spell effects and enemy shots are excluded.
 
-Özgün `0x42a300` kodu mermi paketini hazırlar. Özgün kurucu kopyalamadan önce
-yalnızca iki alan değişir:
+Original `0x42a300` prepares the projectile packet. Before the original
+constructor copies it, only two fields change:
 
-| Paket alanı | Nesne alanı | Değer | İşlev |
+| Packet field | Object field | Value | Purpose |
 |---|---|---|---|
-| `+0x08` | `+0xd8` | 1 | Kare başına hedef takibi |
-| `+0x0c` | `+0xdc` | 20 | Flame Strike dönüş hızı |
+| `+0x08` | `+0xd8` | 1 | Per-frame target tracking |
+| `+0x0c` | `+0xdc` | 20 | Flame Strike turn speed |
 
-Flame Strike bu ayarı `0x42d6e0` / `0x42da24` yolunda kullanır. Mermilerin
-gerçek hareketi `0x45e1e0` içinde kalır. Native hedef kimliği, hedef kaybı,
-açı normalleştirme ve `0x4140a0` hareket matematiği değiştirilmez. Hedefe
-ait ham bir bellek işaretçisi saklanmaz.
+Flame Strike uses these settings along `0x42d6e0` / `0x42da24`. Actual projectile
+movement remains in `0x45e1e0`. Native target IDs, target loss, angle normalization
+and `0x4140a0` movement math are unchanged. No raw target memory pointer is retained.
 
-İkili atışın native kaynağı sabit konum (0), diğerlerinin oyuncu konumu (1)
-olarak işaretlidir. İkisi de kaynak karakter kimliğiyle doğrulanır. Bu ayrım,
-iki ok atan silahların yanlışlıkla kapsam dışında kalmasını önler.
+The native source for double shots is marked as fixed position (0), while the
+other shots use player position (1). Both are validated by source character ID,
+preventing two-arrow weapons from being excluded accidentally.
 
-Doğrulanmış EXE ve yedi kod bölgesinin SHA-256 değeri denetlenir. İlk
-bağlantıdan önce kayıtların yedeği alınır. Oyun EXE/DLL'si veya save içeriği
-değiştirilmez. Yardımcı kapanırken çağrı geri alınır; sarmalayıcı içinde
-devam eden çağrı bitmeden belleği serbest bırakılmaz.
+The verified EXE and SHA-256 values of seven code regions are checked. Saves
+are backed up before the first attachment. Game EXE/DLL files and save contents
+are not modified. Shutdown restores the call; wrapper memory is kept until
+in-flight calls finish.
 
-## Doğrulama
+## Verification
 
-`tests/test_homing_shots.py` sekiz test içerir. Unicorn içinde özgün oyunun
-x86 kodu yürütülür:
+`tests/test_homing_shots.py` contains eight tests executing the original x86
+code inside Unicorn:
 
-- Gerçek iki silah atış döngüsünde 1–7 mermi ve ikili atış kaynağı.
-- Sekiz normal efekt türünde görsel, hasar, hız ve diğer paket alanlarının
-  birebir korunması; yalnızca iki takip alanının değişmesi.
-- Gerçek native hareket, açı ve x87 matematiğiyle hareketli hedefe kıvrılma.
-- Ölü/kayıp hedef, NPC, farklı karakter, farklı harita ve çok oyuncuda geçiş.
-- Yazmaçlar, bayraklar, yığın ve özgün kurucu argümanlarının korunması.
+- 1–7 projectiles and the double-shot source in both real weapon firing loops.
+- Exact visual, damage, speed and other packet-field preservation across eight
+  normal effect types; only the two steering fields change.
+- Turning toward a moving target through real native movement, angle and x87 math.
+- Fallback for dead/lost targets, NPCs, other characters/maps and multiplayer.
+- Preservation of registers, flags, stack and original constructor arguments.
 
-24 Ekim 2026: tam proje testleri **116/116 geçti**. Açık oyundaki üçlü
-atışla canlı bellek örnekleri de toplandı: 60 örnekte 82 ayrı mermi
-görüldü; birden çok örnekte yakalanan 7 merminin yönünün uçuş sırasında
-değiştiği ölçüldü. Bu sayılar toplam isabet veya toplam kıvrılan mermi
-sayısı değildir; örnekleme aralığında yakalanabilen mermilerdir.
+On 24 October 2026, **116/116 project tests passed**. Live memory samples of a
+three-shot weapon were also collected: 82 distinct projectiles appeared in
+60 samples; seven observed in multiple samples changed direction during flight.
+These are sampled observations, not total hit or homing-projectile counts.
 
-Yerel API: `POST /api/live/homing-shots`, gövde `{"enabled":true/false}`.
-Mevcut localhost Origin/Host ve oturum anahtarı denetimleri geçerlidir.
-Durum `homingShots` altında görünür. Tanılama, sabit alanlarla sınırlı,
-salt okunur `POST /api/live/diagnostic {"homingShots":true}` örneğini sağlar.
+Local API: `POST /api/live/homing-shots`, body `{"enabled":true/false}`.
+Existing localhost Origin/Host and session-token checks apply. State appears
+under `homingShots`. The read-only diagnostic sample is limited to fixed fields:
+`POST /api/live/diagnostic {"homingShots":true}`.

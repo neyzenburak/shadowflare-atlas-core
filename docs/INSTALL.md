@@ -72,12 +72,13 @@ patch recipes. It never installs or removes a language patch from your game.
 Curated guide facts provide episode/map ordering and item cross-references.
 Guide scans/screenshots are not present in a stock game and are optional.
 Unavailable image buttons are hidden; native game renders and map navigation
-remain available. A CT file is entirely optional and must be supplied by its
-user through the Trainer file picker. Its contents stay local and never enter a generated ZIP.
+remain available. A CT file is entirely optional. Place your own CT beside
+`ShadowFlare.exe` for automatic import, or select one with **Add CT file** in
+Trainer. Its contents stay local and never enter a generated ZIP.
 Atlas-specific features work without an imported CT.
 
-Custom resolution startup is built into **Control Desk → ShadowFlare’i
-başlat**. Width/height default to 1920×900 and are remembered locally.
+Custom resolution startup is built into **Control Desk → Launch ShadowFlare**.
+Width/height default to 1920×900 and are remembered locally.
 `start.cmd -LaunchGame -Width 1920 -Height 900` provides the same launch path.
 Neither external configurator/patcher executable is required. Existing games
 are kept running; a changed preference applies to the next launch. See

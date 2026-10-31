@@ -1,91 +1,90 @@
-# Premium seçmeli drop etkinliği
+# Drop events with a Premium-only option
 
-Canlı kontrolün drop etkinliğinde **Sadece Premiumlara uygula** seçeneği,
-mevcut çarpanla birlikte **Çarpanı uygula** düğmesiyle uygulanır. Seçim yerel
-olarak hatırlanır; başlatıcı çalışan yardımcıyı yükseltirken çarpanı ve seçimi
-birlikte aktarır. Çarpan ve Grail filtresi kapalıysa özgün drop çağrısı geri yüklenir.
+In the live drop event, **Apply to Premiums only** takes effect together with
+the multiplier when you press **Apply multiplier**. The choice is stored locally;
+when upgrading a running companion, the launcher transfers both settings.
+When the multiplier and grail filter are disabled, the original loot call is restored.
 
-## Tur davranışı
+## Roll behavior
 
-- ×100, oyunun özgün ganimet işlevini tam 100 kez çalıştırır.
-- İlk turdaki bütün sonuçlar korunur. Boss'un bir normal turunda birden çok
-  deneme varsa bunların tamamı korunur. Aşağıdaki Grail tekrar filtresi açıksa,
-  bulunan Premium sonuçlar bu normal turdan da elenir.
-- Seçenek açıkken sonraki 99 turdan yalnızca kategori 0/1/2 ve gerçek eşya
-  niteliği 2 olan Premium ekipman kabul edilir.
-- Premium olmayan sonuç yeniden zar atılmadan elenir. Boş sonuçlar da boş kalır;
-  her bonus tur için bir Premium garanti edilmez.
-- Mavi ve beyaz ekipmanlar, Tablet/Meat/Capsule ve diğer tüketilebilirler
-  çarpandan yararlanmaz. Mine ve altının mevcut ×1 istisnası da korunur.
-- Seçenek kapalıyken önceki etkinlik davranışı devam eder; Mine/altın dışında
-  bütün ganimetler çarpandan yararlanır.
+- At ×100, the original loot function runs exactly 100 times.
+- All results of the first normal roll are preserved. If a boss has multiple
+  attempts in its normal roll, all are preserved. With the grail duplicate
+  filter below enabled, already-found Premiums are excluded from this roll too.
+- With Premium-only enabled, the next 99 rolls accept only Premium equipment
+  in categories 0/1/2 with actual item quality 2.
+- Non-Premium results are discarded without rerolling. Empty results remain
+  empty; a bonus roll does not guarantee a Premium.
+- Magic/Plain equipment, Tablet/Meat/Capsule and other consumables do not benefit
+  from the multiplier. The existing ×1 exceptions for Mine and gold remain.
+- With Premium-only disabled, the previous event behavior applies: all loot
+  except Mine and gold benefits from the multiplier.
 
-Önceden yerde bulunan eşyalara dokunulmaz. Kabul edilen yeni eşyalar mevcut
-zemin kontrollü sekizgen dağıtımı kullanır. Eşya veya tur sınırı eklenmez.
+Existing ground items are untouched. Accepted new items use the existing
+terrain-aware octagonal spreading. No item or roll cap is introduced.
 
-## Uygulama
+## Implementation
 
-**Grail’de bu karakterin buldukları droplanmasın** seçeneği bağımsız bir
-tekrar filtresidir. İlk normal tur dahil bütün yaratık ganimet sonuçlarına
-uygulanır ve ×1’de de açık kalır. Kayıtlı toplama, takip öncesinde mevcut
-ekipman veya elle **Buldum** kanıtı Grail arayüzündekiyle aynı şekilde bulunmuş
-sayılır. Kontrol tam kategori/şablon kimliğiyle yapılır; aynı adlı farklı
-seviye kayıtları birleştirilmez. Manuel yere bırakma, satıcı ve görev ödülleri
-bu yaratık filtresine girmez. Eşya başka bir Premium ile değiştirilmez.
+**Exclude Premiums already found by this character** is an independent duplicate
+filter. It covers all monster loot results, including the first normal roll,
+and remains active at ×1. Recorded pickups, equipment owned before tracking
+and manual **Found it** marks count as found, matching the grail UI. Exact
+category/template identities are checked; different-level records sharing a
+name are not merged. Manual item drops, merchants and quest rewards are outside
+this monster filter. Rejected items are not replaced by other Premiums.
 
-`grail_policy.py` içindeki sıralı tablo, Grail’in özel belleğinde tutulur.
-Yerel oyuncu adresi, adının 12 baytı ve save yolunun 14 baytı her native
-okumada doğrulanır. Karakter değişimi veya hazır olmayan tablo durumunda
-eski karakterin kayıtları kullanılmaz. Başarılı toplama hook’u ilgili kaydı
-aynı oyun çağrısında işaretler; Python olayları kalıcı günlüğe aktarır.
-Durumda `excludeFound`, `filterActive`, `grailReady`, `grailProfile`,
-`foundKeys` ve `duplicatesSkipped` alanları bulunur. Önbellek anahtarları
-Grail seçimini ve bulunan kimlikleri içerir; engellenen eşyaların Atlas
-oranları sıfırdır. Kaynak/harita listeleri de buna göre yenilenir.
+The sorted table from `grail_policy.py` lives in private grail memory. Each native
+read verifies the local player address, 12 name bytes and 14 save-path bytes.
+A character change or unready table prevents using the previous character's
+records. The successful-pickup hook marks the entry during the same game call;
+Python persists the events in the journal. State includes `excludeFound`,
+`filterActive`, `grailReady`, `grailProfile`, `foundKeys` and `duplicatesSkipped`.
+Cache keys include the policy and found identities. Suppressed items have zero
+Atlas probability, and source/map lists refresh accordingly.
 
-`drop_event.py` v5 yalnızca düşman ölümündeki `0x45a01c` çağrısını değiştirir.
-Ganimet işlevinin doğrulanmış kopyası, gizli bir yığın argümanıyla ölüm başına
-ayrı bağlam alır. Çarpan ve Premium seçimi tek hizalı DWORD'dan birlikte
-okunur; devam eden bir ölümün politikası ayar değişikliğinden etkilenmez.
+`drop_event.py` v5 only replaces the enemy-death call at `0x45a01c`. A verified
+copy of the loot function receives per-death context through a hidden stack
+argument. Multiplier and Premium-only settings are read together from one aligned
+DWORD, so changing settings cannot alter the policy of an in-progress death.
 
-Bonus Mine/altın önceki gibi yaratılmadan atlanır. Diğer bonus sonuçlar özgün
-`0x462d30` fabrikasından bir kez geçirilir; böylece özgün rastgele özellik
-üretimi de çalışır. Premium kontrolü isim veya ID tahmini yerine gerçek
-nesnenin `+0xc` kategori ve `+0x18` nitelik alanlarını okur. Reddedilen nesne,
-haritaya eklenmeden önce bankanın doğrulanmış `0x465640(Item**)` silme
-işleviyle kaldırılır. Premium sonuç özgün konumlandırma ve ekleme yoluna döner.
-Grail'in aynı silme girişindeki doğrulanmış gözlem detour'u kontrol sırasında
-özgün baytlara yansıtılır; çalışma sırasında gözlemci korunur. Başka bir yama
-bu girişe dokunmuşsa üzerine yazılmaz.
+Bonus Mine/gold results are skipped before creation, as before. Other bonus
+results pass once through the original `0x462d30` factory, preserving native
+random property generation. Premium checks read the actual object's category
+at `+0xc` and quality at `+0x18`, rather than guessing from names or IDs.
+Before entering the map, a rejected object is removed through the verified
+bank deletion function `0x465640(Item**)`. Accepted Premiums return to the
+original placement/insertion path. During verification, the known grail observer
+detour at that same deletion entry is represented by its verified original bytes;
+the observer remains installed at runtime. Foreign patches are not overwritten.
 
-API: `POST /api/live/event` için `{"multiplier":100,"premiumOnly":true,"excludeFound":true}`.
-Alan verilmezse mevcut seçim korunur. Durumda `premiumOnly`,
-`bonusNonPremiumsSkipped` ve `bonusPremiumsAccepted` bulunur; son iki sayaç
-yalnızca bonus turları sayar. İlk normal tur bunlara dahil değildir.
+API: `POST /api/live/event` with `{"multiplier":100,"premiumOnly":true,"excludeFound":true}`.
+Omitted options retain their current values. State includes `premiumOnly`,
+`bonusNonPremiumsSkipped` and `bonusPremiumsAccepted`. The last two counters
+cover bonus rolls only, excluding the first normal roll.
 
-Atlas, Premium için `1 - (1-p)^çarpan` olasılığını; diğer eşyalar için normal
-olasılığı gösterir. Beklenen adetler de eşya başına aynı kuralla güncellenir.
-Eşya, yaratık ve harita önbellekleri çarpanın yanında bu seçimi de dikkate alır.
+Atlas displays `1 - (1-p)^multiplier` for Premiums and the normal probability
+for other items. Expected quantities follow the same per-item rule. Item,
+monster and map caches include this option alongside the multiplier.
 
-## Doğrulama
+## Verification
 
-`python -m unittest discover -s tests -p test_drop_event.py -v` özgün EXE
-üzerinde Unicorn ile 13 test çalıştırır. Yerel, telifli EXE fixture'ı yoksa
-oyun kodu testleri atlanır. Normal/Magic/tüketilebilir sonuçların elenmesi,
-üç Premium kategorisi, boss'un tüm normal denemeleri, ×1000, başarısız
-yaratma, nesne silme, tur sırasında ayar değişikliği, multiplayer/lease
-fallback, çağrı yığını ve kayıtçıların korunması doğrulanır.
+`python -m unittest discover -s tests -p test_drop_event.py -v` runs 13 Unicorn
+tests against the original EXE. Game-code tests skip when the local copyrighted
+EXE fixture is absent. Coverage includes rejecting Plain/Magic/consumables,
+all three Premium categories, every normal boss attempt, ×1000, failed creation,
+object deletion, settings changes during a roll, multiplayer/lease fallback,
+and stack/register preservation.
 
-`node tests/test_event_model.cjs` olasılıkları, harita önbelleklerini ve gerçek
-`live.js` kontrol akışını doğrular. Uygulanmamış kutu seçimi durum sorgusunda
-kaybolmaz; başarısız istek Atlas oranlarını değiştirmez.
+`node tests/test_event_model.cjs` checks probabilities, map caches and the actual
+`live.js` control flow. Polling preserves an unapplied checkbox draft; a failed
+request does not change Atlas probabilities.
 
-25 Ekim 2026 canlı denemesinde, aynı oyun süreci açık kalırken 7 yaratıkta
-700 tur tamamlandı. Bonus turlardan 10 Premium kabul edildi, 405 Premium
-olmayan eşya ve 5 Mine elendi. Bu sayaçlar belirli denemenin sonucudur;
-Premium düşeceğine dair garanti değildir. Uygulamadan önce karakter oyunun
-özgün kayıt işleviyle kaydedildi ve yedeklendi.
+In the live test on 25 October 2026, seven monster deaths completed 700 rolls
+without closing the process. Bonus rolls accepted 10 Premiums and rejected
+405 non-Premium items and 5 Mine. These are results of that test, not a guarantee
+of Premium drops. The character was saved through the original game routine
+and backed up before applying the change.
 
-Aynı gün v5 canlı denemesinde 5 yeni yaratıkta 5.000 tur tamamlandı;
-karakterin bulduğu 14 Premium sonuç yere eklenmeden elendi. Kırmızı Grail
-ışını mevcut yer eşyalarında, yeni yaratık kesilmeden de doğrulandı.
+In the v5 live test later that day, five new monsters completed 5,000 rolls;
+14 previously found Premium results were rejected before entering the world.
+Red grail beams were also verified on existing ground items without new kills.
