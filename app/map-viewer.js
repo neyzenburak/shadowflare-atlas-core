@@ -38,6 +38,7 @@
       viewport.addEventListener('pointerleave',()=>{if(!this.drag){this.pointer=null;this.setHover(null);}});
       viewport.addEventListener('keydown',event=>this.key(event));
       document.addEventListener('visibilitychange',()=>{this.lastTime=0;if(!document.hidden)this.request();});
+      root.addEventListener?.('atlas:languagechange',()=>this.request());
     }
     local(event){const r=this.viewport.getBoundingClientRect();return {x:event.clientX-r.left,y:event.clientY-r.top};}
     bounds(){return this.scene?.bounds||this.asset?.bounds||[0,0,this.scene?.width||1,this.scene?.height||1];}
@@ -166,7 +167,7 @@
         const selected=marker.id===this.markerFocus,r=selected?12:10;
         ctx.beginPath();ctx.arc(at.x,at.y,r,0,Math.PI*2);ctx.fillStyle=selected?'#f0cd89':'#22291c';ctx.fill();ctx.strokeStyle='#e9c27b';ctx.lineWidth=selected?3:1.5;ctx.stroke();
         ctx.font='bold 11px "Segoe UI",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=selected?'#18190e':'#f5d89e';ctx.fillText(String(marker.number),at.x,at.y+.5);
-        if(selected){const label=marker.label,tw=ctx.measureText(label).width;ctx.fillStyle='#10160eee';ctx.fillRect(at.x-tw/2-8,at.y-r-27,tw+16,21);ctx.fillStyle='#f4dfa8';ctx.fillText(label,at.x,at.y-r-16);}
+        if(selected){const label=root.AtlasI18n?.t(marker.label)||marker.label,tw=ctx.measureText(label).width;ctx.fillStyle='#10160eee';ctx.fillRect(at.x-tw/2-8,at.y-r-27,tw+16,21);ctx.fillStyle='#f4dfa8';ctx.fillText(label,at.x,at.y-r-16);}
       }
       this.onView?.({zoom:this.zoom,cx:Math.round(this.cx),cy:Math.round(this.cy),detail:complete});
     }

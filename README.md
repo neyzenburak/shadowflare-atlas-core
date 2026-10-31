@@ -31,11 +31,17 @@ resource recipes, installer commands and replay endpoint. Its Git history
 starts from this edition; the previous repository history is not included.
 No external trainer table, table records or third-party resolution-helper
 implementation is bundled. A CT can be imported locally by its owner. The
-Atlas interface remains in Turkish.
+Atlas interface supports Turkish and English through the **TR / EN** buttons
+in the top-right corner. The selection is remembered locally.
 
-This README is in English. The application interface and several linked
-technical documents are currently in Turkish; relevant interface labels are
-included below.
+This README is in English. Several linked technical documents are in Turkish;
+the Turkish interface labels are included below alongside their English meaning.
+
+The language switch covers all five tabs, filters, item properties, scenario
+instructions, accessible labels and live status/error messages. It preserves
+your selected item, map, filters and pending control values. Translation is
+local, uses no online service and does not modify the game language, item/NPC
+names or user-supplied CT scripts. See [interface languages](docs/LANGUAGES.md).
 
 ## How it works
 

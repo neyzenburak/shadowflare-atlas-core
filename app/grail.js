@@ -7,7 +7,7 @@
   for(const group of new Set(D.mobs.flatMap(m=>m.variants.map(v=>v.group))))for(const rows of Object.values(D.groups[group]?.data||{}))for(const row of rows)if(row[1]>0)standardDrops.add(row[0]);
   let data=null,connected=false,busy=false,loading=false,again=false,selected=null,page=1,follow=true,toastEvent=null,errorMessage='';
   const noticeSeen=new Set();let noticeReady=false;
-  const date=value=>value?new Date(value).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'';
+  const date=value=>value?new Date(value).toLocaleString(window.AtlasI18n?.locale||'tr-TR',{dateStyle:'short',timeStyle:'short'}):'';
   const evidence=e=>e?.first_pickup?'pickup':e?.manual?'manual':e?.first_owned?'owned':'missing';
   const labels={pickup:'✦ YERDEN TOPLANDI',manual:'✓ ELLE İŞARETLENDİ',owned:'◇ TAKİP ÖNCESİNDE MEVCUT',missing:'KAYDI YOK'};
   const mapName=id=>D.maps.find(m=>m.id===String(id).padStart(8,'0'))?.name||('Bölge '+id);
@@ -66,5 +66,6 @@
     $('#grailToastClose').addEventListener('click',()=>{$('#grailToast').hidden=true;});
     $('#grailToastOpen').addEventListener('click',()=>{if(toastEvent){selected=toastEvent.profile;follow=false;$('#grailFollow').checked=false;}$('#grailToast').hidden=true;window.AtlasTabs.show('grail');});
   });
+  window.addEventListener('atlas:languagechange',render);
   render();
 })();

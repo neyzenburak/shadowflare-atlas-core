@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="maps.css?v=13-map-travel">
   <link rel="stylesheet" href="grail.css?v=1">
   <link rel="stylesheet" href="scenario.css?v=1">
+  <link rel="stylesheet" href="i18n.css?v=1">
+  <script src="translations.js?v=1"></script>
+  <script src="i18n.js?v=1"></script>
 </head>
 <body>
   <a class="skip-link" href="#catalogue">Kataloğa geç</a>
@@ -20,7 +23,7 @@
       <span><b>SHADOWFLARE</b><small>DROP ATLAS</small></span>
     </a>
     <nav aria-label="Üst menü"><a href="#catalogue" class="nav-active">Arşivi keşfet</a><button type="button" id="aboutButton">Atlas hakkında <span>↗</span></button></nav>
-    <span class="offline"><i></i> TAMAMEN ÇEVRİMDIŞI</span>
+    <div class="topbar-tools"><span class="offline"><i></i> TAMAMEN ÇEVRİMDIŞI</span><div id="languageSwitch" class="language-switch" role="group" aria-label="Arayüz dili" data-i18n-ignore><button type="button" data-language="tr" lang="tr" aria-pressed="true" title="Türkçe">TR</button><span aria-hidden="true">/</span><button type="button" data-language="en" lang="en" aria-pressed="false" title="English">EN</button></div></div>
   </header>
 
   <main>
@@ -34,7 +37,7 @@
     <div id="atlasPage" role="tabpanel" aria-labelledby="atlasTab">
     <section class="hero" aria-labelledby="heroTitle">
       <div class="hero-copy"><p class="eyebrow"><span class="tiny-diamond"></span> BİR SHADOWFLARE SAHA REHBERİ</p><h1 id="heroTitle">Her ganimetin<br>bir <em>izi</em> var.</h1><p class="hero-text">Yaratığı bul. Havuzunu gör.<br>Aradığın eşyanın izini sür.</p></div>
-      <div class="hero-ledger"><span class="ledger-label">OYUN DOSYALARINDAN, DOĞRUDAN.</span><div class="ledger-numbers"><div><b id="itemTotal">2.860</b><span>EŞYA</span></div><div><b id="mobTotal">572</b><span>YARATIK</span></div><div><b>209</b><span>HARİTA</span></div></div><div class="ledger-note"><span class="seal">✓</span><p>Gerçek envanter ikonları.<br>Orijinal yaratık animasyonları.<br>Koddan çıkarılmış drop bağlantıları.</p></div></div>
+      <div class="hero-ledger"><span class="ledger-label">OYUN DOSYALARINDAN, DOĞRUDAN.</span><div class="ledger-numbers"><div><b id="itemTotal">2.860</b><span>EŞYA</span></div><div><b id="mobTotal">572</b><span data-i18n-en="MONSTERS">YARATIK</span></div><div><b>209</b><span>HARİTA</span></div></div><div class="ledger-note"><span class="seal">✓</span><p>Gerçek envanter ikonları.<br>Orijinal yaratık animasyonları.<br>Koddan çıkarılmış drop bağlantıları.</p></div></div>
     </section>
 
     <section id="catalogue" class="workspace" aria-label="Eşya ve yaratık kataloğu">
