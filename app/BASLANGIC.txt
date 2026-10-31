@@ -1,0 +1,153 @@
+SHADOWFLARE ATLAS v13 — AKICI YOĞUN DROP
+
+Yoğun drop çöküşündeki eski fare adresi düzeltildi. Aynı 1155 eşya korunurken
+çizim sıralaması iyileştirmesiyle yaklaşık 5.6 → 30 FPS ölçüldü.
+Yeni sekizgen droplar oyunun yürünebilir zemin tablosunu kontrol eder.
+Eşya veya tur sayısı sınırı eklenmez. Ayrıntılar YOGUN-DROP-DUZELTMESI.txt.
+ARAYUZ-DUZELT.cmd ile başlat; açık Atlas sayfasında Ctrl+F5 kullan.
+
+SHADOWFLARE ATLAS v12 — DÜNYA ATLASI
+
+Haritalar sekmesinde dört episode'u birleştiren dünya görünümü eklendi.
+80 rehber bölgesi gerçek oyun dokularıyla görünür; işaretten bölgeye ve
+zindan katlarına geç. Tekerlekle yakınlaş, sürükleyerek gez. Episode filtresi,
+rehber sıralaması ve hedef eşyanın kaynak vurgusu birlikte çalışır.
+Rehber sayısal bölge seviyeleri vermiyor; görev seviye şartları ayrıca
+gösterilir. Ayrıntılar DUNYA.txt. Açık sayfada Ctrl+F5 ile v13'ü yükle.
+
+SHADOWFLARE ATLAS v11 — HARİTALAR
+
+Üçüncü Haritalar sekmesi: 209 bölge + üç ek harita dosyası.
+Gerçek oyun dünyasını tamamı görünecek şekilde aç; yakınlaştır, sürükle
+veya fareyi çerçevenin kenarına götürerek gez. Eşyadan haritalara,
+haritadan yaratıklara ve ganimetlerine geç. Ayrıntılar HARITALAR.txt.
+
+SHADOWFLARE ATLAS v11 — SEKİZGEN DROP
+
+Çarpan açıkken eşyalar yaratığın çevresinde sekizgen halkalara dağılır.
+Mine ve altın ×1’de kalır. Bossların aynı turdaki eşyaları da ayrı noktalara
+yerleşir; tur veya eşya sınırı uygulanmaz. Ayrıntılar CANLI-DROP.txt.
+
+Drop etkinliği ve arayüz düzeltmesi artık Canlı kontrol sekmesindedir.
+Trainer kendi CT dosyanı yerel olarak ekleyebilir; tablo dağıtıma dahil değil. Ayrıntılar TRAINER.txt.
+
+GENİŞ EKRAN DÜZELTMESİ v10
+
+ARAYUZ-DUZELT.cmd ile başlat. Pot sağ tık bölgeleri, envanter konumu ve
+bilgi kutusu sınırları düzeltilir. Ayrıntılar ARAYUZ-DUZELTMESI.txt.
+Yardımcı, oyunun açılmasını ve çözünürlüğünü otomatik takip eder; karakter
+seçim ekranında başlatılabilir. 1920 × 900 sağa yaslama da oyunda doğrulandı.
+Çarpan, seçilen tur sayısını eksiksiz çalıştırır. Yoğun drop düzeltmelerinin
+ayrıntıları YOGUN-DROP-DUZELTMESI.txt dosyasında açıklanır.
+
+SHADOWFLARE · DROP ATLAS
+
+DROP ÇARPANI v9 — KENDİN AVLA, GANİMETİNİ KENDİN BUL
+
+CANLI-DROP-BASLAT.cmd ile açılan Atlas'ın Canlı kontrol sekmesinden
+kaydırıcıyla ×1–100 veya sayı kutusuyla ×1–1000 seç. “Çarpanı uygula”ya bas.
+Yaratıkların normal ganimet işlemi bu sayıda tekrarlanır. 10 denemeli bir boss
+×10 ile 100 deneme yapar. Katalogdaki oranlar etkin çarpanla güncellenir.
+“Etkinliği kapat · ×1” oyunun normal davranışını geri getirir.
+Mine, altın ve görev betiklerinin doğrudan ödülleri bu çarpana dahil değildir.
+Değer kutusundaki önizleme tek başına oyunu değiştirmez.
+
+SEÇİLİ EŞYAYI ELLE YERE BIRAKMA
+
+Oyun açıkken CANLI-DROP-BASLAT.cmd dosyasını çalıştır. Windows yönetici onayını
+gerekiyorsa kendin ver. Açılan yerel Atlas'ta eşya seç, “Seçili eşyayı karakterinin
+yanına bırak” düğmesine bir kez bas ve oyuna dön. Her tıklama bir eşya bırakır.
+Bu özellik Windows, Python 3.9+ ve doğrulanan ShadowFlare v2.004 sürümünü gerektirir.
+Yalnızca tek oyunculu, haritası yüklenmiş canlı karakterle çalışır.
+Tesla Blade · Seviye 80 canlı oyunda denenip doğrulandı. Ayrıntılar CANLI-DROP.txt.
+
+REHBER GÖRÜNÜMÜ — ÖZGÜN OYUN FONTLU EŞYA PANELLERİ
+
+Bir eşya seç: sağdaki “Oyun paneli” görünümü rehberdeki düzende render edilir.
+“Paneli tam boy aç” düğmesiyle özgün piksel fontunu büyük boy inceleyebilirsin.
+Font00.njp içinden çıkarılan 9.375 karakter ve gerçek envanter ikonları kullanılır.
+Koyu doku özgün oyun arayüzünden alınmıştır; çerçeve tarayıcıda yeniden çizilir.
+Temel değerler üstte, olası ek özellikler altta ayrıdır. Bir rastgele eşya örneği
+üretilmez; değişken özelliklerin geçerli aralıkları gösterilir.
+
+Tür, gereken seviye aralığı ve rehber karşılaştırması filtreleri eklendi.
+“Rehberde listelenmeyen 5 Premium” seçimiyle eksik kayıtlara ulaşabilirsin.
+Eşya ayrıntısındaki “Özgün rehber görselini gör” düğmesi kaynak JPG’yi açar.
+Tesla Blade’in iki kaydı da rehberde vardır. Ayrıntılar REHBER-KARSILASTIRMA.md.
+
+KULLANIM
+
+1. ZIP paketini bir klasöre tamamen çıkar.
+2. index.html dosyasına çift tıkla. Chrome veya Edge ile açabilirsin.
+3. assets klasörü ile .js ve .css dosyalarını index.html ile birlikte tut.
+
+Kataloğu incelemek için internet, oyun kurulumu, Python, Node veya sunucu gerekmez.
+Canlı drop düğmesi isteğe bağlı yerel Python yardımcısıyla çalışır.
+
+NE VAR?
+
+- 2.860 eşya kaydının gerçek envanter ikonları.
+- 572 yaratık adı, 1.496 harita/görünüm/drop varyantı.
+- 569 özgün yaratık görünümü, sekiz yönlü animasyon.
+- Arama boşken tam katalog; eşya ve yaratık tür filtreleri, sayfalama.
+- Katalogda ve yaratığın ganimet havuzunda ayrı kalite filtreleri.
+- Normal / Plain (152), Magic / Büyülü (2.202), Unique / Premium (457), Özel (49).
+- Eşya adlarında kalite renkleri ve ayrıntıda yazılı kalite etiketi.
+- Yaratıktan eşyaya, eşyadan kaynak yaratığa gezinme.
+- Harita/drop varyantı seçimi ve 1–4 aktif oyuncu için oranlar.
+- “Bu eşya düşer mi?” karşılaştırması; düşmeyen kayıtlar sıfır olarak gösterilir.
+- Aynı isimli eşya varyantları, seviye ve özellik farkları.
+- Favori işaretleri (yalnızca bu tarayıcıda saklanır).
+
+ÖRNEKLER
+
+Red Goblin: gerçek kırmızı görünümü ve animasyonu; temel ekipman havuzu.
+Red Goblin + Mine / Tablet / Tesla Blade: standart havuzunda bulunmuyor.
+Goblin / Near the Remote Town: Mine %3,2; Tablet %4,8.
+Tesla Blade: iki ayrı eşya kaydı, iki farklı ikon ve kaynak oranları.
+
+KALİTEYE GÖRE AYIKLAMA
+
+Arşivde “Tüm kaliteler” menüsünden istediğin kaliteyi seç. Arama ve kategori
+filtresiyle birlikte çalışır. Örneğin Silahlar + Unique / Premium.
+Bir yaratık seçtiğinde Ganimet havuzu altındaki Kalite menüsü yalnızca o
+yaratığın eşyalarını ayıklar. Filtre yüzdeleri yeniden ölçeklemez.
+
+Kalite isme/prefix'e bakılarak tahmin edilmez. Item.Ibn içindeki +0x018 alanı
+kullanılır: 0 Normal, 1 Magic, 2 Unique / Premium, 3 Özel.
+Short Sword 0, Speed Short Sword 1, Knuckle Breaker 2; iki Tesla Blade de 2.
+3. sınıf görev nesnelerini ve bazı ayrı ekipman kayıtlarını içerir. Ayrı tutulur.
+Sayılar eşya kayıtlarını ifade eder; aynı adlı kayıtlar birden fazla olabilir.
+
+GÖRSEL KONTROLLER
+
+Yaratığın altında yön düğmeleri, oynat/duraklat ve yakınlaştırma düğmeleri var.
+Yaratığın üzerinde sağa/sola sürükleyerek de yön değiştirebilirsin.
+Görseller, oyunun kullandığı önceden render edilmiş sekiz yönlü karelerdir;
+keyfi açılı, gerçek zamanlı bir 3D mesh değildir.
+
+SINIRLAR
+
+Yüzdeler, bir öldürmede en az bir hedef eşya gelmesi için nominal olasılıklardır.
+Oyunun RNG modulo sapmaları ve durum bağımlılıkları tam olarak modellenmez.
+Görev betiklerinin bütün ödülleri ve yeniden doğma koşulları kapsama dahil değil.
+Saatte farm verimliliği iddia edilmez. Yerleşim sayıları statik senaryo kayıtlarıdır.
+Oyun dosyasında görseli tanımlı olmayan Enemy Hole kayıtlarında görsel uydurulmaz.
+Altın ayrı drop kontrolüyle gösterilir; ekrandaki miktarlar bonus öncesidir.
+
+DOĞRULAMA
+
+Ana drop modeli: gerçek x86 koduyla 2.710 kontrol.
+Ön yüz verisi: bağımsız kaynak modeline karşı 248 olasılık karşılaştırması.
+Görseller: 1.645 PNG, animasyon sınırları ve 18.788 senaryo/görünüm eşleşmesi.
+Chrome üzerinde yerel HTTP önizlemede arama, filtre, karşılaştırma, kaynak
+bağlantıları, animasyon kontrolleri ve dar ekran düzeni kontrol edildi.
+Tarayıcı otomasyonunun güvenlik politikası file:// açmaya izin vermediği için
+dosyaya çift tıklama akışı otomasyonla ayrıca denenemedi. Paket classic script
+ve göreli yerel görseller kullanır; harici font veya CDN kullanmaz.
+Canlı drop modülü yalnızca 127.0.0.1:8770 üzerindeki yardımcıya istek gönderir;
+index.html dosya olarak açıldığında hiçbir ağ isteği göndermez.
+
+Veri kesiti: 18 Ekim 2026.
+Oyun EXE'si ve eşya tabloları dosya üzerinde değiştirilmez. Canlı drop öncesinde
+Save altındaki .ssv ve .bmp dosyaları live-drop-backups klasörüne yedeklenir.

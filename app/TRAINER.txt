@@ -1,0 +1,15 @@
+TRAINER - KENDI CT DOSYAN
+
+Kontrol Masasi > Trainer > CT dosyasi ekle ile kendi .ct dosyani sec.
+Tablo verilmeden Atlas'in kendi kontrolleri kullanilabilir. Dis tablo
+kayitlari, betikleri veya yama tanimlari dagitima dahil degildir.
+
+CT yalnizca bu bilgisayarda app/trainer-local/table.json olarak saklanir.
+Git'e ve hazirlanan ZIP'e eklenmez. Tabloyu kaldir etkin dis yamalari
+kapatir, sabitlemeleri temizler ve yerel tabloyu kaldirir.
+
+Lua calistirilmaz. Desteklenmeyen kayitlar nedenleriyle gosterilir.
+Desteklenen sayisal degerler, isaretci zincirleri ve sinirli x86 yamalar
+kullanilabilir; bu arac genel bir Cheat Engine calistiricisi degildir.
+
+Ayrintilar: docs/LOCAL_CT.md

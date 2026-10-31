@@ -1,0 +1,58 @@
+SHADOWFLARE — GENİŞ EKRAN DÜZELTMESİ v10
+
+Sağ tık düzeltmesi: eski Menu alanı ve HUD dışında kalan alt yan harita
+alanları artık büyü tıklamalarını yutmaz. Görünür HUD tıklamayı yakalar;
+pencere kapatma, envanter ve pot işlevleri korunur. Oyunun özgün Town Portal
+ve saldırı büyüsü akışı beş çözünürlükte test edildi.
+
+Büyüler çalışmıyorsa MP ve ekipman cezalarını da kontrol et. Örneğin
+Criminal’s Leather Cloth ve Knuckle Breaker toplam −200 MP verir.
+190 temel MP ile azami mana 1 olur; mana potu bu sınırı aşamaz.
+
+1. ARAYUZ-DUZELT.cmd dosyasını çalıştır. Oyun yönetici yetkiliyse dosyayı
+   sağ tık → Yönetici olarak çalıştır ile aç; Windows onayını kendin ver.
+2. Oyunu mevcut çözünürlük yardımcınla aç. Önceden açıksa da çalışır.
+3. Atlas, http://127.0.0.1:8770/ adresinde açılır. Yardımcı oyunu otomatik
+   bekler ve gerçek çözünürlüğe göre uygular. Karakter seçimi/yükleme
+   ekranında başlatmak artık arayüz düzeltmesini engellemez.
+
+Envanter ve Special Items sağ kenara yaslanır. Eşya ikonları, mayın gücü,
+yazılar, takma/çıkarma ve yerleştirme koordinatları birlikte taşınır.
+Potların sağ tık bölgeleri görünen HUD yuvalarına taşınır. Ortada ve
+ekranın kenarlarında görünen boş harita, arayüz alanı olarak engellenmez.
+Eşya, durum ve yetenek bilgi kutuları gerçek ekran boyutuyla sınırlanır.
+Tam genişlikteki görev ve ilgili işlem pencereleri yatayda ortalanır;
+fare koordinatları aynı miktarda dönüştürülür. Soldaki durum, büyü,
+waypoint ve küçük harita panelleri sol kenarda çalışır.
+
+Atlas'taki “Önceki arayüze dön” düğmesi bu düzeltmeyi geri alır.
+“Düzeltmeyi uygula” yeniden etkinleştirir. Yardımcı açık kaldığı sürece
+oyunun yeniden açılmasını ve yeni çözünürlüğü takip eder. Yardımcı da
+kapatılmışsa ARAYUZ-DUZELT.cmd dosyasını yeniden aç.
+Yeni sürüm görünmüyorsa Atlas sayfasını yenile; başlık v13 ile bitmelidir.
+Arayüz düğmeleri ve drop etkinliği üstteki ikinci “Canlı kontrol” sekmesindedir.
+
+Bu araç mevcut çözünürlük yamasını tamamlar; çözünürlük seçimini değiştirmez.
+Oyunun EXE/DLL dosyaları ve eski iki yardımcı dosya değiştirilmez.
+Değişiklikler yalnızca doğrulanmış v2.004 oyun sürecine uygulanır.
+Oyun kapanınca biter. Uygulanan baytlar ve geri alma kaydı
+display-fix-sessions klasöründe tutulur. Başka bir yamayla çakışan kodun
+üzerine yazılmaz. Harici Python paketi gerekmez.
+
+1366 × 730 oyun alanında sağa yaslanan envanter ve mayın gücü görsel olarak
+kontrol edildi. Kullanıcı, eski pot alanında yanlış tüketimin durduğunu ve
+envanterden ortadaki haritaya eşya bırakmanın çalıştığını doğruladı.
+1920 × 900 çözünürlüğünde de envanterin sağ kenara yaslandığı kullanıcı
+tarafından 21 Ekim 2026 tarihinde doğrulandı.
+640 × 480, 1024 × 768, 1366 × 730, 1920 × 900, 1920 × 1080 koordinatları özgün x86
+koduyla test edildi. Bütün menüler ve çözünürlükler oyunda tek tek denenmedi.
+Yükleme ekranı, oyun henüz açık değilken başlatma, yeniden açılış, çözünürlük
+değişikliği, kapatma tercihi ve açık menü sırasında güvenli geri alma için
+altı yardımcı yaşam döngüsü testi de geçti.
+
+YÜKSEK DROP ÇARPANI
+
+Tur veya yer eşyası sınırı uygulanmaz; seçilen tur sayısı eksiksiz çalışır.
+Kaydı alınan fare nesnesi çöküşü giderildi; yoğun drop çizim sıralaması
+hızlandırıldı. Yeni dağıtım, yürünemeyen zemine taşmayı kontrol eder.
+Ayrıntılar ve doğrulama kapsamı YOGUN-DROP-DUZELTMESI.txt dosyasındadır.

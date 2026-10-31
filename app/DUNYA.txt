@@ -1,0 +1,36 @@
+SHADOWFLARE ATLAS v12 — DÖRT EPISODE, TEK DÜNYA
+
+Haritalar sekmesinin üstündeki dünya atlası, rehberdeki 80 bölge işaretini
+gerçek oyun dokularıyla bir araya getirir. Tekerlekle yakınlaş, sürükle veya
+ok tuşlarıyla gez. Tüm dünya / Episode I–IV düğmeleri görünümü odaklar.
+Bir işareti seç; bölgenin veya zindanın katını açarak yaratık ve drop
+ayrıntılarına geç. “Dünyada göster” seçili bölgeye geri odaklanır.
+
+Harita listesinin varsayılan sırası rehberin episode ve bölge sırasıdır.
+Episode filtresi ve ada göre sıralama vardır. Hedef eşya seçiliyken en iyi
+drop oranına göre de sıralanabilir; dünya üzerindeki kaynaklar vurgulanır.
+209 senaryo + üç ek harita listede kalır. Rehberde dünya konumu kesin
+gösterilmeyen 45 senaryo kaydı (kule katları dahil) liste üzerinden açılır.
+
+SEVİYE BİLGİSİNİN SINIRI
+Yerel rehberin 78 harita JPG'sinde sayısal bölge seviyeleri veya episode
+seviye aralıkları yok. Bu yüzden önerilen seviye veya yaratık seviyesi
+uydurulmadı. Ekran görüntüsündeki karakter LV'si bölge seviyesi sayılmadı.
+Gedo'nun 16. seviye görev şartı ilgili iki kasabada kaynak görseliyle
+ayrıca gösterilir; kasabaya giriş şartı değildir. Kule katlarının episode
+sonunda açılma sırası rehberden alınır.
+
+GÖRSELLER VE COĞRAFYA
+80 saydam bölge görseli özgün GND collision alanından türetildi; aktör ve
+harita noktalarının bulunduğu kapalı yürünebilir alanlar seçildi. Çevre
+dekorunu korumak için 180 özgün ekran pikseli pay eklendi. Pikseller,
+önceden çıkarılan gerçek oyun zemin/çevre renderlarından gelir.
+Bölge yerleri rehberdeki harf/sayı işaretlerine dayanır. Episode aralıkları
+ve doku boyutları gezinme için düzenlenmiştir; kesintisiz gerçek dünya
+koordinatı veya bölgeler arası tam mesafe iddiası yoktur. Çizgiler yalnızca
+senaryodaki sabit hedefli CHANGESCENARIO geçişlerinden çıkarılmıştır;
+görev koşulları, dinamik warp hedefleri ve erişim izinleri canlandırılmaz.
+Özgün rehber düğmesi, yerel kaynak JPG'sini açar.
+
+Tamamen çevrimdışı; harici servis, indirme veya oyun dosyası değişikliği
+gerektirmez. Canlı yardımcı ve oyun yaması bu sürümde değiştirilmedi.

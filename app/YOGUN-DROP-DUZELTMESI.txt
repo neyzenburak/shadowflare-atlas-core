@@ -1,0 +1,49 @@
+SHADOWFLARE ATLAS v13 — YOĞUN DROP DÜZELTMELERİ
+
+ARAYUZ-DUZELT.cmd veya CANLI-DROP-BASLAT.cmd ile başlat.
+Çöküş ve çizim performansı düzeltmeleri yardımcı açıkken otomatik uygulanır.
+Drop çarpanını Canlı kontrol sekmesinden aç; mevcut ×1–1000 seçimi korunur.
+Arayüzde hem yoğun drop hem performans düzeltmesinin durumu görünür.
+Başlatıcı zaten açık eski yardımcıyı günceller. Sayfada Ctrl+F5 kullan;
+tarayıcı başlığı v13 ile biter. Python dışında harici paket gerekmez.
+
+ÇÖKÜŞ
+
+Oyun, ekran nesnelerini yenilerken eski nesneleri serbest bırakıyor; fare
+altındaki eşyayı gösteren liste bazen eski adresi tutuyordu. Çok eşya bu
+hatayı görünür hale getiriyordu. Ekran listesi değiştikten hemen sonra fare
+listesi oyunun kendi işleviyle güncellenir.
+
+Alınan çöküş kaydı aynı DLL+0x4C40 hatasıyla yeniden üretildi. Güncel listeyle
+özgün okuma başarıyla geçti. ×100, 41 yaratık, 4100 tur ve aynı anda 1156
+yer eşyasında yeni çöküş kaydı yok; yoğun eşya ve seri toplama kullanıcı
+tarafından doğrulandı. Bu, kaydı alınan hatanın çözümüdür; oyunun bütün
+olası hatalarına yönelik sınırsız kararlılık garantisi değildir.
+
+PERFORMANS
+
+Özgün çizim sıralaması aynı eşya listesine tekrar tekrar başından yürüyordu.
+Karşılaştırma kuralları korunarak doğrudan liste bağlantıları kullanılır.
+Çizilen nesne sayısı, eşya içeriği ve sıra değişmez. Bir ölçümde 1155 eşya
+korunurken 5.59 FPS → 29.95 FPS görüldü; akıcılık kullanıcı tarafından da
+doğrulandı. Bu tek sahnenin ölçümüdür. 5000 nesneli sentetik testte de
+nesne kaybı veya kapasite sınırı yoktur.
+
+ZEMİN KONTROLLÜ SEKİZGEN DAĞITIM
+
+Yeni normal eşya droplarında, yaratığın çevresindeki hedefe giderken oyunun
+güncel yürünebilir zemin tablosu kontrol edilir. Duvar/su engeli varsa eşya
+son uygun noktada kalır. Çapraz kapalı köşelerden geçilmez. Yaratık geçersiz
+zeminde öldüyse oyuncunun uygun zemini başlangıç olarak kullanılır.
+Dar alanlarda halkalar sıkışabilir ve eşyalar üst üste gelebilir.
+Önceden yere düşmüş eşyaların konumu değiştirilmez. Mine ve altın, özgün
+ilk turdaki davranışını korur ve çarpılmaz. Bu kontrol hareketli bütün
+karakterler için tam yol bulma hesabı yapmaz.
+
+Eşya veya tur sayısı sınırı eklenmez; hiçbir başarılı eşya seçimi silinmez.
+Değişiklikler yalnızca doğrulanmış tek oyunculu v2.004 sürecinin belleğine
+uygulanır. Oyun EXE/DLL dosyaları değiştirilmez. Yardımcı normal kapanırken
+çağrılar geri alınır. Sonraki oyun açılışını yardımcı otomatik takip eder;
+drop çarpanını her oyun oturumunda yeniden aç.
+
+Teknik ve ölçüm özeti DOGRULAMA.json içindedir.

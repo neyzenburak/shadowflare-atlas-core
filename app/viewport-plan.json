@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "exeSha256": "82011dcc94fd0ba3c9a9447f1c42d24fc334f3574da0d76962aece267821efef",
+  "provenance": "Screen allocations, viewport clipping, projection and HUD input decoded directly from the verified original game. No third-party patch bytes or configuration formats.",
+  "immediates": [
+    {
+      "address": 4200614,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4200619,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4200742,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4200753,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4201212,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4201217,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204046,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204051,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204122,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204127,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204894,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4204899,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4322019,
+      "before": "68e0010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4322024,
+      "before": "6880020000",
+      "offset": 1,
+      "size": 4,
+      "value": "width",
+      "add": 0,
+      "label": "native screen allocation"
+    },
+    {
+      "address": 4205536,
+      "before": "81f97f020000",
+      "offset": 2,
+      "size": 4,
+      "value": "width",
+      "add": -1,
+      "label": "client mouse edge"
+    },
+    {
+      "address": 4205544,
+      "before": "3ddf010000",
+      "offset": 1,
+      "size": 4,
+      "value": "height",
+      "add": -1,
+      "label": "client mouse edge"
+    },
+    {
+      "address": 4291492,
+      "before": "2d40010000",
+      "offset": 1,
+      "size": 4,
+      "value": "halfWidth",
+      "add": 0,
+      "label": "screen to map projection"
+    },
+    {
+      "address": 4291503,
+      "before": "81e9f0000000",
+      "offset": 2,
+      "size": 4,
+      "value": "halfHeight",
+      "add": 0,
+      "label": "screen to map projection"
+    },
+    {
+      "address": 4291380,
+      "before": "bea0000000",
+      "offset": 1,
+      "size": 4,
+      "value": "zero",
+      "add": 0,
+      "label": "full viewport panel offset"
+    },
+    {
+      "address": 4291387,
+      "before": "be60ffffff",
+      "offset": 1,
+      "size": 4,
+      "value": "zero",
+      "add": 0,
+      "label": "full viewport panel offset"
+    },
+    {
+      "address": 4485979,
+      "before": "81f9e0010000",
+      "offset": 2,
+      "size": 4,
+      "value": "height",
+      "add": 0,
+      "label": "screen mouse height"
+    },
+    {
+      "address": 4215438,
+      "before": "3d68020000",
+      "offset": 1,
+      "size": 4,
+      "value": "dx",
+      "add": 616,
+      "label": "quest marker mouse X"
+    },
+    {
+      "address": 4215449,
+      "before": "3d80020000",
+      "offset": 1,
+      "size": 4,
+      "value": "dx",
+      "add": 640,
+      "label": "quest marker mouse X"
+    },
+    {
+      "address": 4215596,
+      "before": "8d8e80020000",
+      "offset": 2,
+      "size": 4,
+      "value": "dx",
+      "add": 640,
+      "label": "quest marker mouse X"
+    },
+    {
+      "address": 4215606,
+      "before": "8d8e98020000",
+      "offset": 2,
+      "size": 4,
+      "value": "dx",
+      "add": 664,
+      "label": "quest marker mouse X"
+    },
+    {
+      "address": 4215464,
+      "before": "3d70010000",
+      "offset": 1,
+      "size": 4,
+      "value": "dy",
+      "add": 368,
+      "label": "quest marker mouse Y"
+    },
+    {
+      "address": 4215475,
+      "before": "3d80010000",
+      "offset": 1,
+      "size": 4,
+      "value": "dy",
+      "add": 384,
+      "label": "quest marker mouse Y"
+    },
+    {
+      "address": 4215620,
+      "before": "3d70010000",
+      "offset": 1,
+      "size": 4,
+      "value": "dy",
+      "add": 368,
+      "label": "quest marker mouse Y"
+    },
+    {
+      "address": 4215627,
+      "before": "3d80010000",
+      "offset": 1,
+      "size": 4,
+      "value": "dy",
+      "add": 384,
+      "label": "quest marker mouse Y"
+    }
+  ],
+  "entries": {
+    "4319579": "8b44246048",
+    "4319838": "8b44246048",
+    "4479952": "83ec3c5355",
+    "4486512": "83ec1c578bf9"
+  },
+  "magicRender": {
+    "address": 4214536,
+    "before": "83f810bee00000007507be58010000eb0a83f8017505be7c000000"
+  },
+  "magicInput": {
+    "address": 4486595,
+    "before": "83fa10bee00000007507be58010000eb0a83fa017505be7c000000"
+  }
+}

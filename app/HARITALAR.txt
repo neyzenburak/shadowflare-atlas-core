@@ -1,0 +1,46 @@
+v12: Episode dünya atlası ve rehber sırası eklendi. Ayrıntılar DUNYA.txt.
+
+SHADOWFLARE ATLAS v11 — HARİTALAR
+
+Atlas'ın üçüncü “Haritalar” sekmesini aç. Arşivdeki 209 senaryo bölgesi ve
+bu senaryolara bağlı olmayan üç ek harita dosyası ayrı kayıtlar olarak listelenir.
+Aynı harita görünümünü paylaşan bölgelerin yaratık ve drop bilgileri birleştirilmez.
+
+Harita ya da yaratık adıyla ara. Bölgeyi seçince gerçek zemin, duvar, bina,
+ağaç ve çevre nesnelerinden oluşan tam görüntü açılır. Bu bir kroki değildir;
+görseller oyunun kendi Map, NJP ve SDW dosyalarından çizilir. Harita dışındaki
+boş hücreler siyah kalır. Görüntüler yapay zekâ ile üretilmemiştir.
+
+Tamamını gör: Bölgenin tamamını çerçeveye sığdırır.
+Tekerlek / + / −: Fare konumuna doğru yakınlaştırır veya uzaklaştırır.
+Sürükleme / ok tuşları: Haritada dolaştırır.
+Kenarda kaydır: Fareyi çerçevenin kenarına götürünce görünümü o yöne kaydırır.
+0 veya Home: Tam görünümü geri getirir.
+Tam ekran: Haritayı tarayıcının tam ekran görünümünde açar.
+Dokunmatik: Tek parmakla sürükle, iki parmakla yakınlaştır.
+
+Yaratık konumlarını kutudan açıp kapatabilirsin. Turuncu noktalar senaryodaki
+yerleşimlerdir; seçilen yaratık altın rengiyle vurgulanır. Mor noktalar,
+dosyalarda görev betiğiyle açıkça açılıp kapatılan yerleşimlerdir. Diğerlerinin
+her koşulda aktif olduğu iddia edilmez. “Konum” düğmesi ilgili yaratığı vurgular.
+Yaratığın adına basmak animasyon ve drop panelini açar.
+
+Eşya panelindeki “Hangi haritalarda?” bağlantıları bu eşyanın düşebildiği
+bölgelere götürür. Seviye ve kayıt kimlikleri ayrı tutulur; Tesla Blade 80
+ile Tesla Blade 75 aynı kaynak listesi değildir. Eşya filtresini kaldırarak
+tüm haritalara dönebilirsin.
+
+“Burada neler düşer?” listesinde oran, bölgedeki uygun yaratık varyantları
+arasında tek öldürmede en yüksek olasılıktır. Haritanın tamamını temizleme
+olasılığı veya saatlik ganimet hesabı değildir. Oyuncu sayısı ve canlı drop
+çarpanı aynı drop modelinden izlenir; Mine ve altın ×1 istisnası korunur.
+
+Konumlar olası statik senaryo yerleşimleridir. Görev durumu, yeniden doğma,
+dinamik karakterler ve görevle oluşturulan eşyalar bu görünümün kapsamı dışındadır.
+Ek üç harita dosyasının neden senaryoya bağlanmadığı bilinmiyor; bu durum tek
+başına beta veya oyundan çıkarılmış içerik olduklarını kanıtlamaz.
+
+Arşiv çevrimdışı çalışır: index.html'yi açmak yeterlidir. Büyük haritalar için
+tam görüntüyle başlar, yakınlaşınca özgün çözünürlükteki parçaları yükler.
+Canlı Trainer, drop veya arayüz düzeltmesini değiştirmek için mevcut başlatıcılar
+kullanılır. Harita gezmek açık oyunun belleğine veya kayıtlarına yazmaz.

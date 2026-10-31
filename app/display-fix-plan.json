@@ -1,0 +1,724 @@
+{
+  "immediates": [
+    {
+      "address": 4498957,
+      "before": "3d65010000",
+      "offset": 1,
+      "size": 4,
+      "value": 357,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4498964,
+      "before": "3de5010000",
+      "offset": 1,
+      "size": 4,
+      "value": 485,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4498974,
+      "before": "81fa9d010000",
+      "offset": 2,
+      "size": 4,
+      "value": 413,
+      "anchor": "hudY",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4498982,
+      "before": "81fabd010000",
+      "offset": 2,
+      "size": 4,
+      "value": 445,
+      "anchor": "hudY",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4498990,
+      "before": "059bfeffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966939,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": true
+    },
+    {
+      "address": 4499008,
+      "before": "3d95010000",
+      "offset": 1,
+      "size": 4,
+      "value": 405,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4499019,
+      "before": "3d15020000",
+      "offset": 1,
+      "size": 4,
+      "value": 533,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4499033,
+      "before": "81f9bd010000",
+      "offset": 2,
+      "size": 4,
+      "value": 445,
+      "anchor": "hudY",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4499041,
+      "before": "81f9dd010000",
+      "offset": 2,
+      "size": 4,
+      "value": 477,
+      "anchor": "hudY",
+      "label": "potion right-click",
+      "negative": false
+    },
+    {
+      "address": 4499049,
+      "before": "056bfeffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966891,
+      "anchor": "hudX",
+      "label": "potion right-click",
+      "negative": true
+    },
+    {
+      "address": 4481861,
+      "before": "3d40010000",
+      "offset": 1,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4481889,
+      "before": "3d40010000",
+      "offset": 1,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4481920,
+      "before": "3d77010000",
+      "offset": 1,
+      "size": 4,
+      "value": 375,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4481927,
+      "before": "3dbb010000",
+      "offset": 1,
+      "size": 4,
+      "value": 443,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4499226,
+      "before": "81f940010000",
+      "offset": 2,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4499255,
+      "before": "81f940010000",
+      "offset": 2,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4224306,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4224313,
+      "before": "3d88010000",
+      "offset": 1,
+      "size": 4,
+      "value": 392,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222103,
+      "before": "81f9ea010000",
+      "offset": 2,
+      "size": 4,
+      "value": 490,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222115,
+      "before": "81f9ff010000",
+      "offset": 2,
+      "size": 4,
+      "value": 511,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222405,
+      "before": "81f901020000",
+      "offset": 2,
+      "size": 4,
+      "value": 513,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222417,
+      "before": "81f916020000",
+      "offset": 2,
+      "size": 4,
+      "value": 534,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222713,
+      "before": "81f9ea010000",
+      "offset": 2,
+      "size": 4,
+      "value": 490,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4222725,
+      "before": "81f9ff010000",
+      "offset": 2,
+      "size": 4,
+      "value": 511,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4223015,
+      "before": "81f901020000",
+      "offset": 2,
+      "size": 4,
+      "value": 513,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4223027,
+      "before": "81f916020000",
+      "offset": 2,
+      "size": 4,
+      "value": 534,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4213639,
+      "before": "81f977010000",
+      "offset": 2,
+      "size": 4,
+      "value": 375,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4213647,
+      "before": "81f9bb010000",
+      "offset": 2,
+      "size": 4,
+      "value": 443,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4483854,
+      "before": "2d40010000",
+      "offset": 1,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4258151,
+      "before": "81f977010000",
+      "offset": 2,
+      "size": 4,
+      "value": 375,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4258159,
+      "before": "81f9bb010000",
+      "offset": 2,
+      "size": 4,
+      "value": 443,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4490806,
+      "before": "81fe40010000",
+      "offset": 2,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4490825,
+      "before": "81fe77010000",
+      "offset": 2,
+      "size": 4,
+      "value": 375,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4490833,
+      "before": "81febb010000",
+      "offset": 2,
+      "size": 4,
+      "value": 443,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4230624,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4230700,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4230782,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4230860,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4501067,
+      "before": "3d40010000",
+      "offset": 1,
+      "size": 4,
+      "value": 320,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4501098,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4501191,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4501288,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4501385,
+      "before": "3d50010000",
+      "offset": 1,
+      "size": 4,
+      "value": 336,
+      "anchor": "right",
+      "label": "inventory input",
+      "negative": false
+    },
+    {
+      "address": 4230639,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4230718,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4230800,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4230878,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4501114,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4501209,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4501306,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4501403,
+      "before": "05b0feffff",
+      "offset": 1,
+      "size": 4,
+      "value": 4294966960,
+      "anchor": "right",
+      "label": "special inventory column",
+      "negative": true
+    },
+    {
+      "address": 4218083,
+      "before": "3d80020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4218090,
+      "before": "b880020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4220483,
+      "before": "3d80020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4220490,
+      "before": "b880020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4227042,
+      "before": "3d80020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4227049,
+      "before": "b880020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4233277,
+      "before": "81fa80020000",
+      "offset": 2,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4233285,
+      "before": "b880020000",
+      "offset": 1,
+      "size": 4,
+      "value": 640,
+      "anchor": "right",
+      "label": "tooltip screen width",
+      "negative": false
+    },
+    {
+      "address": 4218108,
+      "before": "81f9e0010000",
+      "offset": 2,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4218116,
+      "before": "bae0010000",
+      "offset": 1,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4220508,
+      "before": "81f9e0010000",
+      "offset": 2,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4220516,
+      "before": "bae0010000",
+      "offset": 1,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4227067,
+      "before": "81f9e0010000",
+      "offset": 2,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4227075,
+      "before": "bae0010000",
+      "offset": 1,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4233302,
+      "before": "81f9e0010000",
+      "offset": 2,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4233310,
+      "before": "bae0010000",
+      "offset": 1,
+      "size": 4,
+      "value": 480,
+      "anchor": "hudY",
+      "label": "tooltip screen height",
+      "negative": false
+    },
+    {
+      "address": 4490647,
+      "before": "81fe4d020000",
+      "offset": 2,
+      "size": 4,
+      "value": 589,
+      "anchor": "hudX",
+      "label": "modal HUD menu close",
+      "negative": false
+    },
+    {
+      "address": 4490655,
+      "before": "81fe7f020000",
+      "offset": 2,
+      "size": 4,
+      "value": 639,
+      "anchor": "hudX",
+      "label": "modal HUD menu close",
+      "negative": false
+    },
+    {
+      "address": 4490663,
+      "before": "81f992010000",
+      "offset": 2,
+      "size": 4,
+      "value": 402,
+      "anchor": "hudY",
+      "label": "modal HUD menu close",
+      "negative": false
+    },
+    {
+      "address": 4490671,
+      "before": "81f99d010000",
+      "offset": 2,
+      "size": 4,
+      "value": 413,
+      "anchor": "hudY",
+      "label": "modal HUD menu close",
+      "negative": false
+    }
+  ],
+  "entries": {
+    "4485776": "83ec20b890010000",
+    "4611248": "53558b442424",
+    "4216208": "83ec1c66a138d54700",
+    "4478800": "8b54240856",
+    "4499888": "8b89fc030000",
+    "4247200": "81ec24010000",
+    "4258272": "83ec085355",
+    "4260800": "81ece0020000"
+  }
+}

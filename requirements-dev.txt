@@ -1,0 +1,6 @@
+# Optional native-code verification tools. Not used by start.cmd or the runtime.
+pefile
+unicorn
+keystone-engine
+capstone
+Pillow

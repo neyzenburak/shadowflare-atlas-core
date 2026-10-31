@@ -1,0 +1,94 @@
+SHADOWFLARE ATLAS v13 — AKICI YOĞUN DROP
+
+Yoğun drop çöküşündeki eski fare adresi düzeltildi. Aynı 1155 eşya korunurken
+çizim sıralaması iyileştirmesiyle yaklaşık 5.6 → 30 FPS ölçüldü.
+Yeni sekizgen droplar oyunun yürünebilir zemin tablosunu kontrol eder.
+Eşya veya tur sayısı sınırı eklenmez. Ayrıntılar YOGUN-DROP-DUZELTMESI.txt.
+ARAYUZ-DUZELT.cmd ile başlat; açık Atlas sayfasında Ctrl+F5 kullan.
+
+CANLI KONTROL v11 — SEKİZGEN DROP
+
+Çarpan açıkken eşyalar yaratığın çevresinde sekizgen halkalara dağılır.
+İlk sekiz sıranın ardından dış halkalarda yeni noktalar açılır. Tur ve eşya
+sayısı sınırı eklenmez. Bossun aynı turdaki eşyaları da ayrı noktalara gider.
+Mine ve altının normal düşüşü korunur; ek turlarda çoğaltılmaz.
+Atlanan Mine/altın seçimleri başka bir eşya için yeniden zar attırmaz.
+Mine ve altının katalog oranları da ×1 olarak kalır.
+
+Drop etkinliği ve arayüz düzeltmesi artık Canlı kontrol sekmesindedir.
+Trainer kendi CT dosyanı yerel olarak ekleyebilir; tablo dağıtıma dahil değil. Ayrıntılar TRAINER.txt.
+
+GENİŞ EKRAN DÜZELTMESİ v10
+
+ARAYUZ-DUZELT.cmd ile başlat. Pot sağ tık bölgeleri, envanter konumu ve
+bilgi kutusu sınırları düzeltilir. Ayrıntılar ARAYUZ-DUZELTMESI.txt.
+Yardımcı, oyunun açılmasını ve çözünürlüğünü otomatik takip eder; karakter
+seçim ekranında başlatılabilir. 1920 × 900 sağa yaslama da oyunda doğrulandı.
+Çarpan, seçilen tur sayısını eksiksiz çalıştırır. Yoğun drop düzeltmelerinin
+ayrıntıları YOGUN-DROP-DUZELTMESI.txt dosyasında açıklanır.
+
+SHADOWFLARE ATLAS — CANLI DROP
+
+DROP ÇARPANI v9
+
+Atlas'ın Canlı kontrol sekmesindeki Drop çarpanı panelini kullan. Kaydırıcı ×1–100,
+sayı kutusu ×1–1000 kabul eder. Değeri girdikten sonra “Çarpanı uygula”ya bas.
+“Etkinliği kapat · ×1” özgün davranışı geri getirir.
+
+Bu özellik yaratığın kendi normal eşya drop işlemini seçtiğin sayıda tekrarlar.
+Bir denemeli yaratık ×10 ile 10, 10 denemeli boss toplam 100 deneme yapar.
+Havuz, nadirlik izinleri, özellik zarları ve seviye filtreleri normal oyun
+kurallarıyla çalışır. Aynı öldürmede birden çok eşya gelebilir. Çok yüksek
+çarpanlar yerde çok sayıda eşya oluşturabilir. Mine ve altın çarpılmaz;
+ayrı altın zarı da değişmez.
+Görev betiklerinden doğrudan verilen ödüller bu çarpana dahil değildir.
+
+Katalog, canlı oyunda etkin olan çarpanla oranları otomatik yeniden hesaplar.
+Önizlemede bir değer yazmak oyunu değiştirmez; “Çarpanı uygula”ya basmalısın.
+Mine ve altın dışındaki bir eşyanın normal şansı p ise ×N için en az bir
+tane şansı 1-(1-p)^N olur. Bu yüzden
+çok nadir eşyaların ortalama bekleme süresi yaklaşık N'ye bölünür; bu bir
+belirli sayıda öldürmede düşme garantisi değildir. RNG sapmaları için önceki
+nominal oran sınırlamaları geçerlidir.
+
+Çarpan oturumluk çalışır ve EXE dosyasını değiştirmez. Yardımcı normal
+kapatılırken özgün çağrı geri yüklenir. Yardımcı beklenmedik biçimde sonlanırsa
+son canlılık sinyalinden beş saniye sonra oyun normal ×1 turunu kullanır.
+Sonraki oyun açılışı her zaman özgün davranışla başlar. Etkinliği yeniden aç.
+
+SEÇİLİ EŞYAYI ELLE YERE BIRAKMA
+
+Windows ve Python 3.9+ gerekir. Harici Python paketi gerekmez.
+Bu bilgisayarda Python 3.12 ile doğrulandı.
+
+CANLI-DROP-BASLAT.cmd dosyasını çalıştır. Windows yönetici onayı gerekiyorsa
+kendin onayla. Açılan yerel Atlas'ta eşya seçip “Seçili eşyayı yanına bırak”
+düğmesine bas; sonra oyuna dön. Her istek bir adet eşya bırakır.
+
+Tarayıcı tek başına oyun belleğine erişemez. Bu yardımcı yalnızca
+127.0.0.1:8770 üzerinde yerel olarak çalışır. İnternete veri göndermez.
+Yalnızca analiz edilen ShadowFlare v2.004 çalıştırılabilir dosyası ve tek
+oyunculu, yüklenmiş canlı karakter desteklenir.
+
+Eşya oyunun kendi oluşturma ve yere bırakma işlevleriyle üretilir. Geçici
+çağrı oyun döngüsünde çalışır; girişteki altı bayt işlemden sonra geri alınır.
+Oyun EXE'si, eşya tabloları veya kayıt dosyaları dosya üzerinde yamalanmaz.
+İşlem öncesi Save klasöründeki .ssv ve .bmp dosyalarının kopyası bu klasördeki
+live-drop-backups altında saklanır. Eşyayı alıp oyunu kaydedersen normal kayıt
+mekanizmasıyla kaydına dahil olur.
+
+Standart eşya özellik zarları oyunun kendisi tarafından atılır; değişken
+özellikler Atlas'taki aralıkların içinden gelir.
+
+Oyun duraklatılmışsa veya başka penceredeyken oyun döngüsü duruyorsa istek
+bekler. Oyuna dön. Sonucu belirsiz bir hata alırsan tekrar tıklamadan önce
+oyundaki yeri kontrol et.
+
+İlk canlı doğrulama: Tesla Blade, gereken seviye 80 (0:80000127).
+HTML düğmesiyle tek bir eşya oluşturuldu; oyun içindeki modeli, haritanın
+yerdeki eşya listesi, kimliği ve karaktere bitişik konumu doğrulandı.
+Her katalog kaydı oyunda tek tek denenmiş değildir. Değişken özellikler için
+oyunun kendi zarları kullanılır; belirli bir maksimum özellik vaat edilmez.
+
+Yardımcı açıkken başlatıcıyı tekrar çalıştırmak mevcut Atlas sayfasını açar.
+Eski, yalnızca elle eşya bırakan yardımcı varsa başlatıcı güncel sürüme geçirir.

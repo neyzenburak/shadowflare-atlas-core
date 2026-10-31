@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10120f">
+  <meta name="description" content="ShadowFlare'ın gerçek oyun görselleriyle çevrimdışı yaratık, eşya ve drop atlası.">
+  <title>ShadowFlare · Atlas & Canlı Kontrol v30-core</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=29-game-launch">
+  <link rel="stylesheet" href="maps.css?v=13-map-travel">
+  <link rel="stylesheet" href="grail.css?v=1">
+  <link rel="stylesheet" href="scenario.css?v=1">
+</head>
+<body>
+  <a class="skip-link" href="#catalogue">Kataloğa geç</a>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ShadowFlare Drop Atlas ana sayfa">
+      <svg class="brand-mark" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 1 37 11v25L20 47 3 36V11Z"/><path d="m23 9-11 14h9l-5 15 14-18h-9Z"/></svg>
+      <span><b>SHADOWFLARE</b><small>DROP ATLAS</small></span>
+    </a>
+    <nav aria-label="Üst menü"><a href="#catalogue" class="nav-active">Arşivi keşfet</a><button type="button" id="aboutButton">Atlas hakkında <span>↗</span></button></nav>
+    <span class="offline"><i></i> TAMAMEN ÇEVRİMDIŞI</span>
+  </header>
+
+  <main>
+    <div class="page-tabs" role="tablist" aria-label="Atlas bölümleri">
+      <button id="atlasTab" role="tab" aria-controls="atlasPage" aria-selected="true" tabindex="0"><span>01</span> Drop Atlas <small>Eşya & yaratık arşivi</small></button>
+      <button id="controlsTab" role="tab" aria-controls="controlsPage" aria-selected="false" tabindex="-1"><span>02</span> Canlı kontrol <small>Trainer & drop etkinliği</small></button>
+      <button id="mapsTab" role="tab" aria-controls="mapsPage" aria-selected="false" tabindex="-1"><span>03</span> Haritalar <small>Dünya & ganimet rotaları</small></button>
+      <button id="grailTab" role="tab" aria-controls="grailPage" aria-selected="false" tabindex="-1"><span>04</span> Grail <small>Premium koleksiyonu</small></button>
+      <button id="scenarioTab" role="tab" aria-controls="scenarioPage" aria-selected="false" tabindex="-1"><span>05</span> Misc / Special / Scenario <small>Eşya konumları &amp; görev yolları</small></button>
+    </div>
+    <div id="atlasPage" role="tabpanel" aria-labelledby="atlasTab">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy"><p class="eyebrow"><span class="tiny-diamond"></span> BİR SHADOWFLARE SAHA REHBERİ</p><h1 id="heroTitle">Her ganimetin<br>bir <em>izi</em> var.</h1><p class="hero-text">Yaratığı bul. Havuzunu gör.<br>Aradığın eşyanın izini sür.</p></div>
+      <div class="hero-ledger"><span class="ledger-label">OYUN DOSYALARINDAN, DOĞRUDAN.</span><div class="ledger-numbers"><div><b id="itemTotal">2.860</b><span>EŞYA</span></div><div><b id="mobTotal">572</b><span>YARATIK</span></div><div><b>209</b><span>HARİTA</span></div></div><div class="ledger-note"><span class="seal">✓</span><p>Gerçek envanter ikonları.<br>Orijinal yaratık animasyonları.<br>Koddan çıkarılmış drop bağlantıları.</p></div></div>
+    </section>
+
+    <section id="catalogue" class="workspace" aria-label="Eşya ve yaratık kataloğu">
+      <div class="catalogue-pane">
+        <div class="catalogue-heading"><h2>Arşiv</h2><span id="resultCount" aria-live="polite">Arşiv yükleniyor…</span></div>
+        <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><input id="search" type="search" placeholder="Bir yaratık veya eşya ara…" aria-label="Yaratık veya eşya ara" autocomplete="off"><kbd>/</kbd></div>
+        <div class="quick-searches" aria-label="Örnek aramalar"><span>İZ SÜR:</span><button data-quick="Red Goblin">Red Goblin</button><button data-quick="Mine">Mine</button><button data-quick="Tablet">Tablet</button><button data-quick="Tesla Blade">Tesla Blade</button><button data-quick="Knuckle Breaker">Knuckle Breaker · yeni panel</button></div>
+        <div class="filter-bar"><div class="segmented" aria-label="Katalog türü"><button data-scope="all" class="active" aria-pressed="true">Hepsi</button><button data-scope="mob" aria-pressed="false">Yaratıklar</button><button data-scope="item" aria-pressed="false">Eşyalar</button></div><button id="favoritesOnly" class="icon-button" title="Yalnızca işaretlediklerim" aria-label="Yalnızca işaretlediklerim" aria-pressed="false">☆</button></div>
+        <div class="catalogue-options"><label><span class="sr-only">Eşya kategorisi</span><select id="category"><option value="all">Tüm kategoriler</option><option value="0">Silahlar</option><option value="1">Zırhlar</option><option value="2">Aksesuarlar</option><option value="3">Tüketilebilirler</option><option value="4">Diğer</option></select></label><label><span class="sr-only">Eşya kalitesi</span><select id="quality"><option value="all">Tüm kaliteler</option><option value="0">Normal / Plain</option><option value="1">Magic / Büyülü</option><option value="2">Unique / Premium</option><option value="3">Özel</option></select></label><label class="sort-option"><span class="sr-only">Sıralama</span><select id="sort"><option value="curated">Arşiv sırası</option><option value="name">Ada göre · A–Z</option><option value="level">Gereken seviyeye göre</option><option value="exp-desc" hidden disabled>Ham EXP · yüksekten düşüğe</option><option value="exp-asc" hidden disabled>Ham EXP · düşükten yükseğe</option><option value="progression" hidden disabled>Episode ve harita ilerleyişi</option></select></label></div>
+        <div class="guide-filters"><label><span>EKİPMAN TÜRÜ</span><select id="itemKind" aria-label="Ekipman türü"><option value="all">Tüm türler</option></select></label><label><span>GEREKEN SEVİYE</span><select id="levelBand" aria-label="Gereken seviye aralığı"><option value="all">Tüm seviyeler</option><option value="1-30">1–30</option><option value="31-50">31–50</option><option value="51-80">51–80</option><option value="1-40">1–40 · zırh rehberi</option><option value="41-999">41+ · zırh rehberi</option><option value="31-75">31–75 · aksesuar rehberi</option></select></label><label><span>REHBER KARŞILAŞTIRMASI</span><select id="guideFilter" aria-label="Rehber karşılaştırması"><option value="all">Tüm kayıtlar</option><option value="listed">Rehberde listelenen Premium</option><option value="unlisted">Rehberde listelenmeyen 5 Premium</option><option value="outside">Premium rehberinin kapsamı dışında</option></select></label></div>
+        <div id="entityGrid" class="entity-grid" aria-label="Katalog sonuçları"></div>
+        <div id="emptyState" class="empty-state" hidden><span>⌕</span><h3>Bu iz henüz yok.</h3><p>Başka bir ad deneyebilir veya filtreleri temizleyebilirsin.</p><button class="text-button" id="resetFilters">Arşivin tamamını göster ↗</button></div>
+        <nav id="pagination" class="pagination" aria-label="Katalog sayfaları"></nav>
+      </div>
+      <aside id="detail" class="detail-pane" aria-label="Seçili kayıt ayrıntıları"><div class="initial-loading">Oyun arşivi açılıyor…</div></aside>
+    </section>
+    </div>
+    <div id="controlsPage" role="tabpanel" aria-labelledby="controlsTab" hidden>
+      <section class="control-intro"><div><p class="eyebrow">SHADOWFLARE · KONTROL MASASI</p><h1>Kuralları <em>sen seç.</em></h1><p>Drop etkinliği, karakterin ve ekipmanların. Hepsi aynı yerde.</p><nav class="control-shortcuts" aria-label="Canlı kontrol kısayolları"><button data-control-jump="dropEvent">Drop etkinliği ↓</button><button data-control-jump="experienceEvent">EXP & seviye ↓</button><button data-control-jump="trainerTitle">Trainer ↓</button><button data-control-jump="displayFix">Geniş ekran ↓</button><button data-control-jump="quickSell">Sağ tıkla sat ↓</button><button data-control-jump="premiumBeam">Premium ışını ↓</button></nav></div><div class="connection-chip" id="trainerConnection" role="status"><i></i><span>Yerel yardımcı bekleniyor</span></div></section>
+    <section class="event-panel game-launch-panel" id="gameLauncher" aria-labelledby="gameLaunchTitle">
+      <div class="event-heading"><div><p class="eyebrow">OYUNA DÖN</p><h2 id="gameLaunchTitle">ShadowFlare’i başlat</h2><p>Çözünürlüğü seç; envanter, pot tıklamaları ve yağmur düzeltmeleriyle birlikte aç.</p></div></div>
+      <div class="game-launch-fields">
+        <label>Genişlik<input id="gameLaunchWidth" type="number" min="640" max="7680" step="1" value="1920" inputmode="numeric"></label><span aria-hidden="true">×</span>
+        <label>Yükseklik<input id="gameLaunchHeight" type="number" min="480" max="4320" step="1" value="900" inputmode="numeric"></label>
+        <label class="game-launch-path">Oyun klasörü<input id="gameLaunchPath" type="text" placeholder="ShadowFlare klasörünün yolu" spellcheck="false"></label>
+        <div class="event-actions"><button id="saveGameLaunch" disabled>Ayarı kaydet</button><button id="startGame" disabled>Oyunu başlat ↗</button></div>
+      </div>
+      <p class="event-status" id="gameLaunchStatus" role="status">Yerel yardımcı bekleniyor.</p>
+    </section>
+    <section class="event-panel" id="dropEvent" aria-labelledby="dropEventTitle">
+      <div class="event-heading"><div><p class="eyebrow">KENDİN AVLA, GANİMETİNİ KENDİN BUL</p><h2 id="dropEventTitle">Drop çarpanı</h2><p>Yaratığın normal ganimet işlemini daha çok çalıştır. Her tur kendi eşya havuzundan seçim yapar.</p></div><div class="event-badge"><span id="eventBadgeLabel">NORMAL DROP</span><strong id="eventActiveFactor">×1</strong></div></div>
+      <div class="event-settings"><label class="event-slider"><span>ZAR TURU ÇARPANI <small>Kaydırıcı ×1–100</small></span><input id="eventMultiplierRange" type="range" min="1" max="100" step="1" value="10" aria-label="Drop çarpanı kaydırıcısı"></label><label class="event-number"><span>VEYA KENDİN YAZ</span><div><span>×</span><input id="eventMultiplierNumber" type="number" min="1" max="1000" step="1" value="10" inputmode="numeric" aria-label="Drop çarpanı değeri"></div><small>1–1000 · tam sayı</small></label><div class="event-actions"><button id="applyDropEvent" disabled>Çarpanı uygula</button><button id="stopDropEvent" disabled>Etkinliği kapat · ×1</button></div></div>
+      <label class="event-premium-option"><input id="eventPremiumOnly" type="checkbox"><span>Sadece Premiumlara uygula<small>Normal drop turu korunur; ek turlardan yalnızca Premium çıkar. Çarpanı uygula düğmesiyle etkinleşir.</small></span></label>
+      <label class="event-premium-option"><input id="eventExcludeFound" type="checkbox"><span>Grail’de bu karakterin buldukları droplanmasın<small>Normal tur dahil, bulunan Premium sonuçlar elenir. ×1’de de çalışır; tekrar zar atılmaz. Çarpanı uygula düğmesiyle etkinleşir.</small></span></label>
+      <p class="event-preview" id="eventPreview"></p><p class="event-status" id="eventStatus" role="status">Canlı çarpan için CANLI-DROP-BASLAT.cmd dosyasını çalıştır.</p><p class="event-footnote">Eşyalar yaratığın çevresinde sekizgen halkalara yayılır; duvar ve su engelinde uygun zeminde kalır. Dar alanlarda halkalar sıkışabilir. Mine ve altın ×1’de kalır. Seçilen tur sayısı eksiksiz çalışır.</p>
+    </section>
+    <div class="qol-grid experience-controls">
+      <section class="event-panel compact-panel" id="experienceEvent" aria-labelledby="experienceTitle">
+        <div class="event-heading"><div><p class="eyebrow">HER ÖLDÜRME BİR ADIM DAHA</p><h2 id="experienceTitle">EXP etkinliği</h2><p>Yaratıklardan kazandığın ham deneyimi ×1–1000 ile çarp.</p></div></div>
+        <div class="event-actions"><button id="applyExperience" disabled>Uygula</button><button id="stopExperience" disabled>×1 · Kapat</button></div>
+        <div class="pickup-range"><label for="experienceRange">EXP ×</label><input id="experienceRange" type="range" min="1" max="1000" step="1" value="1" aria-label="EXP çarpanı kaydırıcısı"><input id="experienceNumber" type="number" min="1" max="1000" step="1" value="1" inputmode="numeric" aria-label="EXP çarpanı"></div>
+        <p class="event-status" id="experienceStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Yalnızca karakterin yaratık EXP’si değişir. Oyunun normal kuralı korunur: öldürme başına en fazla bir seviye; seviye atlayınca fazla EXP silinir.</p>
+      </section>
+      <section class="event-panel compact-panel" id="levelRewind" aria-labelledby="levelRewindTitle">
+        <div class="event-heading"><div><p class="eyebrow">BİR SEVİYEYİ YENİDEN KAZAN</p><h2 id="levelRewindTitle">Statları koru, seviyeyi düşür</h2><p>Mevcut statların kalır; yeniden seviye atladığında normal bonuslar tekrar eklenir.</p></div></div>
+        <div class="event-actions"><button id="applyLevelRewind" disabled>Seviyeyi düşür</button></div>
+        <div class="pickup-range"><label for="levelRewindNumber">Hedef seviye</label><input id="levelRewindNumber" type="number" min="1" max="99" step="1" value="78" inputmode="numeric" aria-label="Düşürülecek seviye"><span id="levelRewindCurrent"></span></div>
+        <p class="event-status" id="levelRewindStatus" role="status">Karakter bekleniyor.</p>
+        <p class="event-footnote">Önce güncel ilerleme kaydedilip yedeklenir. Hedef seviyede EXP sıfırdan başlar. İşlem için oyuna dön; sabitlenmiş seviye/EXP ve tek yaratıkla seviye atlama kapalı olmalı.</p>
+      </section>
+    </div>
+    <section class="event-panel" id="displayFix" aria-labelledby="displayFixTitle">
+      <div class="event-heading"><div><p class="eyebrow">GENİŞ EKRAN</p><h2 id="displayFixTitle">Oyun arayüzü düzeltmesi</h2><p>Envanteri sağa yasla, pot tıklamalarını düzelt ve yağmuru tüm ekrana yay.</p></div></div>
+      <div class="event-actions"><button id="applyDisplayFix" disabled>Düzeltmeyi uygula</button><button id="stopDisplayFix" disabled>Önceki arayüze dön</button></div>
+      <p class="event-status" id="displayFixStatus" role="status">Yerel yardımcı bekleniyor.</p>
+      <p id="hoverLifetimeStatus" class="event-status" role="status">Yoğun drop düzeltmesi için yerel yardımcı bekleniyor.</p>
+      <p id="renderSortStatus" class="event-status" role="status">Performans düzeltmesi için yerel yardımcı bekleniyor.</p>
+
+    </section>
+
+      <div class="qol-grid">
+      <section class="event-panel compact-panel" id="omegaBeam" aria-labelledby="omegaBeamTitle">
+        <div class="event-heading"><div><p class="eyebrow">BİRAZ ABARTALIM</p><h2 id="omegaBeamTitle">Özel yetenekler</h2><p id="specialSkillDescription">Warrior · sol Alt + sağ tık · Attack ×3.</p></div></div>
+        <div class="event-actions"><button id="applyOmegaBeam" disabled>Aç</button><button id="stopOmegaBeam" disabled>Kapat</button></div>
+        <div class="special-skill-options"><label>Yetenek<select id="specialSkillSelect" disabled><option value="omega">Omega ışını</option><option value="meteor">Meteor yağmuru</option></select></label><label id="specialSurpriseWrap" class="special-surprise" hidden><input type="checkbox" id="specialSurprise" disabled> Sürpriz mod</label></div>
+        <p class="event-status" id="omegaBeamStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-note" id="specialSkillNote">Paneller kapalıyken kullan.</p>
+      </section>
+      <section class="event-panel compact-panel" id="ctrlTeleport" aria-labelledby="ctrlTeleportTitle">
+        <div class="event-heading"><div><p class="eyebrow">BİR ADIM ÖTEYE</p><h2 id="ctrlTeleportTitle">Ctrl + tıkla ışınlan</h2><p>Ctrl tuşunu basılı tutup yürünebilir bir zemine sol tıkla.</p></div></div>
+        <div class="event-actions"><button id="applyCtrlTeleport" disabled>Aç</button><button id="stopCtrlTeleport" disabled>Kapat</button></div>
+        <p class="event-status" id="ctrlTeleportStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Envanter, harita ve diğer paneller kapalı olmalı. Duvara, suya veya karakterin sığmadığı bir yere ışınlanmaz. Her tıklama bir ışınlanmadır.</p>
+      </section>
+      <section class="event-panel compact-panel" id="homingShots" aria-labelledby="homingShotsTitle">
+        <div class="event-heading"><div><p class="eyebrow">HEDEFİN İZİNDE</p><h2 id="homingShotsTitle">Güdümlü ok ve taş</h2><p>Crossbow, bowgun ve slingshot atışları Flame Strike gibi hedefini izler.</p></div></div>
+        <div class="event-actions"><button id="applyHomingShots" disabled>Aç</button><button id="stopHomingShots" disabled>Kapat</button></div>
+        <p class="event-status" id="homingShotsStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Yaratığı hedefleyerek ateş et. Çoklu atışın bütün okları ve taşları takip eder; sayı ve hasarı silahın belirler. Aç/kapat, yeni atışlara uygulanır.</p>
+      </section>
+      <section class="event-panel compact-panel" id="quickSell" aria-labelledby="quickSellTitle">
+        <div class="event-heading"><div><p class="eyebrow">HIZLI SATIŞ</p><h2 id="quickSellTitle">Sağ tıkla sat</h2><p>Satıcı açıkken çantadaki eşyaya sağ tıkla. Satış fiyatını oyun belirler.</p></div></div>
+        <div class="event-actions"><button id="applyQuickSell" disabled>Aç</button><button id="stopQuickSell" disabled>Kapat</button></div>
+        <p class="event-status" id="quickSellStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Satıcıdan sağ tıkla almaya devam edebilirsin. Oyun satışı kabul etmezse eşya çantada kalır.</p>
+      </section>
+      <section class="event-panel compact-panel" id="premiumBeam" aria-labelledby="premiumBeamTitle">
+        <div class="event-heading"><div><p class="eyebrow">ALTIN İZ</p><h2 id="premiumBeamTitle">Premium ışını</h2><p>Altın ışının çevresindeki kırmızı yörüngeler, bu karakterin Grail’de henüz bulmadığı Premium’u gösterir.</p></div></div>
+        <div class="event-actions"><button id="applyPremiumBeam" disabled>Aç</button><button id="stopPremiumBeam" disabled>Kapat</button></div>
+        <p class="event-status" id="premiumBeamStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Işın eşyanın yerinde kalır; eşya toplandığında söner. Koleksiyon kaydı, eşya çantaya alındığında oluşur.</p>
+      </section>
+      <section class="event-panel compact-panel" id="groundLoot" aria-labelledby="groundLootTitle">
+        <div class="event-heading"><div><p class="eyebrow">YERDEKİ KALABALIK</p><h2 id="groundLootTitle">Beyaz / mavi ganimet</h2><p>Ekipmanı geçici olarak gizle; Premium’lara rahatça tıkla.</p></div></div>
+        <div class="event-actions"><button id="hideGroundLoot" disabled>Gizle</button><button id="showGroundLoot" disabled>Göster</button></div>
+        <p class="event-status" id="groundLootStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <div class="ground-sale-actions"><button id="sellGroundLoot" disabled>Yerdeki beyaz ve mavileri sat</button><span id="groundSaleStatus" role="status"></span></div>
+        <label class="save-before-option"><input id="groundSaleSave" type="checkbox"> İşlemden önce kaydet</label>
+        <p class="event-footnote">Satış bu haritadaki ekipmanı teşhis edilmemiş bedelle altına çevirir. Altın yerde kalır, elle alınır. Premium, potlar ve Mine korunur. Kayıt seçiliyse önce kaydedilip yedeklenir.</p>
+      </section>
+      <section class="event-panel compact-panel" id="magicBeam" aria-labelledby="magicBeamTitle">
+        <div class="event-heading"><div><p class="eyebrow">MAVİ İZ · %80+</p><h2 id="magicBeamTitle">Değerli Magic ışını</h2><p>Angel, Saint Angel, Conqueror ve Legendary: her değişken bonus kendi aralığında en az %80.</p></div></div>
+        <div class="event-actions"><button id="applyMagicBeam" disabled>Aç</button><button id="stopMagicBeam" disabled>Kapat</button></div>
+        <p class="event-status" id="magicBeamStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Teşhis edilmeden de çalışır. Bütün değişken bonuslar koşulu sağlamalı; sabit bonuslar ve cezalar hesaba katılmaz.</p>
+      </section>
+      <section class="event-panel compact-panel" id="goldCapacity" aria-labelledby="goldCapacityTitle">
+        <div class="event-heading"><div><p class="eyebrow">GENİŞ ALTIN KESESİ</p><h2 id="goldCapacityTitle">2.147.483.647 altın</h2><p>Her altın kesesi tek yuvada 32 bit tamsayı sınırına kadar birikir.</p></div></div>
+        <p class="event-status" id="goldCapacityStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Otomatik uygulanır. Shift + sağ tıkla altın ayırma ve satıcı işlemleri kullanılabilir.</p>
+      </section>
+      <section class="event-panel compact-panel" id="autoPickup" aria-labelledby="autoPickupTitle">
+        <div class="event-heading"><div><p class="eyebrow">YAKIN GANİMET</p><h2 id="autoPickupTitle">Otomatik topla</h2><p>Potlar, meyveler, Mine ve altın karakterinin yanından çantana.</p></div></div>
+        <div class="event-actions"><button id="applyAutoPickup" disabled>Aç</button><button id="stopAutoPickup" disabled>Kapat</button></div>
+        <div class="pickup-range"><label for="pickupRadiusRange">Halka</label><input id="pickupRadiusRange" type="range" min="1" max="20" step="1" value="1" aria-label="Otomatik toplama halkası"><span>×</span><input id="pickupRadiusNumber" type="number" min="1" max="20" step="1" value="1" aria-label="Otomatik toplama halka sayısı"><button id="applyPickupRadius" disabled>Uygula</button></div>
+        <p class="event-status" id="autoPickupStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">×1 ilk sekizgen halka · ×20 en geniş menzil. Çantaya sığmayan eşya yerde kalır.</p>
+      </section>
+      <section class="event-panel compact-panel" id="potionStack" aria-labelledby="potionStackTitle">
+        <div class="event-heading"><div><p class="eyebrow">999 ADET</p><h2 id="potionStackTitle">Pot yığınları</h2><p>Aynı tür tüketilebilir eşyalar tek çanta yuvasında birleşir.</p></div></div>
+        <div class="event-actions"><button id="applyPotionStack" disabled>Aç</button><button id="stopPotionStack" disabled>Kapat</button></div>
+        <p class="event-status" id="potionStackStatus" role="status">Yerel yardımcı bekleniyor.</p>
+        <p class="event-footnote">Shift + sağ tık: istediğin adedi ayırıp boş yuvaya koy. Hotbar önce çantadaki adedi kullanır.</p>
+      </section>
+      </div>
+      <section class="trainer-panel" aria-labelledby="trainerTitle">
+        <div class="trainer-heading"><div><p class="eyebrow">ATLAS + YEREL TABLON</p><h2 id="trainerTitle">Trainer</h2><p id="trainerTableSummary">CT dosyası eklenmedi.</p></div><div class="event-actions"><label class="source-download">CT dosyası ekle <input id="trainerCTFile" type="file" accept=".ct" hidden></label><button id="trainerCTRemove" disabled>Tabloyu kaldır</button></div></div>
+        <div class="trainer-toolbar"><label class="trainer-search"><span class="sr-only">Trainer’da ara</span><input id="trainerSearch" type="search" placeholder="Ölümsüzlük, can, büyü, Attack…" autocomplete="off"><kbd>/</kbd></label><button id="trainerRefresh" disabled>Değerleri yenile ↻</button><button id="trainerUndo" disabled>Son işlemi geri al</button><button id="trainerReset" disabled>Hileleri kapat</button></div>
+        <div class="trainer-workspace"><nav id="trainerCategories" aria-label="Trainer grupları"></nav><div class="trainer-content"><div class="trainer-content-heading"><h3 id="trainerGroupTitle">Hileler</h3><span id="trainerCount"></span></div><p id="trainerMessage" role="status">Canlı değerler için CANLI-DROP-BASLAT.cmd veya ARAYUZ-DUZELT.cmd dosyasını çalıştır.</p><div id="trainerRecords"></div></div></div>
+        <div class="trainer-footnote"><span id="trainerActiveCount">Hiçbir hile açık değil.</span><p>Bir değeri değiştirmek için Uygula’ya bas. Karakter veya eşya değişince ilgili sabitleme kapanır. İlk değişiklikten önce kayıt yedeği alınır.</p><p>CT dosyasını kendin sağlarsın; yalnızca bu bilgisayarda saklanır ve ZIP’e eklenmez. Lua çalıştırılmaz. Desteklenmeyen betikler açıklamasıyla gösterilir.</p></div>
+      </section>
+    </div>
+    <div id="mapsPage" role="tabpanel" aria-labelledby="mapsTab" hidden>
+      <section class="map-intro"><div><p class="eyebrow">SHADOWFLARE · DÜNYA ARŞİVİ</p><h1>Ganimetin <em>coğrafyası.</em></h1><p>Bir bölge seç. Dünyayı gez, yaratıkları bul, eşyanın izini sür.</p></div><div class="map-totals"><b id="mapTotal">209</b><span>209 BÖLGE + 3 EK HARİTA</span></div></section>
+      <section class="world-atlas" aria-labelledby="worldTitle">
+        <div class="world-heading"><div><p class="eyebrow">DÖRT EPISODE · TEK YOLCULUK</p><h2 id="worldTitle">Dünyanın öteki ucuna.</h2><p>Rehberin coğrafyası, oyunun kendi dokuları. Bir bölgeye dokun, ganimetine ulaş.</p></div><button id="worldGuide">Özgün rehber ↗</button></div>
+        <div class="world-toolbar"><div id="worldEpisodes" class="world-episodes" role="group" aria-label="Dünya episode görünümü"><button data-world-episode="0" aria-pressed="true">Tüm dünya</button><button data-world-episode="1" aria-pressed="false">I <span>Remote Town</span></button><button data-world-episode="2" aria-pressed="false">II <span>Kanfore</span></button><button data-world-episode="3" aria-pressed="false">III <span>Antalusia</span></button><button data-world-episode="4" aria-pressed="false">IV <span>Calado</span></button></div><div class="world-zoom"><button id="worldZoomOut" aria-label="Dünyayı uzaklaştır">−</button><button id="worldFit">Dünyayı sığdır</button><button id="worldZoomIn" aria-label="Dünyaya yakınlaş">+</button></div></div>
+        <div class="world-stage" id="worldStage" tabindex="0" aria-label="Dünya atlası. Tekerlekle yakınlaştır, sürükleyerek gez. Bölge işaretleri klavyeyle de seçilebilir."><svg id="worldSvg" viewBox="0 0 2900 1630" aria-label="Dört episode dünya haritası"></svg><span class="world-compass" aria-hidden="true">N<br>✥<br>S</span><div class="world-caption"><span id="worldStatus" role="status">Dünya açılıyor…</span><span>SÜRÜKLE · YAKINLAŞ · KEŞFET</span></div></div>
+        <div id="worldSelection" class="world-selection" hidden></div>
+        <p class="world-note">Bölge yerleri rehberdeki işaretlere dayanır; episode aralıkları ve doku boyutları gezinme için düzenlendi. Çizgiler, senaryoda doğrudan kayıtlı geçişlerdir. Tüm katlar ve ek bölgeler aşağıdaki listede bulunur.</p>
+      </section>
+      <div class="map-workspace">
+        <aside class="map-directory" aria-label="Harita arşivi"><div class="map-directory-title"><h2>Haritalar</h2><span id="mapResultCount" aria-live="polite"></span></div><label class="map-search"><span class="sr-only">Harita veya yaratık ara</span><input id="mapSearch" type="search" placeholder="Harita veya yaratık ara…" autocomplete="off"><kbd>/</kbd></label><div class="map-directory-filters"><label>Episode<select id="mapEpisode"><option value="0">Tüm episode’lar</option><option value="1">I · Remote Town</option><option value="2">II · Kanfore</option><option value="3">III · Antalusia</option><option value="4">IV · Calado</option><option value="extra">Ek harita dosyaları</option></select></label><label>Sıralama<select id="mapSort"><option value="progression">Rehber ilerleyişi ↑</option><option value="name">Ada göre A–Z</option><option value="chance">Hedef eşyanın drop oranı ↓</option></select></label></div><p class="map-level-note">Rehber sayısal bölge seviyeleri vermiyor. Sıra, episode ve rehber bölge dizilimine dayanır.</p><div id="mapItemFilter" class="map-item-filter" hidden></div><div id="mapList" class="map-list" aria-label="Harita sonuçları"></div></aside>
+        <section class="map-content" aria-labelledby="mapTitle">
+          <div class="map-heading"><div><p class="eyebrow" id="mapRegionCode"></p><h2 id="mapTitle">Harita seç</h2><p id="mapSummary"></p><p id="mapGuideInfo"></p></div><span class="original-map-label"><i></i> OYUNUN KENDİ DÜNYASI</span></div>
+          <section class="map-travel" aria-label="Canlı oyunda haritaya git">
+            <div><b>Oyunda bu bölgeye git</b><p>Seçili haritanın başlangıç girişine ışınlan. <span id="mapTravelCurrent"></span></p></div>
+            <button id="travelToMap" disabled>Giriş noktasına ışınlan</button>
+            <label class="save-before-option"><input id="mapTravelSave" type="checkbox"> İşlemden önce kaydet</label>
+            <p id="mapTravelStatus" role="status">Yerel yardımcı bekleniyor.</p>
+          </section>
+          <div id="mapViewer" class="map-viewer">
+            <div id="mapViewport" class="map-viewport" tabindex="0" aria-label="Harita görünümü. Sürükleyerek gez, tekerlekle yakınlaştır. Ok tuşlarıyla da hareket edebilirsin.">
+              <canvas id="mapCanvas" role="img" aria-label="Seçili bölgenin gerçek oyun görünümü"></canvas>
+              <div id="mapLoadState" class="map-load-state" role="status">Harita açılıyor…</div>
+              <div id="mapHover" class="map-hover" hidden></div>
+              <div class="map-view-readout"><span id="mapCoordinates"></span><b id="mapScale">—</b></div>
+            </div>
+            <div class="map-tools"><div class="map-zoom-tools"><button id="mapZoomOut" aria-label="Haritayı uzaklaştır">−</button><button id="mapFit">Tamamını gör</button><button id="mapZoomIn" aria-label="Haritaya yakınlaş">+</button></div><label><input id="mapShowMobs" type="checkbox" checked> Yaratık konumları</label><label class="map-edge-control"><input id="mapEdgePan" type="checkbox" checked> Kenarda kaydır</label><button id="mapFullscreen" class="map-fullscreen" aria-label="Haritayı tam ekran aç">Tam ekran ↗</button></div>
+          </div>
+          <p class="map-help">Sürükle veya ok tuşlarıyla gez · Tekerlekle yakınlaş · Kenara götürerek kaydır · <kbd>0</kbd> tamamını gör</p>
+          <div id="mapFocusInfo" class="map-focus-info" hidden></div>
+          <div id="mapScenarioFocus" class="map-scenario-focus" hidden></div>
+          <div class="map-detail-columns"><section class="map-spawn-section"><div class="section-heading"><h3>Bu bölgedeki yaratıklar</h3><span id="mapMobCount"></span></div><div id="mapMobList" class="map-mob-list"></div><p class="probability-note">Adetler senaryodaki yerleşimlerdir. Görev ilerlemesi ve yeniden doğma koşulları, oyunda hangilerinin bulunduğunu değiştirebilir.</p></section><section class="map-loot-section"><div class="section-heading"><h3>Burada neler düşer?</h3><span id="mapLootCount"></span></div><div class="map-loot-filters"><input id="mapLootSearch" type="search" placeholder="Bölgenin ganimetinde ara…" aria-label="Bölgenin ganimetinde ara"><select id="mapLootQuality" aria-label="Harita ganimet kalitesi"><option value="all">Tüm kaliteler</option><option value="0">Normal / Plain</option><option value="1">Magic / Büyülü</option><option value="2">Unique / Premium</option><option value="3">Özel</option></select><label>Oyuncu <select id="mapPlayers" aria-label="Harita drop hesabında oyuncu sayısı"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label></div><p class="probability-note">Oran, bu bölgedeki uygun yaratıklar arasında <b>tek öldürmede en yüksek oran</b>. Eşyayı seçerek kaynağını ve diğer haritaları görebilirsin.</p><div id="mapLootList" class="map-loot-list"></div></section></div>
+        </section>
+      </div>
+    </div>
+
+    <div id="scenarioPage" role="tabpanel" aria-labelledby="scenarioTab" hidden>
+      <header class="scenario-intro"><div><p class="eyebrow">HARİTADA SAKLI OLANLAR</p><h1>Misc / Special / Scenario Items</h1><p>Hazır konumlar, NPC takasları ve görev tetikleyicileri.</p></div><div id="scenarioTotals" class="scenario-totals"></div></header>
+      <div class="scenario-layout"><section class="scenario-catalogue" aria-label="Özel eşya rehberi"><div class="scenario-filters"><input id="scenarioSearch" type="search" placeholder="Eşya, NPC veya harita ara…" aria-label="Özel eşya, NPC veya harita ara"><select id="scenarioKind" aria-label="Elde etme yolu"><option value="all">Bütün kaynaklar</option><option value="ground">Hazır yerde</option><option value="trade">NPC takası</option><option value="scenario">Senaryo ödülü</option><option value="dialog">Görev diyaloğu</option><option value="mob">Yaratık drobu</option><option value="unresolved">Kaynağı doğrulanmamış</option></select><select id="scenarioCategory" aria-label="Özel eşya türü"><option value="all">Bütün türler</option><option value="3">Tüketilebilirler</option><option value="4">Özel / görev eşyaları</option></select></div><p id="scenarioResultCount" class="scenario-count" role="status"></p><div id="scenarioGrid" class="scenario-grid"></div><p class="scenario-footnote">Konumlar başlangıç yerleşimlerini gösterir. NPC’ler hareket edebilir; görev durumu konuşmaları ve senaryo ödüllerini etkileyebilir.</p></section><aside id="scenarioDetail" class="scenario-detail" aria-label="Seçili özel eşyanın rehberi"></aside></div>
+    </div>
+    <div id="grailPage" role="tabpanel" aria-labelledby="grailTab" hidden>
+      <section class="grail-hero" aria-labelledby="grailTitle"><div><p class="eyebrow">KARAKTERİNİN GANİMET GÜNLÜĞÜ</p><h1 id="grailTitle">Her ilk buluş,<br>bir <em>sayfa.</em></h1><p>Bir kez bulduğun kaybolmaz. Satsan da koleksiyonun hatırlar.</p></div><div class="grail-seal" aria-hidden="true"><span>✧</span><small>PREMIUM CHRONICLE</small></div></section>
+      <section class="grail-character" aria-label="Grail karakteri"><div><label for="grailCharacter">KARAKTER & KAYIT</label><select id="grailCharacter" disabled><option>Karakterler yükleniyor…</option></select><label class="grail-follow"><input id="grailFollow" type="checkbox" checked> Açık karakteri takip et</label></div><div class="grail-tools"><button id="grailRefresh">Yenile ↻</button><button id="grailExport" disabled>Günlüğü indir ↗</button></div><p id="grailStatus" role="status">Yerel yardımcı bekleniyor.</p></section>
+      <section class="grail-progress" aria-label="Koleksiyon ilerlemesi"><div><b id="grailKnown">0</b><span>/ <span id="grailTotal">457</span> PREMIUM</span></div><p id="grailBreakdown">Karakter seçerek koleksiyonunu gör.</p><progress id="grailProgress" value="0" max="457" aria-label="Premium koleksiyonu tamamlanma oranı"></progress><div class="grail-legend"><span>✦ Yerden toplandı</span><span>◇ Takip öncesinde mevcut</span><span>✓ Elle işaretlendi</span></div></section>
+      <div class="grail-layout"><section class="grail-catalogue" aria-labelledby="grailListTitle"><div class="grail-list-heading"><h2 id="grailListTitle">Kutsal liste.</h2><span id="grailResultCount">457 kayıt</span></div><div class="grail-filters"><input id="grailSearch" type="search" placeholder="Bir Premium eşya ara…" aria-label="Premium eşya ara"><select id="grailFilter" aria-label="Grail durumu"><option value="all">Bütün Premiumlar</option><option value="missing">Eksikler</option><option value="found">Koleksiyonda olanlar</option><option value="pickup">Yerden toplananlar</option><option value="owned">Takip öncesinde mevcut</option><option value="manual">Elle işaretlenenler</option><option value="no-source">Standart mob havuzunda yok</option></select><select id="grailCategory" aria-label="Grail eşya kategorisi"><option value="all">Bütün türler</option><option value="0">Silahlar</option><option value="1">Zırhlar</option><option value="2">Aksesuarlar</option></select><select id="grailSort" aria-label="Grail sıralaması"><option value="name">Ada göre A–Z</option><option value="level">Gereken seviyeye göre</option><option value="recent">Son bulunan önce</option></select></div><div id="grailGrid" class="grail-grid"></div><div id="grailPagination" class="pagination"></div></section><aside class="grail-journal" aria-labelledby="grailJournalTitle"><p class="eyebrow">İLKLERİN HATIRASI</p><h2 id="grailJournalTitle">Günlük</h2><div id="grailJournal"></div><details><summary>Liste nasıl tutuluyor?</summary><p>Yerden çantaya başarıyla giren Premium otomatik kaydedilir. Envanter açıkken imleçte tutulan eşya, çantaya bırakılana kadar sayılmaz.</p><p>İlk okumada save, ekipman, çanta ve açık karakterin depo alanlarında bulunanlar “takip öncesinde mevcut” işareti alır. Geçmişte satılmış veya kaybolmuş droplar kesin çıkarılamaz; hatırladıklarını “Buldum” ile ekleyebilirsin.</p><p>Takibin çalışması için yerel yardımcı açık olmalı. Satıcıdan alışveriş ve başarısız toplama, yeni bir yerden toplama kaydı oluşturmaz. Günlük oyun save’ini değiştirmeden bu bilgisayarda saklanır.</p><p>Aynı adlı farklı eşya kimlikleri ayrı koleksiyon kayıtlarıdır. “Kaydı yok”, geçmişte hiç düşmediğinin kanıtı değildir.</p></details></aside></div>
+    </div>
+    <footer><span class="footer-brand">SHADOWFLARE <i>×</i> DROP ATLAS</span><p>18 Ekim 2026 veri kesiti · <span id="assetStatus">Görseller yükleniyor</span></p><button id="footerAbout">Olasılıklar nasıl hesaplanıyor? ↗</button></footer>
+  </main>
+
+  <dialog id="aboutDialog" aria-labelledby="aboutTitle"><button class="dialog-close icon-button" id="closeAbout" aria-label="Bilgi penceresini kapat">×</button><p class="eyebrow">ATLASIN NOTLARI</p><h2 id="aboutTitle">Görsel bir drop arşivi.</h2><p>İkonlar ve animasyonlar kendi ShadowFlare kurulumunun NJP / CAF dosyalarından çıkarıldı. Yaratık görünümü, oyunun kullandığı farklı yönlerden hazırlanmış karelerle canlandırılır; gerçek zamanlı bir 3D model değildir.</p><p>Yüzde, seçili yaratık varyantı öldüğünde <strong>en az bir</strong> hedef eşyanın gelmesi için nominal olasılıktır. Eşya ağırlıkları, on seçim yuvası, çoklu denemeler ve denemeler arasında taşınan nadirlik izinleri hesaba katılır.</p><p>Oyunun rastgele sayı üretecinin modulo sapmaları ve ardışık durumları, yüzdelerde tam olarak modellenmez. Görev betiklerinin bütün ödülleri ve yeniden doğma koşulları kapsama dahil değildir. Saatlik farm verimliliği iddia edilmez.</p><p>Aynı adlı eşyaların kayıtları farklı olabilir. Aynı adlı yaratıkların harita, görünüm veya drop grubu farklıysa ayrı varyantları vardır. Harita adetleri statik yerleşim sayısıdır.</p><p>Haritalar sekmesinde 209 senaryo bölgesi ve üç ek harita dosyası bulunur. 165 özgün harita kaynağı, kendi zemin ve çevre görselleriyle çizilir. Tam görünüm, özgün çözünürlükte yakınlaştırma ve fareyi kenara götürerek kaydırma kullanılabilir. Yaratık noktaları olası senaryo yerleşimleridir; görev durumları ve dinamik aktörler canlandırılmaz.</p><div class="about-verification"><b>2.710</b><span>Gerçek x86 koduyla başarılı kontrol</span></div><p class="small-note">Katalog tamamen çevrimdışı açılır. Canlı drop için CANLI-DROP-BASLAT.cmd ile yerel yardımcıyı başlat; bu özellik açık oyuna erişir ve işlem öncesi kayıt yedeği alır.</p></dialog>
+  <dialog id="itemPanelDialog" class="item-panel-dialog" aria-labelledby="largePanelTitle"><button id="closeItemPanel" class="dialog-close icon-button" aria-label="Eşya panelini kapat">×</button><h2 id="largePanelTitle"></h2><canvas id="largeItemPanel" class="game-item-canvas" role="img" aria-label="Tam boy eşya paneli"></canvas><p class="panel-note">Oyun fontu ve orijinal ikonlar · temel değerler ile ek özellikler ayrı gösterilir.</p></dialog>
+  <dialog id="guideSourceDialog" class="guide-source-dialog" aria-labelledby="guideSourceTitle"><button id="closeGuideSource" class="dialog-close icon-button" aria-label="Rehber görselini kapat">×</button><h2 id="guideSourceTitle">Özgün rehber görseli</h2><div class="guide-source-viewport"><img id="guideSourceImage" alt="Arşivlenmiş Premium eşya rehberindeki özgün oyun panelleri"></div><p class="panel-note">herşey klasöründeki özgün JPG · kaynağın yerel kopyası</p></dialog>
+  <dialog id="worldGuideDialog" class="world-guide-dialog" aria-labelledby="worldGuideTitle"><button id="worldGuideClose" class="dialog-close icon-button" aria-label="Dünya rehberini kapat">×</button><h2 id="worldGuideTitle">Özgün dünya rehberi</h2><p id="worldGuideSource"></p><img id="worldGuideImage" alt="Mischief Society rehberinin özgün dünya haritası"><p>Yerel herşey klasöründen alınan kaynak · İşaretlerdeki harf ve sayılar bölge kodlarıdır.</p></dialog>
+  <noscript><div class="noscript">Bu çevrimdışı araç için tarayıcıda JavaScript açık olmalı.</div></noscript>
+  <script src="data.js?v=4"></script>
+  <script src="assets/visuals.js?v=3"></script>
+  <script src="assets/fonts/game-font.js?v=3"></script>
+  <script src="tooltip.js?v=3"></script>
+  <script src="model.js?v=13"></script>
+  <script src="map-model.js?v=14"></script>
+  <script src="assets/world/world.js?v=12"></script>
+  <script src="assets/maps/index.js?v=11"></script>
+  <script src="assets/maps/manifest.js?v=11"></script>
+  <script src="assets/scenario-items.js?v=1"></script>
+  <script src="scenario-model.js?v=1"></script>
+  <script src="tabs.js?v=17-scenario"></script>
+  <script src="app.js?v=18-map-travel"></script>
+  <script src="map-viewer.js?v=12-scenario"></script>
+  <script src="maps.js?v=17-setup"></script>
+  <script src="world-viewer.js?v=13-setup"></script>
+  <script src="live.js?v=37-core-game-launch"></script>
+  <script src="trainer-data.js?v=core-local-1"></script>
+  <script src="trainer-extras.js?v=2"></script>
+  <script src="trainer.js?v=core-local-1"></script>
+  <script src="grail.js?v=1"></script>
+  <script src="scenario.js?v=1"></script>
+  <div id="grailToast" class="grail-toast" role="status" hidden><span>✦ YENİ GRAIL KAYDI</span><b id="grailToastName"></b><small id="grailToastCharacter"></small><button id="grailToastOpen">Koleksiyona git ↗</button><button id="grailToastClose" aria-label="Grail bildirimini kapat">×</button></div>
+</body>
+</html>
